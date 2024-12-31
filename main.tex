@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage[letterpaper]{geometry}
+
+% typesetting issues
+\addtolength{\topmargin}{-0.30in}
+\addtolength{\textheight}{1.60in}
+\setlength{\textwidth}{5.00in}
+\setlength{\oddsidemargin}{3.25in}\addtolength{\oddsidemargin}{-0.5\textwidth}
+\pagestyle{myheadings}
+\markboth{foo}{\sffamily Hogg / What is a measurement?}
+\frenchspacing\sloppy\sloppypar\raggedbottom
+
+% text macros
+\newcommand{\sectionname}{Section}
+\newcommand{\secref}[1]{\sectionname~\ref{#1}}
+
+% math macros
+\newcommand{\given}{\,|\,}
+
+\title{\bfseries
+What is a measurement?}
+\author{David W. Hogg\footnote{%
+DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
+He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
+\date{January 2025}
+\begin{document}
+
+\maketitle\thispagestyle{empty}
+
+\paragraph{Abstract:}
+The most important point in both Bayesian reasoning and frequentist practice is that all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
+If we have a LF (and we don't, always), and we wish to say that a particular data sample $Y$ has measured a parameter $X$, there must be a neighborhood in $X$ in which the LF peaks, and a complementary region in which it is substantially lower.
+It is not enough to show that a particular estimator (machine-learning regression output, say) returns a value for $X$.
+It is also not enough to show that the posterior pdf for $X$ is peaked, because the posterior pdf involves prior information not derived from the data.
+Of course the LF itself also contains external, subjective, prior information; after all, the investigator made choices and assumptions in constructing the LF.
+That said, for a measurement to be acceptable to the community, that LF must not be strongly contaminated by idiosyncratic assumptions.
+Importantly, the differences between using a LF, a posterior pdf, or a machine-learning regression to estimate $X$ are not differences of subjectivity---all methods abound with subjectivity---the differences are about sufficiency with respect to the data.
+
+\section{Introduction}
+In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
+For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs (CITE).
+For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets (CITE); anything else involves subjective choices, at the expense of optimality.
+It is increasingly recognized (despite monikers such as ``objective Bayes''; CITE) that no method for statistical inference is \emph{objectively correct}:
+Every method for making a measurement, deciding among hypotheses, claiming a discovery from data, or predicting the outcome of a new experiment, involves myriad investigator choices.
+
+This paper is partly about claims of measurement:
+When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
+It is also partly about the \emph{likelihood principle}, which I discuss in \secref{sec:lf}
+This is the principle that all information about any parameter $\theta$ is summarized completely by the likelihood function (LF) $p(Y\given\theta, I)$.
+The LF is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
+The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the LF alone.
+And, additionally, that the LF must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
+If the claimed measurement can't be seen as a peak in a reasonably constructed LF, then the claim is not substantiated by the data.
+
+Example: Gaia parallaxes.
+
+Example: Cosmology with one galaxy.
+
+Goals of measuring: To say what a data sample $Y$ tells you about a parameter $\theta$? To make a prediction for future data? To make a decision? To deliver something useful to other investigators? These goals are related, but not the same. We discuss these issues in ?? and ??
+
+My field is astrophysics, and many of the examples I give will be astrophysical.
+The document that follows will seem to many of my astrophysics colleagues as very frequentist.
+It isn't!
+The likelihood principle is shared between Bayesians and frequentists:
+The LF is sufficient to deliver all information about the parameters coming from the data.
+This is the key idea of Bayes's rule:
+The prior is updated to the posterior with---and only with---the likelihood function.
+Thus the question \emph{Do these data $Y$ deliver a measurement of parameter $\theta$?} must be answerable with a LF---something like $p(Y\given\theta,I)$---if that LF can be written down.
+When the LF cannot be written down, life is harder; we will address that case in \secref{sec:lfi}.
+
+\section{The likelihood function}\label{sec:lf}
+The problem setup will be that there is a data set $Y$, a parameter (or set of parameters, but usually just ``parameter'') of interest $\theta$, a set of nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
+In contexts like this, there are many meanings of the word ``model,'' but for me this will be something that can be used to compute probabilities in the space of the data.
+That is... HOGG
+HOGG: Importantly: Nuisance parameters also!
+HOGG: Importantly: Specific assumptions.
+
+HOGG: You can often (but not always) think of the LF as a prediction for the expectation of the data plus a noise model.
+The LF both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted with the parameters.
+
+Likelihood principle.
+
+Marginalized likelihood.
+
+Profile likelihood.
+
+Fully marginalized likelihood (FML).
+
+\section{Statistical inference}
+Estimates of parameters. Bias and variance.
+Cram\'er--Rao, and Fisher.
+
+Confidence intervals.
+
+Beliefs about parameters. Requires a prior pdf.
+
+Making predictions and placing bets.
+
+Model comparison. FML and likelihood ratio. Neyman--Pearson.
+
+Making decisions. Requires a utility function.
+
+\section{Claiming a detection}
+
+HOGG: It is in this section that community norms must come up.
+
+HOGG: Note that if you can't see a peak in the LF, it doesn't mean that you don't have a measurement! It just means that the scope of your LF is too narrow. More data were involved. Be explicit about that and you will be okay.
+
+\section{Can't I just use flat priors?}
+
+\section{Combining data samples}
+The triviality of combining likelihood functions.
+
+The impossibility of combining posteriors.
+
+\section{Delivering useful catalogs of measurements}\label{sec:catalogs}
+
+\section{What if I don't have a likelihood?}\label{sec:lfi}
+
+\section{Writing the paper}
+
+\section{Discussion}
+This might have sounded frequentist, but it is not!
+This is a fully Bayesian position.
+
+Many Bayesians feel that the only point of science is to update a posterior. Maybe?! But that would be the point of the literature taken as a whole. Not the point of every single paper you write.
+
+If you put tons of work into making a likelihood function, why obscure it by multiplying it by a pointless and obscuring prior?
+
+\end{document}
