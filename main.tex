@@ -1,3 +1,15 @@
+% Copyright 2025 David W. Hogg. All rights reserved.
+
+% to-do items
+% -----------
+% - write all sections.
+% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra
+
+% style notes
+% -----------
+% - Audit for second-person language; maybe make it more third-person where possible?
+% - Use LF in abstract, maybe, but not the main text, which should read clean.
+
 \documentclass{article}
 \usepackage[letterpaper]{geometry}
 
@@ -11,11 +23,13 @@
 \frenchspacing\sloppy\sloppypar\raggedbottom
 
 % text macros
+\newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
 
 % math macros
 \newcommand{\given}{\,|\,}
+\newcommand{\setof}[1]{\left\{{#1}\right\}}
 
 \title{\bfseries
 What is a measurement?}
@@ -36,7 +50,7 @@ Of course the LF itself also contains external, subjective, prior information; a
 For a measurement to be acceptable to the community, that LF must not be strongly contaminated by idiosyncratic assumptions.
 Importantly, the differences among using the LF, the posterior pdf, or a machine-learning regression to estimate $X$ are not differences of subjectivity; the differences are about sufficiency with respect to the data.
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
 For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs (CITE).
 For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets (CITE); anything else involves subjective choices, at the expense of optimality.
@@ -86,6 +100,9 @@ Profile likelihood.
 
 Fully marginalized likelihood (FML).
 
+Reparameterization-invariance of the LF.
+This invariance does not hold for any other part of statistical inference, as we will see.
+
 \section{Statistical inference}
 Estimates of parameters. Bias and variance.
 Cram\'er--Rao, and Fisher.
@@ -100,31 +117,159 @@ Model comparison. FML and likelihood ratio. Neyman--Pearson.
 
 Making decisions. Requires a utility function.
 
-\section{Claiming a detection}
+\section{Isn't Bayes provably best?}\label{sec:bayes}
+The most beautiful thing about Bayesian inference is that it is the provably correct way to reason about uncertain things.\footnote{%
+HOGG Refer here to Jaynes again.}
+The rules of probability theory are also the rules about reasoning about the plausibility of the things you know, or want to know.
+For this reason, it makes sense for a scientist---or a human being---to reason in a Bayesian manner.
+I would even say (and I have said elsewhere; CITE)
+that, for the reason of this provable correctness, the whole scientific community ought to act, collectively, in a kind of Bayesian way.
+It should have a collective set of beliefs and it should update those collective beliefs by (at least approximately) multiplying by a likelihood function for the new data it obtains each year.
+
+Does this mean that \emph{every scientific paper} should describe a prior pdf, a likelihood, and a posterior obtained by Bayes's rule?
+No, it does not.
+The point of each scientific paper is \emph{not}---or not mainly---to describe to the community \emph{the authors' beliefs}.
+The point of each scientific paper is to move forward the beliefs of the community of scientists.
+That moving forward could be contributions to, or arguments about, the community's prior beliefs, the community's many likelihood functions, and the community's posterior beliefs.
+Each paper has a small role in this program; it is not the case that each paper executes the whole program for the whole community.\footnote{%
+There are many treatises on the philosophy of science.
+I feel like we need a philosophical theory of the \emph{scientific paper} or contribution.}
+
+When scientist A reads a paper by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
+I believe that scientist A wants to know if scientist A's beliefs need to be updated.
+I believe that scientist B wants to influence the beliefs of scientist A.
+In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
+What scientist A needs to get from the paper is scientist B's likelihood function.
+
+If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
+and if scientist A broadly agrees with them,
+then scientist A can simply update their beliefs by multiplying (approximately or as exactly as possible, depending on the nature of the work)
+scientist A's prior pdf with scientist B's likelihood function.
+And it is worthy of note that scientist A is much more prone to agree with the assumptions going into scientist B's likelihood function if scientist B's assumptions are aligned with community norms in the field.
+
+When I say that scientist A will multiply their prior pdf by scientist B's likelihood function,
+I don't necessarily mean that they will do so by writing a piece of code that imports or reimplements prior pdfs, imports the likelihood function, and literally does the multiply and representation of the output.
+I mean something more approximate and vague.
+But sometimes it \emph{literally is the case} that this code and import and multiply \emph{is} what scientist A does.
+In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing.
+And NASA created the \textsl{LAMBDA} archive for likelihood functions in cosmology for exactly this purpose of sharing quantitative likelihood functions (CITE).
+
+Of course this is a dream.
+In many real cases, scientist B will not agree with the assumptions going into scientist A's likelihood function.
+But usually scientist A will agree with a lot of those assumptions.
+Then scientist B's paper is a template for making a new likelihood function with modified assumptions, which scientist A can then use to modify scientist A's beliefs.
+This is a less direct use of scientist B's likelihood function, but still very useful.
+
+The point of scientist B's paper is not to represent scientist B's beliefs, but instead to aid scientist A in \emph{updating} scientist A's beliefs.
+Beliefs of individual scientists are idiosyncratic and subjective.
+If we want to update someone \emph{else's} beliefs, we must provide them with a likelihood function.
+The point of (most of) the scientific literature is to communicate about (aspects of) likelihood functions.
+When a paper multiplies a prior by a likelihood to produce a posterior it is---at best---demonstrating the effect of the data on typical beliefs.
+At worst it is irrelevant to every individual reader.\footnote{%
+HOGG WRITE about the DFM pov.}
+
+\section{Machine learning or regression}\label{sec:ml}
+There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
+Here we will only consider one, which is \emph{supervised regression}:
+The setup for supervised regression is that there is a \emph{training set} $\setof{Y_i, \theta_i}_{i=1}^n$ of $n$ data instances $Y_i$ and corresponding labels $\theta_i$.
+We are going to \emph{learn} a flexible function $f(Y;W)$, parameterized by a large block of weights $W$, that does a good job of predicting labels $\theta_i$ for training-set examples $Y_i$.
+We will estimate our parameter of interest $\theta$ by executing the learned function on our data $Y$.
+
+Ideally the labels $\theta_i$ in your training set are very reliable and accurate estimates for each training data object $Y_i$.
+If they are noisy, pure regressions aren't a good idea; it makes more sense to go to models with a generative aspect (for example, CITE).
+Ideally the data $Y_i$ in your training set are somehow ``drawn'' from the same distribution as the data $Y$ you have.
+If they are not drawn from the same distribution, strong biases will occur.
+Often it is believed that so long as the training data ``cover'' the test data (for example the test data live inside the convex hull of the training data), then things are fine.
+This isn't true, and besides, once the data get large enough, coverage of that kind is impossible to satisfy.
+
+It turns out that, even when the situation is ideal---%
+even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are typically biased.
+Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, CITE).
+However, it is relevant to the story being told here.
+Machine learning regressions produce results with a lot of proerties similar to maximum a posteriori (maximum-of-posterior) parameter estimates, with the training data serving as an implicit prior.
+\textbf{HOGG: Did we discuss this point in the previous section? If not, add it.}
+
+Is a machine learning regression output a measurement?
+No, it is not, or at least not in itself:
+When a machine learning method returns a result, it is using information from your data $Y$
+but also from all of the training data $\setof{Y_i, \theta_i}_{i=1}^n$.
+\textbf{HOGG: What about looking at the distribution of $\theta$ in the training set and at the end? Or if you change the data slightly? Can't you answer the information theoretic questions that way? If not, why not?}
+
+\section{Claiming a measurement}\label{sec:claim}
 
 HOGG: It is in this section that community norms must come up.
 
 HOGG: Note that if you can't see a peak in the LF, it doesn't mean that you don't have a measurement! It just means that the scope of your LF is too narrow. More data were involved. Be explicit about that and you will be okay.
 
-\section{Can't I just use flat priors?}
+\section{Can't I just use flat priors?}\label{sec:flat}
+We need a peak in the likelihood function to claim a measurement.
+But if we want to be Bayesian, and we want to use \emph{flat priors},\footnote{%
+If you want to be Bayesian, there is almost no context in which you would want to use flat priors on any parameter you care about.
+The Cox theorems that deliver Bayesian reasoning only apply when the Bayesian procedure is being used to update \emph{your beliefs}.
+It is essentially impossible that your belief about anything you care about is well represented by a flat pdf.}
+isn't it the case that any peak in the likelihood will lead to an identically shaped peak in the posterior pdf?
 
-\section{Combining data samples}
+This sounds so naively and obviously true, what could possibly go wrong?
+There are two things that are very wrong about this idea---the idea that if you use flat priors its the same as having just a likelihood function.
+The first thing that is wrong is that (as we emphasized in \secref{sec:lf}) the likelihood function in reparameterization-invariant.
+The posterior pdf is absolutely not reparameterization-invariant.
+So if the prior is flat in some parameter, it is absolutely not flat in any non-trivial function of that parameter.
+Even worse, if it is flat in some parameter, in any square-root or square or logarithm of that parameter, the prior is strongly peaked \emph{at one edge of the allowed range!}
+That's demonstrated in FIGURE HOGG and definitely not what people usually have in mind when they think about using ``uninformative priors.''
+
+The second thing that is wrong about this idea is that when the number of parameters gets large---larger than 2 say---it gets very very easy to believe that there is a peak in the likelihood function when there most definitely isn't.
+To demonstrate this, we generate a very simple toy-likelihood and toy-posterior situation, in which all priors are flat, and in which it very very much looks like there is a peak in the likelihood function when there absolutely is not.
+HOGG DETAILS AND FIGURES.
+
+\section{Combining data samples}\label{sec:combining}
 The triviality of combining likelihood functions.
 
 The impossibility of combining posteriors.
 
 \section{Delivering useful catalogs of measurements}\label{sec:catalogs}
+Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
+What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
+
+HOGG: FOR EXAMPLE..
+
+For all the reasons given in \secref{sec:combining}, it is critical that the quantities given in your catalog can be used to reconstruct the likelihood functions, or approximations thereto.
+HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
+Does the requirement that there be a peak in a sensible likelihood function (LF) imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
+Obviously, looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
+However, there are many circumstances in the contemporary sciences in which we can get some kind of estimate of our posterior pdf, but we cannot compute the likelihood function.
 
-\section{Writing the paper}
+One example is in present-day cosmology, where one of the goals is to measure cosmological parameters using data on the large-scale structure (as traced by the positions of many millions of galaxies and quasars).
+There are only a few important physical cosmological parameters, but there are (literally) billions of nuisance parameters (often wrongly called ``phases'') that must be chosen before the model makes a specific prediction for the positions of the galaxies.
+Thus it is close to impossible, computationally, to compute the probability of the data given the parameters.
+There are just far too many parameters.
+At the same time, there are methods (known as likelihood-free inference, or simulation-based inference; CITE) for obtaining a posterior pdf for the important few parameters, without ever instantiating a likelihood function.
+Is it impossible to securely claim a measurement in this case?
+It is not.
 
-\section{Discussion}
+HOGG: HOW TO SAFELY ratio the posterior and the prior.
+This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
+
+\section{Writing the paper}\label{sec:writing}
+Given everything written here, what are the important things to make sure of any paper or document you might write about any measurement you have made?
+This \documentname\ has emphasized the choices you made in constructing your likelihood function, or your inference or estimator if you didn't have a likelihood function.
+These choices are important; they embody the subjectivity of measurement science.
+And, as we emphasize, especially in \secref{sec:claim}, a measurement is only acceptable in a scientific community when the assumptions going in to the likelihood function are acceptable to that community.
+Thus the most important property of a scientific paper describing and reporting a measurement is that the paper clearly explain all of the assumptions that went into that measurement.
+
+HOGG: Other things to say here? Or move this into \secref{sec:discussion}?
+
+\section{Discussion}\label{sec:discussion}
 This might have sounded frequentist, but it is not!
 This is a fully Bayesian position.
+Actually, it is a position that doesn't make a commitment between frequentism and Bayesianism.
 
 Many Bayesians feel that the only point of science is to update a posterior. Maybe?! But that would be the point of the literature taken as a whole. Not the point of every single paper you write.
 
 If you put tons of work into making a likelihood function, why obscure it by multiplying it by a pointless and obscuring prior?
+
+\paragraph{Acknowledgments}
+It is a pleasure to thank Dan Foreman-Mackey (DeepMind) and Hans-Walter Rix (MPIA) for valuable discussions about these matters over the years.
 
 \end{document}
