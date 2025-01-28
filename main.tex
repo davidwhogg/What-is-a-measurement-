@@ -9,11 +9,15 @@
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
+% - Footnotes before or after commas and periods?
 
 \documentclass{article}
 \usepackage[letterpaper]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath, amsfonts}
 
 % typesetting issues
+\setstretch{1.08}
 \addtolength{\topmargin}{-0.30in}
 \addtolength{\textheight}{1.60in}
 \setlength{\textwidth}{5.00in}
@@ -28,6 +32,7 @@
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
 
 % math macros
+\newcommand{\dd}{\mathrm{d}}
 \newcommand{\given}{\,|\,}
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
 
@@ -59,16 +64,29 @@ Every method for making a measurement, deciding among hypotheses, claiming a dis
 
 This paper is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
-It is also partly about the \emph{likelihood principle}, which I discuss in \secref{sec:lf}
+My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}
 This is the principle that all information about any parameter $\theta$ is summarized completely by the likelihood function (LF) $p(Y\given\theta, I)$.
 The LF is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
 The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the LF alone.
 And, additionally, that the LF must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
 If the claimed measurement can't be seen as a peak in a reasonably constructed LF, then the claim is not substantiated by the data.
 
-Example: Gaia parallaxes.
+One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission (CITE)\footnote{%
+The project acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions (CITE ME).
+That said, there is no documentary evidence that I can find that the project made the decisions it made specifically because of the likelihood principle.
+Its design decisions may have been intuitively made.},
+which is measuring (among many other things, the parallaxes to more than a billion stars in the Milky Way.
+The parallax is a geometric measure of the inverse of the distance to the star.
+This Mission is trying to deliver valuable information to the astronomical community, members of which can update their beliefs about individual stars, about stellar clusters, and about the populations of stars using the data releases.
+The quantities in the \textsl{Gaia} Catalogs (CITE) that represent its parallax measurements are maximum-likelihood parallax measurements, and uncertainty estimates based on a Fisher-matrix-like analysis of uncertainty.
+These quantities can be cleanly combined into a good approximation of likelihood function (CITE ME).
+That is, the \textsl{Gaia} Catalog parallax and parallax uncertainty for any star are parameters of a form for the probability of the Gaia data given that star's parallax.
+This is clean!
+It permits any user of the Catalog to update their beliefs about that star's distance, or their beliefs about any other astrophysical inferences that involve that star's distance.
+If the \textsl{Gaia} Catalog contained mean or median-of-posterior estimates or any other kind of biased estimators, the data would have been far harder (or even impossible) to use.
 
-Example: Cosmology with one galaxy.
+One project that doesn't understand the likelihood principle is the ``cosmology with one galaxy'' project (CITE).
+This project performed a machine-learning regression on a set of galaxies ... HOGG CAN WE SAY THIS?
 
 Goals of measuring: To say what a data sample $Y$ tells you about a parameter $\theta$? To make a prediction for future data? To make a decision? To deliver something useful to other investigators? These goals are related, but not the same. We discuss these issues in ?? and ??
 
@@ -89,10 +107,30 @@ That is... HOGG
 HOGG: Importantly: Nuisance parameters also!
 HOGG: Importantly: Specific assumptions.
 
-HOGG: You can often (but not always) think of the LF as a prediction for the expectation of the data plus a noise model.
-The LF both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted with the parameters.
+You can often (but not always) think of the LF as a prediction for the expectation of the data plus a noise model.
+For example, if you believe that the expectation for the data depends linearly on the parameters $(\theta, \alpha)$, and then in addition there is additive, Gaussian noise, the likelihood function becomes... HOGG
+The LF both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted, given the parameters.
 
-Likelihood principle.
+I alluded to the likelihood principle in \secref{sec:intro}.
+The principle is that everything about the data $Y$ that can possibly matter to the parameters $(\theta,\alpha)$ is contained in the likelihood function.
+That is, if you have beliefs represented (accurately) a prior pdf $p(\theta,\alpha)$ for the parameters $(\theta,\alpha)$,
+and then you get data $Y$,
+and then you want to update your beliefs to a posterior pdf $p(\theta,\alpha\given Y)$, the only legitimate procedure for updating your beliefs is to multiply by the likelihood function $p(Y\given\theta,\alpha)$:
+\begin{align}
+    p(\theta,\alpha\given Y) &= \frac{1}{Z}\,p(\theta,\alpha)\,p(Y\given\theta,\alpha) ~,\label{eq:bayes}
+\end{align}
+where $Z$ is a normalization that ensures that $\int p(\theta,\alpha\given Y)\,\dd\theta\,\dd\alpha=1$.
+This procedure \eqref{eq:bayes} is called ``Bayes rule'' and is the basis of Bayesian reasoning.
+This is the \emph{only way} that the data are permitted to be used to update your beliefs, in Bayesian reasoning.
+That's the likelihood principle.
+
+But the likelihood principle has a role in frequentist statistics too.
+The principle in frequentism is that everything about the data $Y$ that is relevant to the parameters $(\theta,\alpha)$ is encoded in the likelihood function.
+That is, the likelihood function is a sufficient statistic for the data, when your goals relate (only) to the parameters $(\theta,\alpha)$.
+Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
+The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being unbiased.}
+
+Meanings of differences in log likelihood.
 
 Marginalized likelihood.
 
@@ -155,7 +193,7 @@ In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is 
 And NASA created the \textsl{LAMBDA} archive for likelihood functions in cosmology for exactly this purpose of sharing quantitative likelihood functions (CITE).
 
 Of course this is a dream.
-In many real cases, scientist B will not agree with the assumptions going into scientist A's likelihood function.
+In many real cases, scientist A will not agree with the assumptions going into scientist B's likelihood function.
 But usually scientist A will agree with a lot of those assumptions.
 Then scientist B's paper is a template for making a new likelihood function with modified assumptions, which scientist A can then use to modify scientist A's beliefs.
 This is a less direct use of scientist B's likelihood function, but still very useful.
