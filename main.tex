@@ -4,6 +4,7 @@
 % -----------
 % - write all sections.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra
+% - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 
 % style notes
 % -----------
@@ -72,10 +73,10 @@ The main point of this paper is that a claim of a measurement must be made---or 
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
 If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not substantiated by the data.
 
-One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission (CITE)\footnote{%
-The project acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions (CITE ME).
+One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission \cite{gaia}\footnote{%
+The \textsl{Gaia} Mission acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions \cite{gaialf}.
 That said, there is no documentary evidence that I can find that the project made the decisions it made specifically because of the likelihood principle.
-Its design decisions may have been intuitively made.},
+Its design decisions may have been intuitively made, as far as I can tell, even though they were made absolutely correctly.},
 which is measuring (among many other things, the parallaxes to more than a billion stars in the Milky Way.
 The parallax is a geometric measure of the inverse of the distance to the star.
 This Mission is trying to deliver valuable information to the astronomical community, members of which can update their beliefs about individual stars, about stellar clusters, and about the populations of stars using the data releases.
@@ -330,5 +331,9 @@ If you put tons of work into making a likelihood function, why obscure it by mul
 
 \paragraph{Acknowledgments}
 It is a pleasure to thank Dan Foreman-Mackey (DeepMind) and Hans-Walter Rix (MPIA) for valuable discussions about these matters over the years.
+
+\raggedright
+\bibliographystyle{plain}
+\bibliography{measurement}
 
 \end{document}
