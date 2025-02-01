@@ -10,6 +10,7 @@
 % - Audit for second-person language; maybe make it more third-person where possible?
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
+% - "data" is a mass noun like "grass" or "hair."
 
 \documentclass{article}
 \usepackage[letterpaper]{geometry}
@@ -65,11 +66,11 @@ Every method for making a measurement, deciding among hypotheses, claiming a dis
 This paper is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
 My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}
-This is the principle that all information about any parameter $\theta$ is summarized completely by the likelihood function (LF) $p(Y\given\theta, I)$.
-The LF is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
-The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the LF alone.
-And, additionally, that the LF must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
-If the claimed measurement can't be seen as a peak in a reasonably constructed LF, then the claim is not substantiated by the data.
+This is the principle that all information about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
+The likelihood function is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
+The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
+And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
+If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not substantiated by the data.
 
 One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission (CITE)\footnote{%
 The project acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions (CITE ME).
@@ -88,17 +89,29 @@ If the \textsl{Gaia} Catalog contained mean or median-of-posterior estimates or 
 One project that doesn't understand the likelihood principle is the ``cosmology with one galaxy'' project (CITE).
 This project performed a machine-learning regression on a set of galaxies ... HOGG CAN WE SAY THIS?
 
-Goals of measuring: To say what a data sample $Y$ tells you about a parameter $\theta$? To make a prediction for future data? To make a decision? To deliver something useful to other investigators? These goals are related, but not the same. We discuss these issues in ?? and ??
+This \documentname{} is partly about \emph{subjectivity}:
+Making a measurement involves myriad subjective choices.
+But there is another kind of subjectivity in play.
+What method you use to make a measurement depends on what \emph{you want to do} with that measurement.
+The primary use case I am going to focus on is the case in which you have a data set and you have a parameter of interest, and you want to know \emph{what that particular data set has to say} about the parameter of interest.
+There are other use cases, which lead to different methodologies.
+Sometimes you are making the measurement because you want to make a \emph{prediction} for a future experiment.
+That is, you want to know what some future data set will say about your parameter of interest.
+Sometimes you are trying to make a \emph{decision} and your decision will depend on the value of the parameter, plus other things about your utility function (your economic goals, say).
+We will discuss these factors a tiny bit in \secref{sec:bayes}, but mainly we will concentrate on answering the question ``what does my data\footnote{%
+One of the questions I get asked most about data is whether the word ``data'' is singular or plural. I don't have a strong position. However, in this document I will attempt to treat the word ``data,'' grammatically, as a mass noun, like ``grass'' or ``hair.''}
+say about my parameter of interest?''
 
 My field is astrophysics, and many of the examples I give will be astrophysical.
-The document that follows will seem to many of my astrophysics colleagues as very frequentist.
+Furthermore, the astrophysics community (now) is very Bayesian.
+For this reason, the document that follows will seem to many of my astrophysics colleagues as oddly frequentist.
 It isn't!
 The likelihood principle is shared between Bayesians and frequentists:
-The LF is sufficient to deliver all information about the parameters coming from the data.
+The likelihood function is sufficient to deliver all information about the parameters coming from the data.
 This is the key idea of Bayes's rule:
 The prior is updated to the posterior with---and only with---the likelihood function.
-Thus the question \emph{Do these data $Y$ deliver a measurement of parameter $\theta$?} must be answerable with a LF---something like $p(Y\given\theta,I)$---if that LF can be written down.
-When the LF cannot be written down, life is harder; we will address that case in \secref{sec:lfi}.
+Thus the question \emph{Do these data $Y$ deliver a measurement of parameter $\theta$?} must be answerable with a likelihood function---something like $p(Y\given\theta,I)$---if that likelihood function can be written down.
+When the likelihood function cannot be written down, life is harder; we will address that case in \secref{sec:lfi}.
 
 \section{The likelihood function}\label{sec:lf}
 The problem setup will be that there is a data set $Y$, a parameter (or set of parameters, but usually just ``parameter'') of interest $\theta$, a set of nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
@@ -107,9 +120,9 @@ That is... HOGG
 HOGG: Importantly: Nuisance parameters also!
 HOGG: Importantly: Specific assumptions.
 
-You can often (but not always) think of the LF as a prediction for the expectation of the data plus a noise model.
+You can often (but not always) think of the likelihood function as a prediction for the expectation of the data plus a noise model.
 For example, if you believe that the expectation for the data depends linearly on the parameters $(\theta, \alpha)$, and then in addition there is additive, Gaussian noise, the likelihood function becomes... HOGG
-The LF both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted, given the parameters.
+The likelihood function both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted, given the parameters.
 
 I alluded to the likelihood principle in \secref{sec:intro}.
 The principle is that everything about the data $Y$ that can possibly matter to the parameters $(\theta,\alpha)$ is contained in the likelihood function.
@@ -138,7 +151,7 @@ Profile likelihood.
 
 Fully marginalized likelihood (FML).
 
-Reparameterization-invariance of the LF.
+Reparameterization-invariance of the likelihood function.
 This invariance does not hold for any other part of statistical inference, as we will see.
 
 \section{Statistical inference}
@@ -206,6 +219,14 @@ When a paper multiplies a prior by a likelihood to produce a posterior it is---a
 At worst it is irrelevant to every individual reader.\footnote{%
 HOGG WRITE about the DFM pov.}
 
+HOGG: In what very specific sense is Bayes best?
+It is best for bettors.
+Thus Bayes is the right thing to do if you want to make a prediction.
+HOGG Refer back here to \secref{sec:intro}.
+
+HOGGG: There is another use case, which is decision-making.
+Here again you might want to be Bayesian but then do expectations of utility....
+
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
 Here we will only consider one, which is \emph{supervised regression}:
@@ -237,7 +258,7 @@ but also from all of the training data $\setof{Y_i, \theta_i}_{i=1}^n$.
 
 HOGG: It is in this section that community norms must come up.
 
-HOGG: Note that if you can't see a peak in the LF, it doesn't mean that you don't have a measurement! It just means that the scope of your LF is too narrow. More data were involved. Be explicit about that and you will be okay.
+HOGG: Note that if you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. More data were involved. Be explicit about that and you will be okay.
 
 \section{Can't I just use flat priors?}\label{sec:flat}
 We need a peak in the likelihood function to claim a measurement.
@@ -274,7 +295,7 @@ For all the reasons given in \secref{sec:combining}, it is critical that the qua
 HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
-Does the requirement that there be a peak in a sensible likelihood function (LF) imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
+Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
 Obviously, looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
 However, there are many circumstances in the contemporary sciences in which we can get some kind of estimate of our posterior pdf, but we cannot compute the likelihood function.
 
