@@ -5,10 +5,13 @@
 % - write all sections.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
+% - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
 
 % style notes
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
+% - Is first person "I" or "we"?
+% - Be careful with "set" vs "list" vs "vector" vs "matrix".
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
 % - "data" is a mass noun like "grass" or "hair."
@@ -43,7 +46,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 January}
+\date{2025 February}
 \begin{document}
 
 \maketitle\thispagestyle{empty}
@@ -90,16 +93,15 @@ If the \textsl{Gaia} Catalog contained mean or median-of-posterior estimates or 
 One project that doesn't understand the likelihood principle is the ``cosmology with one galaxy'' project (CITE).
 This project performed a machine-learning regression on a set of galaxies ... HOGG CAN WE SAY THIS?
 
-This \documentname{} is partly about \emph{subjectivity}:
-Making a measurement involves myriad subjective choices.
-But there is another kind of subjectivity in play.
-What method you use to make a measurement depends on what \emph{you want to do} with that measurement.
+I opened by noting that data analyses involve subjective choices.
+There is another kind of subjectivity in play:
+What method you use depends on what \emph{you want to do} with your data analysis.
 The primary use case I am going to focus on is the case in which you have a data set and you have a parameter of interest, and you want to know \emph{what that particular data set has to say} about the parameter of interest.
-There are other use cases, which lead to different methodologies.
+There are other use cases.
 Sometimes you are making the measurement because you want to make a \emph{prediction} for a future experiment.
 That is, you want to know what some future data set will say about your parameter of interest.
 Sometimes you are trying to make a \emph{decision} and your decision will depend on the value of the parameter, plus other things about your utility function (your economic goals, say).
-We will discuss these factors a tiny bit in \secref{sec:bayes}, but mainly we will concentrate on answering the question ``what does my data\footnote{%
+We will discuss these alternative objectives a tiny bit in \secref{sec:bayes}, but mainly we will concentrate on answering the question ``what does my data\footnote{%
 One of the questions I get asked most about data is whether the word ``data'' is singular or plural. I don't have a strong position. However, in this document I will attempt to treat the word ``data,'' grammatically, as a mass noun, like ``grass'' or ``hair.''}
 say about my parameter of interest?''
 
@@ -115,7 +117,7 @@ Thus the question \emph{Do these data $Y$ deliver a measurement of parameter $\t
 When the likelihood function cannot be written down, life is harder; we will address that case in \secref{sec:lfi}.
 
 \section{The likelihood function}\label{sec:lf}
-The problem setup will be that there is a data set $Y$, a parameter (or set of parameters, but usually just ``parameter'') of interest $\theta$, a set of nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
+The problem setup will be that there is a list or block of data $Y$, a parameter (or list of parameters) of interest $\theta$, a list of nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
 In contexts like this, there are many meanings of the word ``model,'' but for me this will be something that can be used to compute probabilities in the space of the data.
 That is... HOGG
 HOGG: Importantly: Nuisance parameters also!
@@ -174,7 +176,7 @@ The most beautiful thing about Bayesian inference is that it is the provably cor
 HOGG Refer here to Jaynes again.}
 The rules of probability theory are also the rules about reasoning about the plausibility of the things you know, or want to know.
 For this reason, it makes sense for a scientist---or a human being---to reason in a Bayesian manner.
-I would even say (and I have said elsewhere; CITE)
+I would even say (and I have said elsewhere \cite{plausibility})
 that, for the reason of this provable correctness, the whole scientific community ought to act, collectively, in a kind of Bayesian way.
 It should have a collective set of beliefs and it should update those collective beliefs by (at least approximately) multiplying by a likelihood function for the new data it obtains each year.
 
@@ -185,13 +187,13 @@ The point of each scientific paper is to move forward the beliefs of the communi
 That moving forward could be contributions to, or arguments about, the community's prior beliefs, the community's many likelihood functions, and the community's posterior beliefs.
 Each paper has a small role in this program; it is not the case that each paper executes the whole program for the whole community.\footnote{%
 There are many treatises on the philosophy of science.
-I feel like we need a philosophical theory of the \emph{scientific paper} or contribution.}
+I feel like we need a philosophical theory of the \emph{scientific paper} or of the individual scientific contribution.}
 
 When scientist A reads a paper by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
 I believe that scientist A wants to know if scientist A's beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
-What scientist A needs to get from the paper is scientist B's likelihood function.
+What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below HOGG DO WE?).
 
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
