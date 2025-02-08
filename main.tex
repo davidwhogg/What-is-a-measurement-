@@ -5,7 +5,10 @@
 % - write all sections.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
+% - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
 % - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
+% - Should the abstract be about derivatives of the log likelihood instead of regions and complementary regions?
+% - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
 
 % style notes
 % -----------
@@ -63,7 +66,7 @@ Importantly, the differences among using the LF, the posterior pdf, or a machine
 \section{Introduction}\label{sec:intro}
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
 For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs (CITE).
-For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets (CITE); anything else involves subjective choices, at the expense of optimality.
+For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets \cite{jaynes}; anything else involves subjective choices, at the expense of optimality.
 It is increasingly recognized (despite monikers such as ``objective Bayes''; CITE) that no method for statistical inference is \emph{objectively correct}:
 Every method for making a measurement, deciding among hypotheses, claiming a discovery from data, or predicting the outcome of a new experiment, involves myriad investigator choices.
 
@@ -90,8 +93,11 @@ This is clean!
 It permits any user of the Catalog to update their beliefs about that star's distance, or their beliefs about any other astrophysical inferences that involve that star's distance.
 If the \textsl{Gaia} Catalog contained mean or median-of-posterior estimates or any other kind of biased estimators, the data would have been far harder (or even impossible) to use.
 
-One project that doesn't understand the likelihood principle is the ``cosmology with one galaxy'' project (CITE).
-This project performed a machine-learning regression on a set of galaxies ... HOGG CAN WE SAY THIS?
+One result that motivated this \documentname{} is a ``cosmology with one galaxy'' claim \cite{onegalaxy}.
+This claim is that there is significant information about some of the cosmological parameters---and especially the mean matter density of the Universe---in the measurable properties of a single galaxy.
+This claim might be correct, but the paper does not demonstrate it.
+The paper is not consistent with the likelihood principle; it does not ground its claim in the likelihood or in any proxy for the likelihood.
+Instead it uses a machine-learning regression to substantiate its results; the issues with this will be discussed in \secref{sec:ml}.
 
 I opened by noting that data analyses involve subjective choices.
 There is another kind of subjectivity in play:
@@ -172,8 +178,8 @@ Model comparison. FML and likelihood ratio. Neyman--Pearson.
 Making decisions. Requires a utility function.
 
 \section{Isn't Bayes provably best?}\label{sec:bayes}
-The most beautiful thing about Bayesian inference is that it is the provably correct way to reason about uncertain things.\footnote{%
-HOGG Refer here to Jaynes again.}
+The most beautiful thing about Bayesian inference is that it is the provably correct way for an individual to reason about uncertain things.\footnote{%
+The best explanation of this I know is the first Chapter of Jaynes's book \cite{jaynes}.}
 The rules of probability theory are also the rules about reasoning about the plausibility of the things you know, or want to know.
 For this reason, it makes sense for a scientist---or a human being---to reason in a Bayesian manner.
 I would even say (and I have said elsewhere \cite{plausibility})
@@ -256,6 +262,8 @@ No, it is not, or at least not in itself:
 When a machine learning method returns a result, it is using information from your data $Y$
 but also from all of the training data $\setof{Y_i, \theta_i}_{i=1}^n$.
 \textbf{HOGG: What about looking at the distribution of $\theta$ in the training set and at the end? Or if you change the data slightly? Can't you answer the information theoretic questions that way? If not, why not?}
+
+HOGG: MAKE SURE this section talks about a training set where a is strongly correlated with b, and the data have information about b. Then you will conclude that you can see a in the data!
 
 \section{Claiming a measurement}\label{sec:claim}
 
