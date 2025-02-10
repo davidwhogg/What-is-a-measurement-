@@ -18,6 +18,7 @@
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
 % - "data" is a mass noun like "grass" or "hair."
+% - Should all pdfs be conditioned on I? I think so; fix that and audit for it.
 
 \documentclass{article}
 \usepackage[letterpaper]{geometry}
@@ -135,13 +136,13 @@ The likelihood function both tells you how you expect the data to change as you 
 
 I alluded to the likelihood principle in \secref{sec:intro}.
 The principle is that everything about the data $Y$ that can possibly matter to the parameters $(\theta,\alpha)$ is contained in the likelihood function.
-That is, if you have beliefs represented (accurately) a prior pdf $p(\theta,\alpha)$ for the parameters $(\theta,\alpha)$,
+That is, if you have beliefs represented (accurately) a prior pdf $p(\theta,\alpha\given I)$ for the parameters $(\theta,\alpha)$,
 and then you get data $Y$,
-and then you want to update your beliefs to a posterior pdf $p(\theta,\alpha\given Y)$, the only legitimate procedure for updating your beliefs is to multiply by the likelihood function $p(Y\given\theta,\alpha)$:
+and then you want to update your beliefs to a posterior pdf $p(\theta,\alpha\given Y,I)$, the only legitimate procedure for updating your beliefs is to multiply by the likelihood function $p(Y\given\theta,\alpha,I)$:
 \begin{align}
-    p(\theta,\alpha\given Y) &= \frac{1}{Z}\,p(\theta,\alpha)\,p(Y\given\theta,\alpha) ~,\label{eq:bayes}
+    p(\theta,\alpha\given Y,I) &= \frac{1}{Z}\,p(\theta,\alpha\given I)\,p(Y\given\theta,\alpha,I) ~,\label{eq:bayes}
 \end{align}
-where $Z$ is a normalization that ensures that $\int p(\theta,\alpha\given Y)\,\dd\theta\,\dd\alpha=1$.
+where $Z$ is a normalization that ensures that $\int p(\theta,\alpha\given Y,I)\,\dd\theta\,\dd\alpha=1$.
 This procedure \eqref{eq:bayes} is called ``Bayes rule'' and is the basis of Bayesian reasoning.
 This is the \emph{only way} that the data are permitted to be used to update your beliefs, in Bayesian reasoning.
 That's the likelihood principle.
@@ -150,18 +151,37 @@ But the likelihood principle has a role in frequentist statistics too.
 The principle in frequentism is that everything about the data $Y$ that is relevant to the parameters $(\theta,\alpha)$ is encoded in the likelihood function.
 That is, the likelihood function is a sufficient statistic for the data, when your goals relate (only) to the parameters $(\theta,\alpha)$.
 Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
-The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being unbiased.}
+The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
 
-Meanings of differences in log likelihood.
+HOGG: Meanings of differences in log likelihood.
+A large difference in log likelihood is required to claim a measurement.
 
-Marginalized likelihood.
+HOGG: Reparameterization-invariance of the likelihood function.
+This invariance does not hold for any other part of statistical inference, as we will see.
+
+\section{Nuisance parameters}
+
+Much of what follows is about the nuisance parameters $\alpha$.
+Nuisance parameters substantially complicate questions of measurement.
+Many of the mistakes in the literature are mistakes in the handling of nuisance parameters.
+This is in part because it is hard to get rid of the nuisance parameters without accidentally introducing information about the parameter of interest $\theta$.
+Any information brought in that doesn't come directly from the data $Y$ is information that can deceive an investigator into mistakenly claiming a measurement or over-estimating the information in the data about the parameter of interest $\theta$.
+
+How do we account for the nuisances $\alpha$ when we are claiming a measurement of the parameter of interest $\theta$?
+For the committed Bayesians, there is only one answer, and that is to marginalize.
+That is, you put a prior $p(\alpha\given I)$ on the nuisance parameters and integrate
+\begin{align}
+    p(\theta\given Y,I) &= \int p(\theta,\alpha\given Y,I)\,p(\alpha\given I)\,\dd\alpha ~,\label{eq:marginallf}
+\end{align}
+where the integral over $\alpha$ is, implicitly the integral over all of the nuisance parameter space, or the sum over all possible settings of $\alpha$ if $\alpha$ is discrete.
+You might be tempted to conclude that we have a measurement of $\theta$ if there is a peak in this marginal likelihood.
+That will turn out to be wrong, as we will show in \secref{sec:flat}, and related to ideas that come up in \secref{sec:ml}:
+If the data contain lots of information about the nuisances $\alpha$ and those nuisances are correlated with (HOGG THIS IS TOO VAGUE) the parameter of interest $\theta$, then these kinds of marginalizations will in general produce peaks in the marginal likelihood even when there is no information about $\theta$ in the data $Y$.
+That's true even when those priors on the nuisances are flat, as we show in \secref{sec:flat}.
 
 Profile likelihood.
 
-Fully marginalized likelihood (FML).
-
-Reparameterization-invariance of the likelihood function.
-This invariance does not hold for any other part of statistical inference, as we will see.
+HOGG: Fully marginalized likelihood (FML)?
 
 \section{Statistical inference}
 Estimates of parameters. Bias and variance.
@@ -340,7 +360,12 @@ Many Bayesians feel that the only point of science is to update a posterior. May
 If you put tons of work into making a likelihood function, why obscure it by multiplying it by a pointless and obscuring prior?
 
 \paragraph{Acknowledgments}
-It is a pleasure to thank Dan Foreman-Mackey (DeepMind) and Hans-Walter Rix (MPIA) for valuable discussions about these matters over the years.
+It is a pleasure to thank
+  Dan Foreman-Mackey (DeepMind) and
+  Hans-Walter Rix (MPIA)
+for valuable discussions about these matters over the years, and
+  Chirag Modi (NYU)
+for discussions of the content of this manuscript.
 
 \raggedright
 \bibliographystyle{plain}
