@@ -14,6 +14,7 @@
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
 % - Is first person "I" or "we"?
+% - We should use \emph{} every time we introduce a new term of jargon that is important to know.
 % - Be careful with "set" vs "list" vs "vector" vs "matrix".
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
@@ -33,6 +34,7 @@
 \setlength{\oddsidemargin}{3.25in}\addtolength{\oddsidemargin}{-0.5\textwidth}
 \pagestyle{myheadings}
 \markboth{foo}{\sffamily Hogg / What is a measurement?}
+\renewcommand{\newblock}{} % this adjusts the bibliography style.
 \frenchspacing\sloppy\sloppypar\raggedbottom
 
 % text macros
@@ -41,6 +43,7 @@
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
 
 % math macros
+\newcommand{\e}{\mathrm{e}} % why do I have to define this?
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\given}{\,|\,}
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
@@ -152,16 +155,30 @@ The principle in frequentism is that everything about the data $Y$ that is relev
 That is, the likelihood function is a sufficient statistic for the data, when your goals relate (only) to the parameters $(\theta,\alpha)$.
 Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
 The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
+The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameter $\theta$ (and all the nuisance parameters $\alpha$).
+Whatever estimate of $\theta$ you want to make, you haven't measured your parameter $\theta$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
-HOGG: Meanings of differences in log likelihood.
-A large difference in log likelihood is required to claim a measurement.
+HOGG: INTRODUCE the log likelihood, give it a symbol, and use that symbol in the paragraphs that follow.
 
-HOGG: Reparameterization-invariance of the likelihood function.
-This invariance does not hold for any other part of statistical inference, as we will see.
+There are two very important properties of the likelihood function, when it comes to measurement.
+The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
+A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma''.
+This (it turns out) means that the second derivative of the log likelihood function with respect to parameters is related to measurement uncertainty.
+This is formalized in the Cram\'er--Rao bound CITE on the variance (and bias) of estimators; more on this in \secref{sec:inference}
+It also means that any claim of a measurement requires a large difference in log likelihood between a model with a best-fit value of some parameter $\theta$ and a null model in which that parameter vanishes.
+
+That is---and critical to everything that follows in this \documentname---A measurement of any parameter $\theta$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
+The peak in the log likelihood must be taller than its surroundings by log-likelihood differences much larger than unity.\footnote{Here, and everywhere in this document, the words ``log'' or ``logarithm'' or ``logarithmic'' always refer to natural logarithms in base $\e$.}
+In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be much larger than unity.
+
+The second important property of the likelihood function is that it is parameterization-invariant.
+If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformations between $(\theta,\alpha)$ and $\beta$ are invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
+This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
+The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes}.
 
 \section{Nuisance parameters}
 
-Much of what follows is about the nuisance parameters $\alpha$.
+Much of what follows is (effectively) about the nuisance parameters $\alpha$.
 Nuisance parameters substantially complicate questions of measurement.
 Many of the mistakes in the literature are mistakes in the handling of nuisance parameters.
 This is in part because it is hard to get rid of the nuisance parameters without accidentally introducing information about the parameter of interest $\theta$.
@@ -177,17 +194,19 @@ where the integral over $\alpha$ is, implicitly the integral over all of the nui
 You might be tempted to conclude that we have a measurement of $\theta$ if there is a peak in this marginal likelihood.
 That will turn out to be wrong, as we will show in \secref{sec:flat}, and related to ideas that come up in \secref{sec:ml}:
 If the data contain lots of information about the nuisances $\alpha$ and those nuisances are correlated with (HOGG THIS IS TOO VAGUE) the parameter of interest $\theta$, then these kinds of marginalizations will in general produce peaks in the marginal likelihood even when there is no information about $\theta$ in the data $Y$.
-That's true even when those priors on the nuisances are flat, as we show in \secref{sec:flat}.
+That's true even when those priors on the nuisances are flat, as we mention in \secref{sec:bayes} (HOGG DO WE?) and explicitly show in \secref{sec:flat}.
 
-Profile likelihood.
+HOGG: There is an extremely important idea in frequentist statistics, which is that of the \emph{profile likelihood}.
+HOGG: DECIDE on a notation and use an equation to define.
 
 HOGG: Fully marginalized likelihood (FML)?
 
-\section{Statistical inference}
+\section{Statistical inference}\label{sec:inference}
 Estimates of parameters. Bias and variance.
 Cram\'er--Rao, and Fisher.
 
-Confidence intervals.
+Confidence intervals and the like.
+Get serious about nuisance parameters again here.
 
 Beliefs about parameters. Requires a prior pdf.
 
