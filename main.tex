@@ -3,12 +3,14 @@
 % to-do items
 % -----------
 % - write all sections.
-% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra
+% - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
+% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
 % - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
 % - Should the abstract be about derivatives of the log likelihood instead of regions and complementary regions?
 % - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
+% - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 
 % style notes
 % -----------
@@ -24,7 +26,7 @@
 \documentclass{article}
 \usepackage[letterpaper]{geometry}
 \usepackage{setspace}
-\usepackage{amsmath, amsfonts}
+\usepackage{amsmath, amsfonts, mathrsfs}
 
 % typesetting issues
 \setstretch{1.08}
@@ -76,17 +78,18 @@ Every method for making a measurement, deciding among hypotheses, claiming a dis
 
 This paper is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
-My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}
-This is the principle that all information about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
+My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}.
+This principle---agreed upon by both Bayesians and frequentists---is that all information in any data set $Y$ about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
 The likelihood function is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
 The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
-If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not substantiated by the data.
+If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not (completely) substantiated by the data.
 
-One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission \cite{gaia}\footnote{%
+One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission\footnote{%
 The \textsl{Gaia} Mission acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions \cite{gaialf}.
 That said, there is no documentary evidence that I can find that the project made the decisions it made specifically because of the likelihood principle.
-Its design decisions may have been intuitively made, as far as I can tell, even though they were made absolutely correctly.},
+Its design decisions may have been intuitively made, as far as I can tell, even though they were made absolutely correctly.}
+\cite{gaia},
 which is measuring (among many other things, the parallaxes to more than a billion stars in the Milky Way.
 The parallax is a geometric measure of the inverse of the distance to the star.
 This Mission is trying to deliver valuable information to the astronomical community, members of which can update their beliefs about individual stars, about stellar clusters, and about the populations of stars using the data releases.
@@ -156,20 +159,25 @@ That is, the likelihood function is a sufficient statistic for the data, when yo
 Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
 The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
 The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameter $\theta$ (and all the nuisance parameters $\alpha$).
-Whatever estimate of $\theta$ you want to make, you haven't measured your parameter $\theta$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
+Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
-HOGG: INTRODUCE the log likelihood, give it a symbol, and use that symbol in the paragraphs that follow.
+In many contexts, both conceptually and for reasons of numerical precision, it is better to work with the logarithm $\mathscr{L}$ of the likelihood function;
+\begin{align}
+    \mathscr{L}(\theta,\alpha) &= \ln p(Y\given\theta,\alpha,I) ~.
+\end{align}
+When we take the log---and we always use natural logarithms here---we usually explicitly write the log likelihood in terms only of the parameters only.
+The data are fixed, after all.
 
 There are two very important properties of the likelihood function, when it comes to measurement.
 The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
-A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma''.
+A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma'' (HOGG CHECK).
 This (it turns out) means that the second derivative of the log likelihood function with respect to parameters is related to measurement uncertainty.
 This is formalized in the Cram\'er--Rao bound CITE on the variance (and bias) of estimators; more on this in \secref{sec:inference}
 It also means that any claim of a measurement requires a large difference in log likelihood between a model with a best-fit value of some parameter $\theta$ and a null model in which that parameter vanishes.
 
-That is---and critical to everything that follows in this \documentname---A measurement of any parameter $\theta$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
+That is---and critical to everything that follows in this \documentname---any claim of a measurement of any parameter $\theta$ in data $Y$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
 The peak in the log likelihood must be taller than its surroundings by log-likelihood differences much larger than unity.\footnote{Here, and everywhere in this document, the words ``log'' or ``logarithm'' or ``logarithmic'' always refer to natural logarithms in base $\e$.}
-In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be much larger than unity.
+In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be substantially larger than unity.
 
 The second important property of the likelihood function is that it is parameterization-invariant.
 If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformations between $(\theta,\alpha)$ and $\beta$ are invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
@@ -193,30 +201,78 @@ That is, you put a prior $p(\alpha\given I)$ on the nuisance parameters and inte
 where the integral over $\alpha$ is, implicitly the integral over all of the nuisance parameter space, or the sum over all possible settings of $\alpha$ if $\alpha$ is discrete.
 You might be tempted to conclude that we have a measurement of $\theta$ if there is a peak in this marginal likelihood.
 That will turn out to be wrong, as we will show in \secref{sec:flat}, and related to ideas that come up in \secref{sec:ml}:
-If the data contain lots of information about the nuisances $\alpha$ and those nuisances are correlated with (HOGG THIS IS TOO VAGUE) the parameter of interest $\theta$, then these kinds of marginalizations will in general produce peaks in the marginal likelihood even when there is no information about $\theta$ in the data $Y$.
+If the data contain lots of information about the nuisances $\alpha$ and the highest-likelihood values of the nuisances depend on the parameter of interest $\theta$, then these kinds of marginalizations will in general produce peaks in the marginal likelihood even when there is no information about $\theta$ in the data $Y$.
 That's true even when those priors on the nuisances are flat, as we mention in \secref{sec:bayes} (HOGG DO WE?) and explicitly show in \secref{sec:flat}.
 
-HOGG: There is an extremely important idea in frequentist statistics, which is that of the \emph{profile likelihood}.
-HOGG: DECIDE on a notation and use an equation to define.
+On the subject of nuisance parameters,
+there is an extremely important idea in frequentist statistics, which is that of the \emph{profile likelihood}.
+\begin{align}
+    \mathscr{L}_\alpha(\theta) &= \max_\alpha \mathscr{L}(\theta,\alpha) ~,
+\end{align}
+where the subscript reminds us what we've profiled over, and the max operation means the following:
+For every value of $\theta$, deliver the log likelihood for the maximum-likelihood value of $\alpha$ at that value of $\theta$.
+This answers the questions of the form:
+Is there \emph{any} setting of $\alpha$ that makes the data probable for this value of $\theta$?
+That is, is it likely to make the data at this value of $\theta$ (when I have no opinions about $\alpha$)?
+Bayesians can make a marginalized likelihood if they want to get rid of $\alpha$ (provided that they have a prior pdf on $\alpha$).
+Frequentists don't usually\footnote{%
+HOGG exception!}
+have a pdf to apply on any parameters, so they can't marginalize; they have to optimize rather than marginalize over alpha.
+Frequentists made a profile likelihood if they want to get rid of $\alpha$.\footnote{%
+I like to joke that Bayesians integrate, and frequentists take derivatives. It isn't entirely a joke.}
 
-HOGG: Fully marginalized likelihood (FML)?
+Sometimes Bayesians do a really big integral, which is the likelihood marginalized over \emph{all} parameters,
+and call it the \emph{evidence} or the \emph{fully marginalized likelihood}.
+This is not relevant to our goals here, so I will leave my criticisms for a different rant.
+
+HOGG: Something about true subjective Bayes if the community really does have shared beliefs about the nuisances. Then does the marginalized likelihood deliver a measurement? I think maybe it does?
 
 \section{Statistical inference}\label{sec:inference}
-Estimates of parameters. Bias and variance.
-Cram\'er--Rao, and Fisher.
+Fundamentally, \emph{inference} is the estimation or measurement or prediction of $\theta$ given data $Y$.
+For a frequentist, this involves an \emph{estimator}, which could be maximum-likelihood or otherwise.
+For a Bayesian, this means making a likelihood function, and (perhaps) multiplying it by a prior and renormalizing to a posterior pdf (or sampling with MCMC; CITE).
+In what follows, for specificity, we will assume that the frequentists use maximum-likelihood estimators.
+Bayesians don't necessarily have estimators, but sometimes a Bayesian will report a posterior mean or median or (wrongly\footnote{%
+Recall my comment in HOGG FOOTNOTE REFERENCE that Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum can be far from the bulk, oddly.})
+a maximum of posterior.
 
-Confidence intervals and the like.
-Get serious about nuisance parameters again here.
+Sometimes Bayesians like to think that, since they have a framework of prior pdf and posterior pdf, they don't need to ever choose an estimator.
+There is an element of truth to this!
+However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$.
+Thus even Bayesians have estimators at some level.
+The qualities of estimators---in terms of bias and variance---are limited by a beautiful set of mathematics in the area of \emph{information theory}.
+The most important, relevant result is the Cram\'er--Rao bound (CITE), which limits the variance estimators.
+This bound says that, given data $Y$, the best an unbiased estimator can do is set by the Fisher Information HOGG SYMBOL (CITE),
+which is (essentially) the second derivative of the negative of the log likelihood $\mathscr{L}(\theta,\alpha)$.
+HOGG EQUATION HERE.
+The Cram\'er--Rao bound appears in frequentist contexts more than Bayesian contexts, but it is a theorem, so it applies in both cases.
+One consequence of all this is that any claim about the ability of some data set $Y$ to measure or constrain some parameter or parameters of interest $\theta$ in the presence of nuisances $\alpha$ can all be boiled down to second derivatives of the log-likelihood $\mathscr{L}(\theta,\alpha)$.
 
-Beliefs about parameters. Requires a prior pdf.
+One way to think about whether data $Y$ have provided a measurement of parameter $\theta$ is to think about the \emph{uncertainty}\footnote{%
+It's not an error bar or an error, it's an uncertainty. If it were an error, we would correct it.}
+in the measurement of $\theta$.
+Cram\'er--Rao guides us here:
+This bound says that the best you can possibly do, in an unbiased-estimator sense, on your parameter of interest, given your data $Y$, is the square root of the inverse of the Fisher information.
+That is, you start by computing the information tensor $C^{-1}_{(\theta,\alpha)}$
+\begin{align}
+    C^{-1}_{(\theta,\alpha)} &= \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.
+\end{align}
+This second-derivative tensor is $d\times d$, where $d$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
+HOGG DO WE HAVE DEFINITIONS for the dimensionality of $\theta$ and $\alpha$?
+Then you invert this matrix to get $C_{(\theta,\alpha)}$.
+Then you take the (square) submatrix of $C_{(\theta,\alpha)}$ corresponding to $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
+If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
+If $\theta$ has more than one component, this submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
+HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
+Importantly, this bound sets the properties of any possible estimator.
+If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
 
-Making predictions and placing bets.
+Frequentists and Bayesians are all bound by Cram\'er--Rao.
+However, Bayesians can do more than frequentists.
+Bayesians can update beliefs, compute optimal betting odds on future outcomes, and optimize utility over decisions, integrating over all possible states of the world.
+All these things are important, but they don't change the fundamental point that the likelihood function is sufficient for conveying the information in data $Y$ about parameter $\theta$ and thus the likelihood function is the only thing in play when a claim of measurement is being made.
 
-Model comparison. FML and likelihood ratio. Neyman--Pearson.
-
-Making decisions. Requires a utility function.
-
-\section{Isn't Bayes provably best?}\label{sec:bayes}
+\section{Isn't Bayes The Best Thing To Do (tm)?}\label{sec:bayes}
 The most beautiful thing about Bayesian inference is that it is the provably correct way for an individual to reason about uncertain things.\footnote{%
 The best explanation of this I know is the first Chapter of Jaynes's book \cite{jaynes}.}
 The rules of probability theory are also the rules about reasoning about the plausibility of the things you know, or want to know.
@@ -234,11 +290,11 @@ Each paper has a small role in this program; it is not the case that each paper 
 There are many treatises on the philosophy of science.
 I feel like we need a philosophical theory of the \emph{scientific paper} or of the individual scientific contribution.}
 
-When scientist A reads a paper by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
+When scientist A reads a paper written by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
 I believe that scientist A wants to know if scientist A's beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
-What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below HOGG DO WE?).
+What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in secref... HOGG DO WE?).
 
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
@@ -274,6 +330,13 @@ HOGG Refer back here to \secref{sec:intro}.
 
 HOGGG: There is another use case, which is decision-making.
 Here again you might want to be Bayesian but then do expectations of utility....
+
+The Cox proof about Bayesian reasoning is correct of course (it's a proof!).
+You, personally ought to reason according to Bayes.
+The scientific community ought to reason according to Bayes.
+The important thing is that \emph{a measurement is not the same as a belief}.
+Measurements are used to \emph{update} your beliefs.
+Hence measurements are properties of your likelihood function, not your posterior pdf.
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
