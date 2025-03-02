@@ -9,7 +9,9 @@
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
 % - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
 % - Should the abstract be about derivatives of the log likelihood instead of regions and complementary regions?
+% - Check Fisher citation; also good for maximum-likelihood??
 % - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
+% - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 
 % style notes
@@ -55,7 +57,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 February}
+\date{2025 March}
 \begin{document}
 
 \maketitle\thispagestyle{empty}
@@ -73,7 +75,7 @@ Importantly, the differences among using the LF, the posterior pdf, or a machine
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
 For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs (CITE).
 For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets \cite{jaynes}; anything else involves subjective choices, at the expense of optimality.
-It is increasingly recognized (despite monikers such as ``objective Bayes''; CITE) that no method for statistical inference is \emph{objectively correct}:
+It is increasingly recognized (despite monikers such as ``objective Bayes'' \cite{objective}) that no method for statistical inference is \emph{objectively correct}:
 Every method for making a measurement, deciding among hypotheses, claiming a discovery from data, or predicting the outcome of a new experiment, involves myriad investigator choices.
 
 This paper is partly about claims of measurement:
@@ -93,8 +95,8 @@ Its design decisions may have been intuitively made, as far as I can tell, even 
 which is measuring (among many other things, the parallaxes to more than a billion stars in the Milky Way.
 The parallax is a geometric measure of the inverse of the distance to the star.
 This Mission is trying to deliver valuable information to the astronomical community, members of which can update their beliefs about individual stars, about stellar clusters, and about the populations of stars using the data releases.
-The quantities in the \textsl{Gaia} Catalogs (CITE) that represent its parallax measurements are maximum-likelihood parallax measurements, and uncertainty estimates based on a Fisher-matrix-like analysis of uncertainty.
-These quantities can be cleanly combined into a good approximation of likelihood function (CITE ME).
+The quantities in the \textsl{Gaia} Data Archive \cite{gaiadata} that represent its parallax measurements are maximum-likelihood parallax measurements, and uncertainty estimates based on a Fisher-matrix-like analysis of uncertainty.
+These quantities can be cleanly combined into a good approximation of likelihood function \cite{gaialf}.
 That is, the \textsl{Gaia} Catalog parallax and parallax uncertainty for any star are parameters of a form for the probability of the Gaia data given that star's parallax.
 This is clean!
 It permits any user of the Catalog to update their beliefs about that star's distance, or their beliefs about any other astrophysical inferences that involve that star's distance.
@@ -172,7 +174,7 @@ There are two very important properties of the likelihood function, when it come
 The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
 A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma'' (HOGG CHECK).
 This (it turns out) means that the second derivative of the log likelihood function with respect to parameters is related to measurement uncertainty.
-This is formalized in the Cram\'er--Rao bound CITE on the variance (and bias) of estimators; more on this in \secref{sec:inference}
+This is formalized in the Cram\'er--Rao bound \cite{cramer, rao} on the variance (and bias) of estimators; more on this in \secref{sec:inference}
 It also means that any claim of a measurement requires a large difference in log likelihood between a model with a best-fit value of some parameter $\theta$ and a null model in which that parameter vanishes.
 
 That is---and critical to everything that follows in this \documentname---any claim of a measurement of any parameter $\theta$ in data $Y$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
@@ -230,7 +232,7 @@ HOGG: Something about true subjective Bayes if the community really does have sh
 \section{Statistical inference}\label{sec:inference}
 Fundamentally, \emph{inference} is the estimation or measurement or prediction of $\theta$ given data $Y$.
 For a frequentist, this involves an \emph{estimator}, which could be maximum-likelihood or otherwise.
-For a Bayesian, this means making a likelihood function, and (perhaps) multiplying it by a prior and renormalizing to a posterior pdf (or sampling with MCMC; CITE).
+For a Bayesian, this means making a likelihood function, and (perhaps) multiplying it by a prior and renormalizing to a posterior pdf (or sampling with MCMC \cite{mcmc}).
 In what follows, for specificity, we will assume that the frequentists use maximum-likelihood estimators.
 Bayesians don't necessarily have estimators, but sometimes a Bayesian will report a posterior mean or median or (wrongly\footnote{%
 Recall my comment in HOGG FOOTNOTE REFERENCE that Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum can be far from the bulk, oddly.})
@@ -241,8 +243,8 @@ There is an element of truth to this!
 However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$.
 Thus even Bayesians have estimators at some level.
 The qualities of estimators---in terms of bias and variance---are limited by a beautiful set of mathematics in the area of \emph{information theory}.
-The most important, relevant result is the Cram\'er--Rao bound (CITE), which limits the variance estimators.
-This bound says that, given data $Y$, the best an unbiased estimator can do is set by the Fisher Information HOGG SYMBOL (CITE),
+The most important, relevant result is the Cram\'er--Rao bound \cite{cramer, rao}, which limits the variance estimators.
+This bound says that, given data $Y$, the best an unbiased estimator can do is set by the Fisher Information HOGG SYMBOL \cite{fisher},
 which is (essentially) the second derivative of the negative of the log likelihood $\mathscr{L}(\theta,\alpha)$.
 HOGG EQUATION HERE.
 The Cram\'er--Rao bound appears in frequentist contexts more than Bayesian contexts, but it is a theorem, so it applies in both cases.
@@ -307,7 +309,7 @@ I don't necessarily mean that they will do so by writing a piece of code that im
 I mean something more approximate and vague.
 But sometimes it \emph{literally is the case} that this code and import and multiply \emph{is} what scientist A does.
 In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing.
-And NASA created the \textsl{LAMBDA} archive for likelihood functions in cosmology for exactly this purpose of sharing quantitative likelihood functions (CITE).
+And NASA created the \textsl{LAMBDA} archive in part to preserve executable likelihood functions in cosmology for exactly this purpose \cite{lambda}.
 
 Of course this is a dream.
 In many real cases, scientist A will not agree with the assumptions going into scientist B's likelihood function.
