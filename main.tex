@@ -14,6 +14,15 @@
 % - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 
+% HWR abstract suggestion ??
+% --------------------------
+% A measurement of a quantity theta is what certain \emph{data} tell you about it, in the ideal case irrespective of subjective choices or prior information.
+% (For both Bayesian and frequentist approaches), this is incorporated in the data likelihood L(theta) that — for a good measurement -- has a clear and unique peak.
+% Posterior distributions, machine-learning regression estimates, or marginalized likelihoods (over nuisance parameters alpha) for theta do not constitute a measurement, as they may be peaked even for uninformative data.
+% Measurements must be based on a clearly peaked \emph{profile likelihood} L_p(theta) = max_alpha L(theta, alpha), where the global maximum over all alpha must be found for any theta.
+% Only L_p(theta) isolates the role of the data in creating a localized likelihood. Constructing L_p(theta) may be computationally expensive or even infeasible if the space of alpha is extremely high-dimensional.
+% The LF itself inevitably contains subjective elements through the choices made in its construction, but these should reflect consensus assumptions within the relevant scientific community.
+
 % style notes
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
@@ -26,6 +35,7 @@
 % - Should all pdfs be conditioned on I? I think so; fix that and audit for it.
 
 \documentclass{article}
+\usepackage[utf8]{inputenc}
 \usepackage[letterpaper]{geometry}
 \usepackage{setspace}
 \usepackage{amsmath, amsfonts, mathrsfs}
