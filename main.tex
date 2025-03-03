@@ -267,7 +267,7 @@ Cram\'er--Rao guides us here:
 This bound says that the best you can possibly do, in an unbiased-estimator sense, on your parameter of interest, given your data $Y$, is the square root of the inverse of the Fisher information.
 That is, you start by computing the information tensor $C^{-1}_{(\theta,\alpha)}$
 \begin{align}
-    C^{-1}_{(\theta,\alpha)} &= \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.
+    C^{-1}_{(\theta,\alpha)} &= - \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.\label{eq:fisher}
 \end{align}
 This second-derivative tensor is $d\times d$, where $d$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
 HOGG DO WE HAVE DEFINITIONS for the dimensionality of $\theta$ and $\alpha$?
@@ -278,6 +278,11 @@ If $\theta$ has more than one component, this submatrix is the variance tensor o
 HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
+
+Second derivatives like in \eqref{eq:fisher} sound hard!
+But they aren't, for two reasons.
+The first is that, when your model is linear, and your noise is Gaussian, this second derivative becomes an outer product of first derivatives (see, for example, \cite{fittingaline}).
+The second is that we live in the future, in which programming languages like jax \cite{jax} give you analytic derivatives to second order for free.
 
 Frequentists and Bayesians are all bound by Cram\'er--Rao.
 However, Bayesians can do more than frequentists.
@@ -428,11 +433,11 @@ One example is in present-day cosmology, where one of the goals is to measure co
 There are only a few important physical cosmological parameters, but there are (literally) billions of nuisance parameters (often wrongly called ``phases'') that must be chosen before the model makes a specific prediction for the positions of the galaxies.
 Thus it is close to impossible, computationally, to compute the probability of the data given the parameters.
 There are just far too many parameters.
-At the same time, there are methods (known as likelihood-free inference, or simulation-based inference; CITE) for obtaining a posterior pdf for the important few parameters, without ever instantiating a likelihood function.
+At the same time, there are methods (known as likelihood-free inference, or simulation-based inference; \cite{abc, sbi}) for obtaining a posterior pdf for the important few parameters, without ever explicitly instantiating a likelihood function.
 Is it impossible to securely claim a measurement in this case?
 It is not.
 
-HOGG: HOW TO SAFELY ratio the posterior and the prior.
+HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 
 \section{Writing the paper}\label{sec:writing}
