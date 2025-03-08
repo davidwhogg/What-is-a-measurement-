@@ -14,15 +14,6 @@
 % - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 
-% HWR abstract suggestion ??
-% --------------------------
-% A measurement of a quantity theta is what certain \emph{data} tell you about it, in the ideal case irrespective of subjective choices or prior information.
-% (For both Bayesian and frequentist approaches), this is incorporated in the data likelihood L(theta) that — for a good measurement -- has a clear and unique peak.
-% Posterior distributions, machine-learning regression estimates, or marginalized likelihoods (over nuisance parameters alpha) for theta do not constitute a measurement, as they may be peaked even for uninformative data.
-% Measurements must be based on a clearly peaked \emph{profile likelihood} L_p(theta) = max_alpha L(theta, alpha), where the global maximum over all alpha must be found for any theta.
-% Only L_p(theta) isolates the role of the data in creating a localized likelihood. Constructing L_p(theta) may be computationally expensive or even infeasible if the space of alpha is extremely high-dimensional.
-% The LF itself inevitably contains subjective elements through the choices made in its construction, but these should reflect consensus assumptions within the relevant scientific community.
-
 % style notes
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
@@ -52,6 +43,7 @@
 \frenchspacing\sloppy\sloppypar\raggedbottom
 
 % text macros
+\renewcommand{\paragraph}[1]{\bigskip\par\noindent\textbf{#1}~---}
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
@@ -72,14 +64,14 @@ He also has appointments at the Center for Computational Astrophysics, Flatiron 
 
 \maketitle\thispagestyle{empty}
 
-\paragraph{Abstract:}
-The most important point common to both Bayesian and frequentist reasoning is that all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
-If we have a LF (and we don't, always), and we wish to say that a particular data sample $Y$ has measured a parameter $X$, there must be a neighborhood in $X$ in which the LF peaks, and a complementary region in which it is substantially lower.
-It is not enough to show that a particular estimator (machine-learning regression output, say) returns a value for $X$.
-It is also not enough to show that the posterior pdf for $X$ is peaked, because the posterior pdf involves prior information not derived from the data.
-Of course the LF itself also contains external, subjective, prior information; after all, the investigator made choices and assumptions in constructing the LF.
-For a measurement to be acceptable to the community, that LF must not be strongly contaminated by idiosyncratic assumptions.
-Importantly, the differences among using the LF, the posterior pdf, or a machine-learning regression to estimate $X$ are not differences of subjectivity; the differences are about sufficiency with respect to the data.
+\paragraph{Abstract}
+A measurement of a parameter $\theta$ is a quantitative constraint on the parameter flowing from some particular data $Y$; for example, the data from the ESA \textsl{Planck} Mission measured the matter density of the Universe.
+In both Bayesian and frequentist practice, all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
+Thus if parameter $\theta$ is measured with data $Y$, there must be a neighborhood in $\theta$ in which the LF has a (sufficiently) tall peak.
+Posterior pdfs, machine-learning regressions, and marginalized likelihoods (marginalized over nuisances), can all deliver things that look like measurements even when the raw LF is not peaked; these do not constitute measurements.
+Construction of the LF involves making subjective decisions and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
+I discuss how to demonstrate that the data $Y$ do (or can) provide a measurement of parameter $\theta$ even in the presence of substantial and covariant nuisances; it involves either profiling (optimizing over nuisances) or else inspection of the inverse of the Fisher information tensor.
+I discuss investigator options when there is no LF, or when it is intractable to search, optimize, or differentiate the LF.
 
 \section{Introduction}\label{sec:intro}
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
@@ -96,6 +88,8 @@ The likelihood function is a probability density for the data $Y$ given the para
 The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
 If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not (completely) substantiated by the data.
+For example, the ESA \textsl{Planck} Mission \cite{Planck} delivered a measurement of the matter density of the Universe \cite{planck18};
+this means that there is a tall, narrow peak in the \textsl{Planck} likelihood function in the cosmological-parameter space, and that peak corresponds to a particular value (or set of values) of the matter density.\footnote{Oddly, the \textsl{Planck} results are all shown as projections of posterior pdfs, so it isn't perfectly obvious to an outsider that in the cited paper \cite{planck18} there is indeed a peak in the likelihood. There is, though.}
 
 One project that understands the likelihood principle is the ESA \textsl{Gaia} Mission\footnote{%
 The \textsl{Gaia} Mission acts very much like it understands the likelihood principle; its data releases include quantitative descriptions of likelihood functions \cite{gaialf}.
@@ -254,13 +248,11 @@ However even the Bayesians have to decide what number (or numbers or intervals) 
 Thus even Bayesians have estimators at some level.
 The qualities of estimators---in terms of bias and variance---are limited by a beautiful set of mathematics in the area of \emph{information theory}.
 The most important, relevant result is the Cram\'er--Rao bound \cite{cramer, rao}, which limits the variance estimators.
-This bound says that, given data $Y$, the best an unbiased estimator can do is set by the Fisher Information HOGG SYMBOL \cite{fisher},
-which is (essentially) the second derivative of the negative of the log likelihood $\mathscr{L}(\theta,\alpha)$.
-HOGG EQUATION HERE.
-The Cram\'er--Rao bound appears in frequentist contexts more than Bayesian contexts, but it is a theorem, so it applies in both cases.
+This bound says that, given data $Y$, the best an unbiased estimator can do is set by the Fisher Information \cite{fisher},
 One consequence of all this is that any claim about the ability of some data set $Y$ to measure or constrain some parameter or parameters of interest $\theta$ in the presence of nuisances $\alpha$ can all be boiled down to second derivatives of the log-likelihood $\mathscr{L}(\theta,\alpha)$.
 
-One way to think about whether data $Y$ have provided a measurement of parameter $\theta$ is to think about the \emph{uncertainty}\footnote{%
+Getting more specific:
+It is possible to think about whether data $Y$ have provided a measurement of parameter $\theta$ by thinking about the \emph{uncertainty}\footnote{%
 It's not an error bar or an error, it's an uncertainty. If it were an error, we would correct it.}
 in the measurement of $\theta$.
 Cram\'er--Rao guides us here:
@@ -332,8 +324,8 @@ But usually scientist A will agree with a lot of those assumptions.
 Then scientist B's paper is a template for making a new likelihood function with modified assumptions, which scientist A can then use to modify scientist A's beliefs.
 This is a less direct use of scientist B's likelihood function, but still very useful.
 
-The point of scientist B's paper is not to represent scientist B's beliefs, but instead to aid scientist A in \emph{updating} scientist A's beliefs.
-Beliefs of individual scientists are idiosyncratic and subjective.
+The point of scientist B's paper is not to represent scientist B's beliefs, but instead to aid scientist A in \emph{updating} scientist A's beliefs, or maybe the beliefs of some community of which scientist A is a part.
+Beliefs of individual scientists (or even whole scientific communities) are idiosyncratic and subjective.
 If we want to update someone \emph{else's} beliefs, we must provide them with a likelihood function.
 The point of (most of) the scientific literature is to communicate about (aspects of) likelihood functions.
 When a paper multiplies a prior by a likelihood to produce a posterior it is---at best---demonstrating the effect of the data on typical beliefs.
@@ -353,7 +345,7 @@ You, personally ought to reason according to Bayes.
 The scientific community ought to reason according to Bayes.
 The important thing is that \emph{a measurement is not the same as a belief}.
 Measurements are used to \emph{update} your beliefs.
-Hence measurements are properties of your likelihood function, not your posterior pdf.
+Hence measurements are properties of your likelihood function, not properties of your posterior pdf.
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
@@ -384,12 +376,6 @@ but also from all of the training data $\setof{Y_i, \theta_i}_{i=1}^n$.
 
 HOGG: MAKE SURE this section talks about a training set where a is strongly correlated with b, and the data have information about b. Then you will conclude that you can see a in the data!
 
-\section{Claiming a measurement}\label{sec:claim}
-
-HOGG: It is in this section that community norms must come up.
-
-HOGG: Note that if you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. More data were involved. Be explicit about that and you will be okay.
-
 \section{Can't I just use flat priors?}\label{sec:flat}
 We need a peak in the likelihood function to claim a measurement.
 But if we want to be Bayesian, and we want to use \emph{flat priors},\footnote{%
@@ -411,9 +397,11 @@ To demonstrate this, we generate a very simple toy-likelihood and toy-posterior 
 HOGG DETAILS AND FIGURES.
 
 \section{Combining data samples}\label{sec:combining}
-The triviality of combining likelihood functions.
+HOGG: The triviality of combining likelihood functions.
 
-The impossibility of combining posteriors.
+HOGG: The impossibility of combining posteriors unless they are continuous functions.
+
+HOGG: The impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
 
 \section{Delivering useful catalogs of measurements}\label{sec:catalogs}
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
@@ -440,14 +428,26 @@ It is not.
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 
-\section{Writing the paper}\label{sec:writing}
-Given everything written here, what are the important things to make sure of any paper or document you might write about any measurement you have made?
-This \documentname\ has emphasized the choices you made in constructing your likelihood function, or your inference or estimator if you didn't have a likelihood function.
-These choices are important; they embody the subjectivity of measurement science.
-And, as we emphasize, especially in \secref{sec:claim}, a measurement is only acceptable in a scientific community when the assumptions going in to the likelihood function are acceptable to that community.
-Thus the most important property of a scientific paper describing and reporting a measurement is that the paper clearly explain all of the assumptions that went into that measurement.
+\section{Writing up the measurement in a paper}\label{sec:claim}
+What does it take to write a paper that claims that a set of data $Y$ constrains or measures a parameter (or set of parameters) $\theta$?
+It should be obvious at this point that it is a likelihood function, with a peak, and with a narrow enough uncertainty, or large enough Fisher Information, that the parameter is usefully measured
+(if it is not possible to access any kind of likelihood function, see \secref{sec:lfi}).
+But even more important than the requirement of a peak in a likelihood function is the requirement that the paper be absolutely clear and unambiguous about everything that was assumed and done.
 
-HOGG: Other things to say here? Or move this into \secref{sec:discussion}?
+The art of writing a good paper about a measurement is, as always, the art of writing clearly and with the audience in mind.
+This means explaining every non-trivial decision and assumption that you have made---where ``non-trivial'' depends on the context, which in turn is set by the expectations of the audience---and showing that the likelihood function (or your method of measurement) flows directly from those decisions and assumptions.
+I have taken the view recently that the decisions and assumptions should make up a stand-alone section in the papers I write (see, for example, \cite{}).
+In addition, it is good practice to release all the code and data, such that the measurement can be reproduced, the assumptions can be explored, and the likelihood can be combined with others that follow (see \secref{sec:combining}).
+
+A measurement will be more acceptable to the community the more consistent with community norms are the decisions and assumptions.
+For example, imagine that in the data $Y$, the parameter of interest $\theta$ is strongly covariant with some nuisance parameter $\alpha_k$,
+such that one cannot measure $\theta$ without having strong constraints on $\alpha_k$.
+In this case it is possible for an investigator to deliver a measurement of $\theta$ if the investigator is willing to postulate a particular value or narrow range for $\alpha_k$.
+That measurement of $\theta$ will only be accepted by the investigator's community if the community agrees that $\alpha_k$ does indeed live in or near that postulated range.
+If that's controversial, then the investigator has not delivered what anyone would accept as a measurement.
+For another example, if there is obviously non-Gaussian noise, but the measurement is only successful under an assumption of Gaussian noise, then there perhaps isn't a measurement in any real sense, even if there is a good peak in the assumed-Gaussian likelihood function.
+
+HOGG: Note that if you have a posterior peak but you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. Maybe more data were involved. Be explicit about that and you will be okay.
 
 \section{Discussion}\label{sec:discussion}
 This might have sounded frequentist, but it is not!
@@ -462,9 +462,10 @@ If you put tons of work into making a likelihood function, why obscure it by mul
 It is a pleasure to thank
   Dan Foreman-Mackey (DeepMind) and
   Hans-Walter Rix (MPIA)
-for valuable discussions about these matters over the years, and
-  Chirag Modi (NYU)
-for discussions of the content of this manuscript.
+for existential discussions about these matters over the years, and
+  Chirag Modi (NYU) and
+  Hans-Walter Rix (MPIA)
+for valuable discussions of the content of this particular \documentname.
 
 \raggedright
 \bibliographystyle{plain}
