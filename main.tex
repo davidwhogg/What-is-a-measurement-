@@ -13,6 +13,9 @@
 % - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
 % - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
+% - Are we clear about what we are suggesting, positively, in each section?
+% - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
+% - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
 
 % style notes
 % -----------
@@ -297,7 +300,7 @@ The point of each scientific paper is to move forward the beliefs of the communi
 That moving forward could be contributions to, or arguments about, the community's prior beliefs, the community's many likelihood functions, and the community's posterior beliefs.
 Each paper has a small role in this program; it is not the case that each paper executes the whole program for the whole community.\footnote{%
 There are many treatises on the philosophy of science.
-I feel like we need a philosophical theory of the \emph{scientific paper} or of the individual scientific contribution.}
+I feel like we need a philosophical theory of the \emph{scientific paper} or of the \emph{individual scientific contribution}.}
 
 When scientist A reads a paper written by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
 I believe that scientist A wants to know if scientist A's beliefs need to be updated.
@@ -397,9 +400,20 @@ To demonstrate this, we generate a very simple toy-likelihood and toy-posterior 
 HOGG DETAILS AND FIGURES.
 
 \section{Combining data samples}\label{sec:combining}
+There are (at least) two cases for combining measurements.
+In the first, there are two data sets, $Y_1$ and $Y_2$, and they both provide measurements of the parameters $\theta$ of interest, plus maybe nuisance parameters (which might differ between $Y_1$ and $Y_2$).
+In this case, the goal might be to get the best possible measurement of the parameters $\theta$ given both data sets.
+In the second, data set $Y_1$ measured parameter of interest $\theta_1$, and data set $Y_2$ measured parameter of interest $\theta_2$.
+In this case, the goal might be to measure some new parameter $\beta$ that depends on the values $\theta_1$ and $\theta_2$.
+In both of these cases, the most straightforward way to make the new measurement is by combining the two likelihood functions.
+
+HOGG: Get explicit, with a notation and some equations.
+
+HOGG: Assumption of independence of the data. NOTE that the sharing of nuisance parameters does not necessarily make the two data sets non-independent.
+
 HOGG: The triviality of combining likelihood functions.
 
-HOGG: The impossibility of combining posteriors unless they are continuous functions.
+HOGG: The impossibility of combining posteriors unless they (and their associated priors) are continuous functions.
 
 HOGG: The impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
 
@@ -436,7 +450,7 @@ But even more important than the requirement of a peak in a likelihood function 
 
 The art of writing a good paper about a measurement is, as always, the art of writing clearly and with the audience in mind.
 This means explaining every non-trivial decision and assumption that you have made---where ``non-trivial'' depends on the context, which in turn is set by the expectations of the audience---and showing that the likelihood function (or your method of measurement) flows directly from those decisions and assumptions.
-I have taken the view recently that the decisions and assumptions should make up a stand-alone section in the papers I write (see, for example, \cite{}).
+I have taken the view recently that the decisions and assumptions should make up a stand-alone section in the papers I write (see, for example, \cite{frizzle}).
 In addition, it is good practice to release all the code and data, such that the measurement can be reproduced, the assumptions can be explored, and the likelihood can be combined with others that follow (see \secref{sec:combining}).
 
 A measurement will be more acceptable to the community the more consistent with community norms are the decisions and assumptions.
@@ -447,6 +461,10 @@ That measurement of $\theta$ will only be accepted by the investigator's communi
 If that's controversial, then the investigator has not delivered what anyone would accept as a measurement.
 For another example, if there is obviously non-Gaussian noise, but the measurement is only successful under an assumption of Gaussian noise, then there perhaps isn't a measurement in any real sense, even if there is a good peak in the assumed-Gaussian likelihood function.
 
+HOGG: What do I write in the abstract of my paper? What uncertainty do I report? Answer this for all statistical philosophies.
+
+HOGG: How many ``sigma'' is my measurement? This is a requirement in many fields of physics.
+
 HOGG: Note that if you have a posterior peak but you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. Maybe more data were involved. Be explicit about that and you will be okay.
 
 \section{Discussion}\label{sec:discussion}
@@ -455,6 +473,7 @@ This is a fully Bayesian position.
 Actually, it is a position that doesn't make a commitment between frequentism and Bayesianism.
 
 Many Bayesians feel that the only point of science is to update a posterior. Maybe?! But that would be the point of the literature taken as a whole. Not the point of every single paper you write.
+If you want to support your Bayesian readers, give them a likelihood function!
 
 If you put tons of work into making a likelihood function, why obscure it by multiplying it by a pointless and obscuring prior?
 
