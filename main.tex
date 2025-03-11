@@ -68,13 +68,13 @@ He also has appointments at the Center for Computational Astrophysics, Flatiron 
 \maketitle\thispagestyle{empty}
 
 \paragraph{Abstract}
-A measurement of a parameter $\theta$ is a quantitative constraint on the parameter flowing from some particular data $Y$; for example, the data from the ESA \textsl{Planck} Mission measured the matter density of the Universe.
+A measurement of a parameter $\theta$ is a quantitative constraint flowing from some particular data $Y$; for example, the data from the ESA \textsl{Planck} Mission measured the matter density of the Universe.
 In both Bayesian and frequentist practice, all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
 Thus if parameter $\theta$ is measured with data $Y$, there must be a neighborhood in $\theta$ in which the LF has a (sufficiently) tall peak.
-Posterior pdfs, machine-learning regressions, and marginalized likelihoods (marginalized over nuisances), can all deliver things that look like measurements even when the raw LF is not peaked; these do not constitute measurements.
+Posterior pdfs, machine-learning regressions, and marginalized likelihoods (marginalized over nuisances), can all deliver things that look like measurements; these are not measurements, unless (in addition) the LF shows a peak.
 Construction of the LF involves making subjective decisions and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
-I discuss how to demonstrate that the data $Y$ do (or can) provide a measurement of parameter $\theta$ even in the presence of substantial and covariant nuisances; it involves either profiling (optimizing over nuisances) or else inspection of the inverse of the Fisher information tensor.
-I discuss investigator options when there is no LF, or when it is intractable to search, optimize, or differentiate the LF.
+I discuss how to demonstrate that the data $Y$ do (or can) provide a measurement of parameter $\theta$ even in the presence of substantial and covariant nuisances; it involves either profiling (optimizing over nuisances) or else taking the inverse of the Fisher information tensor.
+I discuss investigator options when there is no LF, or when it is not tractable or not computable.
 
 \section{Introduction}\label{sec:intro}
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
