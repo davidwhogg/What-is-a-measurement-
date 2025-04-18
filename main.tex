@@ -62,7 +62,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 March}
+\date{2025 April}
 \begin{document}
 
 \maketitle\thispagestyle{empty}
@@ -174,7 +174,7 @@ In many contexts, both conceptually and for reasons of numerical precision, it i
 \begin{align}
     \mathscr{L}(\theta,\alpha) &= \ln p(Y\given\theta,\alpha,I) ~.
 \end{align}
-When we take the log---and we always use natural logarithms here---we usually explicitly write the log likelihood in terms only of the parameters only.
+When we take the log---and we always use natural logarithms here---we usually explicitly write the log likelihood in terms of the parameters only.
 The data are fixed, after all.
 
 There are two very important properties of the likelihood function, when it comes to measurement.
@@ -286,7 +286,8 @@ All these things are important, but they don't change the fundamental point that
 
 \section{Isn't Bayes The Best Thing To Do (tm)?}\label{sec:bayes}
 The most beautiful thing about Bayesian inference is that it is the provably correct way for an individual to reason about uncertain things.\footnote{%
-The best explanation of this I know is the first Chapter of Jaynes's book \cite{jaynes}.}
+The theorems are known as the Cox theorems.
+The best explanation of them I know is the first Chapter of Jaynes's book \cite{jaynes}.}
 The rules of probability theory are also the rules about reasoning about the plausibility of the things you know, or want to know.
 For this reason, it makes sense for a scientist---or a human being---to reason in a Bayesian manner.
 I would even say (and I have said elsewhere \cite{plausibility})
@@ -306,7 +307,7 @@ When scientist A reads a paper written by scientist B, what does scientist A hop
 I believe that scientist A wants to know if scientist A's beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
-What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in secref... HOGG DO WE?).
+What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{...} HOGG DO WE?).
 
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
@@ -333,22 +334,39 @@ If we want to update someone \emph{else's} beliefs, we must provide them with a 
 The point of (most of) the scientific literature is to communicate about (aspects of) likelihood functions.
 When a paper multiplies a prior by a likelihood to produce a posterior it is---at best---demonstrating the effect of the data on typical beliefs.
 At worst it is irrelevant to every individual reader.\footnote{%
-HOGG WRITE about the DFM pov.}
+There is only one important sense in which such a paper---a paper that takes one investigator's subjective prior beliefs and multiplies them by one data set's likelihood function to deliver the updated investigator's subjective posterior beliefs---is a useful scientific product.
+It is that it demonstrates the procedure of constructing a prior pdf, constructing a sensible (we hope) likelihood function, and combining them into a posterior pdf.
+That demonstration can be useful to others, especially if the methods are unambiguously explained and the codes are released for re-use.
+But the specific value or shape of the individual investigator's particular posterior pdf is not an object of community scientific interest, unless the author is an \emph{extremely important person}.}
 
-HOGG: In what very specific sense is Bayes best?
-It is best for bettors.
-Thus Bayes is the right thing to do if you want to make a prediction.
+This \sectionname{} opened with the point that Bayesian reasoning is optimal.
+In what very specific sense is it optimal?
+It turns out that it is best for \emph{placing bets};
+One statement of the theorems is that if two bettors have access to the same information, and one reasons via Bayes, and one reasons in any other way, the Bayesian bettor will win bets (in the long run) against the other.
+Thus Bayes is optimal for making predictions, and in particular putting betting odds on predictions.
+This explains why Bayesian reasoning was developed mainly by the insurance industry \cite{bayesinsurance}.
+Science involves prediction, crucially.
+However, measurements are not the same as predictions.
 HOGG Refer back here to \secref{sec:intro}.
 
-HOGGG: There is another use case, which is decision-making.
-Here again you might want to be Bayesian but then do expectations of utility....
+There is another use case for Bayesian reasoning, which is closely related, and it is decision-making:
+If you have to make a decision (which side of a bet to take, which model to prefer, what to have for lunch, and so on),
+and if you can specify your \emph{utility function}, you can use Bayesian posteriors to compute expectations of utility.
+This is out of scope for this document, but briefly your utility is the amount of money (or money equivalent) that you make or lose in different future outcomes, as a function of your decision.
+Again it makes sense that the insurance industry would care.
+But again, measurements are not the same as decisions.\footnote{%
+It seems obvious that measurements are not decisions!
+But in fact any paper about any measurement says things in its abstract (and body) about the value obtained by the measurement process, and the assumptions that went into the measurement, and what should or could be concluded from that measurement.
+Those are choices, which can be phrased as decisions.
+So even if we are reporting a measurement based only on the likelihood function, perhaps we should be Bayesian when we think about what words to write where and in what order?}
 
-The Cox proof about Bayesian reasoning is correct of course (it's a proof!).
+The theorems about Bayesian reasoning are correct of course (they're theorems!).
 You, personally ought to reason according to Bayes.
 The scientific community ought to reason according to Bayes.
 The important thing is that \emph{a measurement is not the same as a belief}.
 Measurements are used to \emph{update} your beliefs.
 Hence measurements are properties of your likelihood function, not properties of your posterior pdf.
+That's almost the main point of this \documentname.
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
