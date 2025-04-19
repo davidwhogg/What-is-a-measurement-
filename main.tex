@@ -17,7 +17,7 @@
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
-% - Give to friendlies for comments: Vedant, Beane, Audenaert, DFM, HWR, Peebles, Lindegren, Malz, Marshall, APW, ...
+% - Give to friendlies for comments: Vedant, Beane, Audenaert, DFM, HWR, Peebles, Lindegren, Malz, Marshall, APW, DNS, ...
 
 % style notes
 % -----------
@@ -52,12 +52,16 @@
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
+\newcommand{\foreign}[1]{\textsl{#1}}
 
 % math macros
 \newcommand{\e}{\mathrm{e}} % why do I have to define this?
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\given}{\,|\,}
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
+\newcommand{\norm}[1]{\lVert{#1}\rVert}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
 
 \title{\bfseries
 What is a measurement?}
@@ -170,6 +174,9 @@ That is, the likelihood function is a sufficient statistic for the data, when yo
 Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
 The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
 The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameter $\theta$ (and all the nuisance parameters $\alpha$).
+\begin{align}
+    \hat{\theta},\hat{\alpha} = \argmax_{\theta,\alpha} p(Y\given\theta,\alpha,I) ~.
+\end{align}
 Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
 In many contexts, both conceptually and for reasons of numerical precision, it is better to work with the logarithm $\mathscr{L}$ of the likelihood function;
@@ -363,17 +370,18 @@ Those are choices, which can be phrased as decisions.
 So even if we are reporting a measurement based only on the likelihood function, perhaps we should be Bayesian when we think about what words to write where and in what order?}
 
 The theorems about Bayesian reasoning are correct of course (they're theorems!).
-You, personally ought to reason according to Bayes.
-The scientific community ought to reason according to Bayes.
+You, personally, ought to reason according to Bayes (for example when you are deciding what to order at a restaurant, negotiating salary, or deciding whether to buy insurance).
+Similarly, the scientific community taken as a whole ought to update its beliefs (inasmuch as a community has beliefs) according to Bayes.
 The important thing is that \emph{a measurement is not the same as a belief}.
 Measurements are used to \emph{update} your beliefs.
 Hence measurements are properties of your likelihood function, not properties of your posterior pdf.
 That's almost the main point of this \documentname.
 
-Finally, I remark that people often say to me: "But Bayesian inference with flat priors is identical to maximum likelihood, so it doesn't matter."
+Finally, I remark that people often say to me: ``But Bayesian inference with flat priors is identical to maximum likelihood, so it doesn't matter.''
 This is absolutely \emph{not true}.
 For one, Bayesian inference produces probability distributions over outcomes, not single outcomes.
-For another, even flat priors can introduce very weird artifacts and biases into your measurements.
+For another, Bayesian inferences depend on the parameterization; while maximum likelihood estimates don't depend on reparameterizations, the most posterior-probable parameter combinations will always depend on parameterization.
+For yet another, even flat priors can introduce very weird artifacts and biases into your measurements.
 I give one very simple and natural example below in \secref{sec:flat}.
 If you don't want priors to bias your measurement, \emph{don't use priors}.
 
@@ -383,6 +391,12 @@ Here we will only consider one, which is \emph{supervised regression}:
 The setup for supervised regression is that there is a \emph{training set} $\setof{Y_i, \theta_i}_{i=1}^n$ of $n$ data instances $Y_i$ and corresponding labels $\theta_i$.
 We are going to \emph{learn} a flexible function $f(Y;W)$, parameterized by a large block of weights $W$, that does a good job of predicting labels $\theta_i$ for training-set examples $Y_i$.
 We will estimate our parameter of interest $\theta$ by executing the learned function on our data $Y$.
+In equations, this looks something like
+\begin{align}
+    \hat{W} &= \argmin_W \sum_i\norm{\theta_i - f(Y_i;W)} \\
+    \hat{\theta} &= f(Y;\hat{W}) ~,
+\end{align}
+where $\norm{x}$ is some kind of metric distance (like the Euclidean norm or the square of that).
 
 Ideally the labels $\theta_i$ in your training set are very reliable and accurate estimates for each training data object $Y_i$.
 If they are noisy, pure regressions aren't a good idea; it makes more sense to go to models with a generative aspect (for example, CITE).
@@ -392,19 +406,34 @@ Often it is believed that so long as the training data ``cover'' the test data (
 This isn't true, and besides, once the data get large enough, coverage of that kind is impossible to satisfy.
 
 It turns out that, even when the situation is ideal---%
-even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are typically biased.
+even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are biased.
 Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, CITE).
-However, it is relevant to the story being told here.
-Machine learning regressions produce results with a lot of proerties similar to maximum a posteriori (maximum-of-posterior) parameter estimates, with the training data serving as an implicit prior.
-\textbf{HOGG: Did we discuss this point in the previous section? If not, add it.}
+It relates to the point made above in \secref{sec:bayes}:
+Good predictions (like those produced by Bayesian inferences) are biased, and machine learning regressions are optimized to make good predictions.
+The connections between machine learning regressions and Bayesian inferences are strong:
+Machine learning regressions produce results with a lot of properties similar to maximum \foreign{a posteriori} (maximum-of-posterior) parameter estimates, with the training data serving as an implicit prior.
 
 Is a machine learning regression output a measurement?
 No, it is not, or at least not in itself:
 When a machine learning method returns a result, it is using information from your data $Y$
 but also from all of the training data $\setof{Y_i, \theta_i}_{i=1}^n$.
-\textbf{HOGG: What about looking at the distribution of $\theta$ in the training set and at the end? Or if you change the data slightly? Can't you answer the information theoretic questions that way? If not, why not?}
+That is, it cannot be described as telling you what, in your data $Y$, you have learned about parameter $\theta$.
 
-HOGG: MAKE SURE this section talks about a training set where a is strongly correlated with b, and the data have information about b. Then you will conclude that you can see a in the data!
+Another way to see this is:
+A regression, fundamentally, is a kind of nearest-neighbor method.
+Different regression methods are only different in their sophistication about finding neighbors.
+The fundamental assumption underlying a regression is that if two data sets $Y$ and $Y_i$ are ``similar'' in some important way, then their labels $\theta$ and $\theta_i$ must also be similar in some sense.
+This might be true!
+But it can be true for two reasons.
+It can be true because the data $Y$ really contains information about the label $\theta$.
+Or it can be true because objects that are similar in one way are similar in many other ways.
+That is, the fact that a regression to determine label $\theta$ given data input $Y$ works well does not, in itself, imply that there is information about $\theta$ in $Y$.
+
+To be concrete: Imagine that data $Y$ are very informative about some quantity or label $\gamma$.
+And imagine that, in the training set, objects with high $\theta$ also tend to have high $\gamma$, and \foreign{vice versa}.
+Then a regression trained on the training set will deliver good predictions of labels $\theta$, \emph{whether or not} the data $Y$ contains information about $\theta$ directly.
+The regression does not return measurements of $\theta$.
+It returns predictions, under the assumption that the training set is representative.
 
 \section{Can't I just use flat priors?}\label{sec:flat}
 We need a peak in the likelihood function to claim a measurement.
