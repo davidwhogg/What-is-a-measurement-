@@ -16,6 +16,7 @@
 % - Are we clear about what we are suggesting, positively, in each section?
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
+% - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
 % - Give to friendlies for comments: Vedant, Beane, Audenaert, DFM, HWR, Peebles, Lindegren, Malz, Marshall, APW, ...
 
 % style notes
@@ -348,7 +349,7 @@ Thus Bayes is optimal for making predictions, and in particular putting betting 
 This explains why Bayesian reasoning was developed mainly by the insurance industry \cite{bayesactuary}.
 Science involves prediction, crucially.
 However, measurements are not the same as predictions.
-HOGG Refer back here to \secref{sec:intro}.
+They can be similar though: A measurement can (in principle) be seen as a prediction for what a subsequent experiment might measure.
 
 There is another use case for Bayesian reasoning, which is closely related, and it is decision-making:
 If you have to make a decision (which side of a bet to take, which model to prefer, what to have for lunch, and so on),
@@ -368,6 +369,13 @@ The important thing is that \emph{a measurement is not the same as a belief}.
 Measurements are used to \emph{update} your beliefs.
 Hence measurements are properties of your likelihood function, not properties of your posterior pdf.
 That's almost the main point of this \documentname.
+
+Finally, I remark that people often say to me: "But Bayesian inference with flat priors is identical to maximum likelihood, so it doesn't matter."
+This is absolutely \emph{not true}.
+For one, Bayesian inference produces probability distributions over outcomes, not single outcomes.
+For another, even flat priors can introduce very weird artifacts and biases into your measurements.
+I give one very simple and natural example below in \secref{sec:flat}.
+If you don't want priors to bias your measurement, \emph{don't use priors}.
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
