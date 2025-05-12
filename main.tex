@@ -4,7 +4,7 @@
 % -----------
 % - write all sections.
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
-% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich?
+% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS ?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
 % - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
@@ -17,7 +17,6 @@
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
-% - Give to friendlies for comments: Vedant, Beane, Audenaert, DFM, HWR, Peebles, Lindegren, Malz, Marshall, APW, DNS, ...
 
 % style notes
 % -----------
@@ -40,8 +39,8 @@
 \setstretch{1.08}
 \addtolength{\topmargin}{-0.30in}
 \addtolength{\textheight}{1.60in}
-\setlength{\textwidth}{5.00in}
-\setlength{\oddsidemargin}{3.25in}\addtolength{\oddsidemargin}{-0.5\textwidth}
+\setlength{\textwidth}{5.0in}
+\setlength{\oddsidemargin}{0.5\paperwidth}\addtolength{\oddsidemargin}{-1.0in}\addtolength{\oddsidemargin}{-0.5\textwidth}
 \pagestyle{myheadings}
 \markboth{foo}{\sffamily Hogg / What is a measurement?}
 \renewcommand{\newblock}{} % this adjusts the bibliography style.
@@ -70,7 +69,6 @@ DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, De
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
 \date{2025 April}
 \begin{document}
-
 \maketitle\thispagestyle{empty}
 
 \paragraph{Abstract}
@@ -202,7 +200,7 @@ If the problem is reparameterized from parameters $(\theta,\alpha)$ to new param
 This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
 The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes}.
 
-\section{Nuisance parameters}
+\section{Nuisance parameters}\label{sec:nuisance}
 
 Much of what follows is (effectively) about the nuisance parameters $\alpha$.
 Nuisance parameters substantially complicate questions of measurement.
@@ -348,6 +346,9 @@ It is that it demonstrates the procedure of constructing a prior pdf, constructi
 That demonstration can be useful to others, especially if the methods are unambiguously explained and the codes are released for re-use.
 But the specific value or shape of the individual investigator's particular posterior pdf is not an object of community scientific interest, unless the author is an \emph{extremely important person}.}
 
+HOGG: HERE is where we would talk about LIGO posterior samplings and LIGO populations inferences.
+And the point / result that if the number of sources gets large, current methods don't work!
+
 This \sectionname{} opened with the point that Bayesian reasoning is optimal.
 In what very specific sense is it optimal?
 It turns out that it is best for \emph{placing bets};
@@ -364,7 +365,7 @@ and if you can specify your \emph{utility function}, you can use Bayesian poster
 This is out of scope for this document, but briefly your utility is the amount of money (or money equivalent) that you make or lose in different future outcomes, as a function of your decision.
 Again it makes sense that the insurance industry would care.
 But again, measurements are not the same as decisions.\footnote{%
-It seems obvious that measurements are not decisions!
+It might seem obvious that measurements are not decisions!
 But in fact any paper about any measurement says things in its abstract (and body) about the value obtained by the measurement process, and the assumptions that went into the measurement, and what should or could be concluded from that measurement.
 Those are choices, which can be phrased as decisions.
 So even if we are reporting a measurement based only on the likelihood function, perhaps we should be Bayesian when we think about what words to write where and in what order?}
@@ -384,6 +385,61 @@ For another, Bayesian inferences depend on the parameterization; while maximum l
 For yet another, even flat priors can introduce very weird artifacts and biases into your measurements.
 I give one very simple and natural example below in \secref{sec:flat}.
 If you don't want priors to bias your measurement, \emph{don't use priors}.
+
+\section{Can't I just use flat priors?}\label{sec:flat}
+We need a peak in the likelihood function to claim a measurement.
+But if we want to be Bayesian, and we want to use \emph{flat priors},\footnote{%
+If you want to be Bayesian, there is almost no context in which you would want to use flat priors on any parameter you care about.
+The Cox theorems that deliver Bayesian reasoning only apply when the Bayesian procedure is being used to update \emph{your beliefs}.
+It is essentially impossible that your belief about anything you care about is well represented by a flat pdf.}
+isn't it the case that any peak in the likelihood will lead to an identically shaped peak in the posterior pdf?
+
+This sounds so naively and obviously true, what could possibly go wrong?
+There are two things that are very wrong about this idea---the idea that if you use flat priors its the same as having just a likelihood function.
+The first thing that is wrong is that (as we emphasized in \secref{sec:lf}) the likelihood function in reparameterization-invariant.
+The posterior pdf is absolutely not reparameterization-invariant.
+So if the prior is flat in some parameter, it is absolutely not flat in any non-trivial function of that parameter.
+Even worse, if it is flat in some parameter, in any square-root or square or logarithm of that parameter, the prior is strongly peaked \emph{at one edge of the allowed range!}
+That's demonstrated in FIGURE HOGG and definitely not what people usually have in mind when they think about using ``uninformative priors.''
+
+The second thing that is wrong about this idea is that when the number of parameters gets large---larger than 2 say---it becomes very easy to believe that there is a peak in the likelihood function when there most definitely isn't.
+To demonstrate this, we generate a very simple toy-likelihood and toy-posterior situation, in which all priors are flat, and in which it very very much looks like there is a peak in the likelihood function when there absolutely is not.
+
+In our toy problem we have data $Y$ that makes up a $n\times 1$ column vector, or an ordered list of $n$ elements.
+We have parameters $\theta$, which make up a $p\times 1$ column vector, or an ordered list of $p$ elements.
+If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq p$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
+The simplest possible toy model is that the LF depends only on certain linear combinations of the parameters $\theta$.
+That is, there is a rectangular $q\times p$ matrix $A$, with $q<p<n$, such that, to some very good approximation,
+\begin{align}
+    \mathscr{L}(\theta) \equiv \ln p(Y\given\theta,I) &= K - \frac{1}{2}\,\norm{A\cdot\theta - a}^2 ~,\label{eq:toyLF}
+\end{align}
+where $K$ is some scalar constant, $a$ is a $q$-vector constant, and the norm is the standard euclidean norm (square root of sum of squares).
+This model might be called ``low rank'' or ``degenerate'':
+There are parameter degeneracies such that the likelihood depends on less than all the parameters.
+And, by the way, this toy example is extreme; we don't need these parameter degeneracies to be exact to get the effect we are about to see.
+
+HOGG FIX THIS to be more like a standard LF.
+
+(HOGG DESCRIBE PRIOR by adjusting the following:)
+When we do Bayesian inference, we will want a prior, and, because we want to be maximally uninformative, we will choose a prior that is precisely flat in all parameters $\theta_i$.
+That is
+\begin{align}
+    p(\theta\given I) &= \prod_{i=1}^p U(\theta_i\given a_i, b_i) \\
+    U(x\given a, b) & = \left\{\begin{array}{cl}
+    0 & \mbox{for $x<a$,} \\
+    (b-a)^{-1} & \mbox{for $a<x<b$,} \\
+    0 & \mbox{for $b<x$,}\end{array}\right.
+\end{align}
+where the $a_i, b_i$ ($1\leq i\leq p$) are prior limit parameters with $a_i<b_i$ for all $i$.
+In fact, these flat priors \emph{aren't} uninformative (CITE THINGS), but perhaps, in some circumstances, they are least informative?
+It turns out that they will be quite informative in what follows.
+This prior requires us to make $2\,p$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
+
+HOGG SHOW RESULTS.
+
+There is nothing really new about this demonstration, by the way.
+They are all simple consequences of prior-volume effects or prior-edge effects discussed in many places (CITE THINGS).
+This demonstration also links to the idea that flat priors aren't in fact uninformative, as has been argued elsewhere in many places (CITE THINGS).
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
@@ -435,45 +491,33 @@ Then a regression trained on the training set will deliver good predictions of l
 The regression does not return measurements of $\theta$.
 It returns predictions, under the assumption that the training set is representative.
 
-\section{Can't I just use flat priors?}\label{sec:flat}
-We need a peak in the likelihood function to claim a measurement.
-But if we want to be Bayesian, and we want to use \emph{flat priors},\footnote{%
-If you want to be Bayesian, there is almost no context in which you would want to use flat priors on any parameter you care about.
-The Cox theorems that deliver Bayesian reasoning only apply when the Bayesian procedure is being used to update \emph{your beliefs}.
-It is essentially impossible that your belief about anything you care about is well represented by a flat pdf.}
-isn't it the case that any peak in the likelihood will lead to an identically shaped peak in the posterior pdf?
-
-This sounds so naively and obviously true, what could possibly go wrong?
-There are two things that are very wrong about this idea---the idea that if you use flat priors its the same as having just a likelihood function.
-The first thing that is wrong is that (as we emphasized in \secref{sec:lf}) the likelihood function in reparameterization-invariant.
-The posterior pdf is absolutely not reparameterization-invariant.
-So if the prior is flat in some parameter, it is absolutely not flat in any non-trivial function of that parameter.
-Even worse, if it is flat in some parameter, in any square-root or square or logarithm of that parameter, the prior is strongly peaked \emph{at one edge of the allowed range!}
-That's demonstrated in FIGURE HOGG and definitely not what people usually have in mind when they think about using ``uninformative priors.''
-
-The second thing that is wrong about this idea is that when the number of parameters gets large---larger than 2 say---it gets very very easy to believe that there is a peak in the likelihood function when there most definitely isn't.
-To demonstrate this, we generate a very simple toy-likelihood and toy-posterior situation, in which all priors are flat, and in which it very very much looks like there is a peak in the likelihood function when there absolutely is not.
-HOGG DETAILS AND FIGURES.
-
 \section{Combining data samples}\label{sec:combining}
 There are (at least) two cases for combining measurements.
-In the first, there are two data sets, $Y_1$ and $Y_2$, and they both provide measurements of the parameters $\theta$ of interest, plus maybe nuisance parameters (which might differ between $Y_1$ and $Y_2$).
-In this case, the goal might be to get the best possible measurement of the parameters $\theta$ given both data sets.
-In the second, data set $Y_1$ measured parameter of interest $\theta_1$, and data set $Y_2$ measured parameter of interest $\theta_2$.
-In this case, the goal might be to measure some new parameter $\beta$ that depends on the values $\theta_1$ and $\theta_2$.
-In both of these cases, the most straightforward way to make the new measurement is by combining the two likelihood functions.
+In the first, there are two data sets, $Y_1$ and $Y_2$, and they both provide measurements of the parameters $\theta$ of interest, plus maybe nuisance parameters $\alpha_1$ and $\alpha_2$ (which in general will differ between $Y_1$ and $Y_2$).
+An example from cosmology is the cosmological parameters $\theta$, which can be constrained with the power spectrum of the cosmic microwave background (which could be data $Y_1$) and correlation function of galaxies (which could be data $Y_2$); each of these two kinds of data have two different kinds of nuisance parameters, but they both contain information about $\theta$.
 
-HOGG: Get explicit, with a notation and some equations.
+In this case, the goal might be to get the best possible measurement of the parameters $\theta$ given both data sets.
+The great thing is---as long as the two data sets were created or made independently---the likelihood functions just multiply (the log likelihoods just add), such that
+\begin{align}
+    \mathscr{L}(\theta,\alpha_1,\alpha_2) &= \ln p(Y_1\given\theta,\alpha_1,I) + \ln p(Y_2\given\theta,\alpha_2,I) ~.
+\end{align}
+Once combined like this, everything proceeds as above.
+Optimization, marginalization, Bayesian inference, profiling, information theory, and everything else, is just the same for this combined log-likelihood as it was for the individual log-likelihoods (above in \secref{sec:lf} and \secref{sec:nuisance}).
+That is, combining data sets is extremely straightforward, \emph{so long as you have access to the likelihood functions} for each.
+
+In the second case for combining measurements, there are $n$ data sets $Y_i$ each measuring a different parameter of interest $\theta_i$.
+In this case, the goal might be to measure some new parameter $\beta$ that sets the values (or distribution of values) of the $\theta_i$.
+An example from astrophysics might be that each data set $Y_i$ is the data on an exoplanet $i$, measuring the parameters $\theta_i$ of that planet; the parameters $\beta$ describe the distribution or population of planets.
+This is sometimes called ``population inference,'' and it is generally hierarchical in form.
+Here the approach is.... HOGGGG
 
 HOGG: Assumption of independence of the data. NOTE that the sharing of nuisance parameters does not necessarily make the two data sets non-independent.
-
-HOGG: The triviality of combining likelihood functions.
 
 HOGG: The impossibility of combining posteriors unless they (and their associated priors) are continuous functions.
 
 HOGG: The impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
 
-\section{Delivering useful catalogs of measurements}\label{sec:catalogs}
+\section{Delivering data useful to others}\label{sec:catalogs}
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
 What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
 
@@ -481,6 +525,8 @@ HOGG: FOR EXAMPLE..
 
 For all the reasons given in \secref{sec:combining}, it is critical that the quantities given in your catalog can be used to reconstruct the likelihood functions, or approximations thereto.
 HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
+
+HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
@@ -538,7 +584,8 @@ It is a pleasure to thank
   Dan Foreman-Mackey (DeepMind) and
   Hans-Walter Rix (MPIA)
 for existential discussions about these matters over the years, and
-  Chirag Modi (NYU) and
+  Chirag Modi (NYU),
+  Alexander Novara (NYU), and
   Hans-Walter Rix (MPIA)
 for valuable discussions of the content of this particular \documentname.
 
