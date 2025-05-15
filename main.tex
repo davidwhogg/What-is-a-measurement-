@@ -418,7 +418,7 @@ This model might be called ``low rank'' or ``degenerate'':
 There are parameter degeneracies such that the likelihood depends on less than all the parameters.
 And, by the way, this toy example is extreme; we don't need these parameter degeneracies to be exact to get the effect we are about to see.
 
-HOGG FIX THIS to be more like a standard LF.
+HOGG FIX THIS to be more like a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
 
 (HOGG DESCRIBE PRIOR by adjusting the following:)
 When we do Bayesian inference, we will want a prior, and, because we want to be maximally uninformative, we will choose a prior that is precisely flat in all parameters $\theta_i$.
@@ -440,6 +440,7 @@ HOGG SHOW RESULTS.
 There is nothing really new about this demonstration, by the way.
 They are all simple consequences of prior-volume effects or prior-edge effects discussed in many places (CITE THINGS).
 This demonstration also links to the idea that flat priors aren't in fact uninformative, as has been argued elsewhere in many places (CITE THINGS).
+HOGG: ALSO this situation is very easy to diagnose (prior-dependence of results, moving the nuisance priors).
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
