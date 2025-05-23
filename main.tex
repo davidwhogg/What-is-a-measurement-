@@ -492,6 +492,17 @@ Then a regression trained on the training set will deliver good predictions of l
 The regression does not return measurements of $\theta$.
 It returns predictions, under the assumption that the training set is representative.
 
+\section{What is my data?}\label{sec:data}
+HOGG: As raw as possible.
+
+HOGG: If not raw, then the derived data should be related to the raw data only through a LF. Why? Proofs.
+
+HOGG: Explicit re linear chi-squared fitting: It is associative in the relevant sense!
+
+HOGG: Using posteriors does not work; call out the exoplanet atmosphere crew.
+
+HOGG: If you are working with derived data, be careful about repeating the data or using it twice.
+
 \section{Combining data samples}\label{sec:combining}
 There are (at least) two cases for combining measurements.
 In the first, there are two data sets, $Y_1$ and $Y_2$, and they both provide measurements of the parameters $\theta$ of interest, plus maybe nuisance parameters $\alpha_1$ and $\alpha_2$ (which in general will differ between $Y_1$ and $Y_2$).
@@ -500,7 +511,7 @@ An example from cosmology is the cosmological parameters $\theta$, which can be 
 In this case, the goal might be to get the best possible measurement of the parameters $\theta$ given both data sets.
 The great thing is---as long as the two data sets were created or made independently---the likelihood functions just multiply (the log likelihoods just add), such that
 \begin{align}
-    \mathscr{L}(\theta,\alpha_1,\alpha_2) &= \ln p(Y_1\given\theta,\alpha_1,I) + \ln p(Y_2\given\theta,\alpha_2,I) ~.
+    \mathscr{L}(\theta,\alpha_1,\alpha_2) &= \ln p(Y_1\given\theta,\alpha_1,I) + \ln p(Y_2\given\theta,\alpha_2,I) ~.\label{eq:combineLFs}
 \end{align}
 Once combined like this, everything proceeds as above.
 Optimization, marginalization, Bayesian inference, profiling, information theory, and everything else, is just the same for this combined log-likelihood as it was for the individual log-likelihoods (above in \secref{sec:lf} and \secref{sec:nuisance}).
@@ -508,15 +519,35 @@ That is, combining data sets is extremely straightforward, \emph{so long as you 
 
 In the second case for combining measurements, there are $n$ data sets $Y_i$ each measuring a different parameter of interest $\theta_i$.
 In this case, the goal might be to measure some new parameter $\beta$ that sets the values (or distribution of values) of the $\theta_i$.
-An example from astrophysics might be that each data set $Y_i$ is the data on an exoplanet $i$, measuring the parameters $\theta_i$ of that planet; the parameters $\beta$ describe the distribution or population of planets.
+An example from astrophysics might be that each data set $Y_i$ is the data on an exoplanet $i$, measuring the parameters $\theta_i$ of that planet; the parameters $\beta$ describe the distribution or population planet $i$.
 This is sometimes called ``population inference,'' and it is generally hierarchical in form.
-Here the approach is.... HOGGGG
+Here the approach is to build a likelihood for the global $\beta$ out of a product of all the individual likelihoods.
+This looks like
+\begin{align}
+    \mathscr{\beta} &= \ln p(\setof{Y}_{i=1}^n\given\beta,I) \\
+    p(\setof{Y}_{i=1}^n\given\beta,I) &= \prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
+\end{align}
+That combined, marginalized likelihood can be optimized to deliver a good estimator for $\beta$ or else it can be combined with priors for a hierarchical Bayesian inference, discussed in more detail elsewhere (CITE).
+In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integral \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}.\footnote{HOGG: More here?}
 
-HOGG: Assumption of independence of the data. NOTE that the sharing of nuisance parameters does not necessarily make the two data sets non-independent.
+Sometimes what is wanted is a really simple statistic of the $\theta_i$, like the mean value of $\theta_i$.
+For reasons related to what's discussed in \secref{sec:data}, if, from each data set $i$ one obtains a maximum-likelihoood estimate $\hat\theta_i$ for each parameter $\theta_i$, then these can in turn be averaged to get an estimate of the mean $\langle\theta\rangle$.
+If the individual $\theta_i$ estimates are posterior estimates or the outputs of machine-learning regression, they cannot be so averaged.
+A very simple example of that is shown in the appendix of \cite{goodorbad}.
 
+Often when you are combining data, the data are coming from a scientist or a project that is upstream of you.
+That is, in cases like \eqref{eq:bayes}, often you are combining measurements of $\theta_i$ coming from a project or study of which you are not a part.
 HOGG: The impossibility of combining posteriors unless they (and their associated priors) are continuous functions.
+HOGG: Also the impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
 
-HOGG: The impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
+It is critical to the validity of the sum of logarithms in \eqref{eq:combineLFs} and the product in \eqref{eq:hierarchical}
+that the different data sets be \emph{independent}.
+Technically this means that their pdfs are separable and that they can be multiplied.
+Usually, in reality, it means that the data sets contain no objects or pixels or experiments or readouts that are in common.
+They must be fully disjoint data.
+The word ``independent'' can be confusing here.
+Because the two data sets in \eqref{eq:combineLFs} both depend on $\theta$, the two data sets are, in a frequentist sense, covariant.
+However, they are independent in the relevant sense here as long as they contain no data in common.
 
 \section{Delivering data useful to others}\label{sec:catalogs}
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
@@ -524,7 +555,7 @@ What kind of measurements or estimators do you want to use to build that set or 
 
 HOGG: FOR EXAMPLE..
 
-For all the reasons given in \secref{sec:combining}, it is critical that the quantities given in your catalog can be used to reconstruct the likelihood functions, or approximations thereto.
+For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is critical that the quantities given in your catalog can be used to reconstruct the likelihood functions, or approximations thereto.
 HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
 
 HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
