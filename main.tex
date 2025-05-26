@@ -2,6 +2,7 @@
 
 % to-do items
 % -----------
+% - Claude says that the likelihood principle is Bayesian and NOT frequentist. Address this point!
 % - write all sections.
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS ?
@@ -418,7 +419,7 @@ This model might be called ``low rank'' or ``degenerate'':
 There are parameter degeneracies such that the likelihood depends on less than all the parameters.
 And, by the way, this toy example is extreme; we don't need these parameter degeneracies to be exact to get the effect we are about to see.
 
-HOGG FIX THIS to be more like a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
+HOGG FIX THIS to represent the new situation, which is a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
 
 (HOGG DESCRIBE PRIOR by adjusting the following:)
 When we do Bayesian inference, we will want a prior, and, because we want to be maximally uninformative, we will choose a prior that is precisely flat in all parameters $\theta_i$.
@@ -492,11 +493,50 @@ Then a regression trained on the training set will deliver good predictions of l
 The regression does not return measurements of $\theta$.
 It returns predictions, under the assumption that the training set is representative.
 
-\section{What is my data?}\label{sec:data}
-HOGG: As raw as possible.
+\section{What is my data?\protect\footnote{I often get asked whether ``data'' is a plural noun or singular. My position is that ``data'' is a \emph{mass noun} like ``grass'' or ``hair.'' I have attempted to use it this way throughout this \documentname, but I might not be perfectly consistent.}}\label{sec:data}
+Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
+That is, it is better to work on the data that came directly from your instrument, and not data that have been highly processed, especially since that processing can significantly bias or affect your results.
 
-HOGG: If not raw, then the derived data should be related to the raw data only through a LF. Why? Proofs.
+Of course, most data are highly processed: Raw instrument read-outs are generally corrected for instrumental biases and spurious signals, and calibrated to interpretable units.
+These corrections are probably necessary for making good measurements!
+That said, there is no reason that these corrections need to be applied to the raw data before you work with it.
+Any calibration or correction procedure that divides the raw data by $a$, say, and then subtracts $b$ could, instead, be obviated:
+Instead, the investigator could add $b$ to the model---the prediction for the data---and then multiply the model by $a$, thus making the calibration something that is applied to the model, not the data.
+That is, any calibration parameters that are used to correct the raw data to corrected data could instead be thought of as model parameters, that correct the idealized data prediction to a prediction for the raw data.
+Whenever this is possible, I recommend it, because it unifies and makes explicit everything that goes into the data analysis.
+Many times, however, for practical reasons, this is not possible, and the data $Y$ is instead derived by some process from some raw data $Z$.
 
+There are three-ish scenarios in which the derived data $Y$ might have been made from the raw data $Z$:
+\begin{enumerate}
+\item In the first scenario, some aribitrary algorithm, not justified by any statistical theory, might have been applied to the raw data, such that $Y=g(Z)$ for some function $g()$.
+The uncertainties on $Y$ in this scenario might be derived from the raw uncertainties on $Z$  by multiplying the raw uncertainties by (the absolute value of) the derivative $\dd g/\dd Z$, or perhaps something more sophisticated than that.
+This is typically the scenario in astronomy when the raw image from a camera has an estimate of the dark (or bias) subtracted, and then some kind of flat-field divided out, then a gain estimate applied, and then something that calibrates the image to intensity units (say).
+\item In the second scenario, the derived data might be, somehow, the maximum-likelihood value of $Y$ for some probabilistic model $\ln p(Z\given Y,I)$, under assumptions $I$.
+The uncertainties on $Y$ in this scenario might be made from the second derivative of the log likelihood, according to information theory (the Fisher information, that is HOGG REFER TO SOMETHING ABOVE).
+This is the scenario for the ESA \textsl{Gaia} Mission, which delivers maximum-likelihood parallaxes and proper motions for all stars, along with (an approximation to) the (inverse of the) Fisher information tensor from the log likelihood function that was used to measure those parallaxes (CITE).
+\item In the third scenario, the derived data might be the mean or maximum of a posterior pdf for $Y$, generated using a log likelihood $\ln p(Z\given Y,I)$ and a log prior pdf $\ln p(Y\given I)$.
+The uncertainties on $Y$ in this scenario are usually made by estimating the second moment (the variance) of the posterior pdf.
+In astronomy, this is the scenario for exoplanet transit spectroscopy, where, in each wavelength bin, differences in spectral flux as a function of time are generally modeled with a Bayesian analysis using a probabilistic model for the transit.
+\end{enumerate}
+While all three of these scenarios can be workable for doing good data analysis, there are arbitrarily bad things that can happen in the first and third.
+In the first, if the function $g(Z)$ is sufficiently nonlinear, the uncertainty estimates can become arbitrarily wrong, or arbitrarily difficult to make right.
+It is far better to apply $g^{-1}()$ to your prediction for the derived data $Y$ and thus make a prediction for $Z$ directly, than it is to just predict $Y$.
+
+In the third scenario, the Bayesian inference produces biased estimators, such that the data $Y$ can become prior-distorted or even effectively prior-dominated.
+In this case, the data $Y$ don’t tell you just about your raw data; they contain also information about your priors, which distorts the data, and also makes multiple data points correlated (since they will share aspects of this prior).
+In general, the third scenario is to be avoided, because it is very hard to tell in the abstract how much the prior matters; indeed it will matter differently to different models and to different settings of your parameters $(\theta,\alpha)$.
+
+The reason that the second scenario is to be preferred is because likelihood functions can be daisy-chained, in the following sense:
+\begin{align}
+    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y~,
+\end{align}
+where the integral is (implicitly) over the full possible domain of $Y$.
+That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ (or enough information to reconstruct it).
+Because of the likelihood principle (\secref{sec:lf}), if we want to make measurements with the data, we want the data to be useful for making likelihood estimates or comparisons.
+If the data $Y$ are related to the raw data $Z$ by a likelihood, then it is usually possible to perform a data analysis on data $Y$ but have it return exactly what \emph{would have been returned} if the analysis had been performed on the raw data $Z$.
+
+All of this is very nicely demonstrated in terms of linear models with Gaussian noise.
+In this case, the model is… HOGG HAVE WE DONE THIS ALREADY ABOVE? IF NOT, THIS NEEDS TO GO IN ABOVE.
 HOGG: Explicit re linear chi-squared fitting: It is associative in the relevant sense!
 
 HOGG: Using posteriors does not work; call out the exoplanet atmosphere crew.
@@ -524,11 +564,11 @@ This is sometimes called ``population inference,'' and it is generally hierarchi
 Here the approach is to build a likelihood for the global $\beta$ out of a product of all the individual likelihoods.
 This looks like
 \begin{align}
-    \mathscr{\beta} &= \ln p(\setof{Y}_{i=1}^n\given\beta,I) \\
-    p(\setof{Y}_{i=1}^n\given\beta,I) &= \prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
+    \mathscr{L}(\beta) &= \ln p(\setof{Y}_{i=1}^n\given\beta,I)
+    = \ln\prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
 \end{align}
 That combined, marginalized likelihood can be optimized to deliver a good estimator for $\beta$ or else it can be combined with priors for a hierarchical Bayesian inference, discussed in more detail elsewhere (CITE).
-In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integral \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}.\footnote{HOGG: More here?}
+In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integrals in \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}, and combined with a sum.\footnote{HOGG: More here?}
 
 Sometimes what is wanted is a really simple statistic of the $\theta_i$, like the mean value of $\theta_i$.
 For reasons related to what's discussed in \secref{sec:data}, if, from each data set $i$ one obtains a maximum-likelihoood estimate $\hat\theta_i$ for each parameter $\theta_i$, then these can in turn be averaged to get an estimate of the mean $\langle\theta\rangle$.
@@ -559,6 +599,8 @@ For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is
 HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
 
 HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
+
+HOGG: Refer back to the DFM alternative view. HOGG ASKS: Have I stated this clearly above?
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
