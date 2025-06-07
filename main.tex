@@ -4,7 +4,7 @@
 % -----------
 % - write all sections.
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
-% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS ?
+% - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS, Trotta ?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
 % - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
@@ -15,6 +15,7 @@
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 % - Are we clear about what we are suggesting, positively, in each section?
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
+% - community norms loom large in the abstract. But are they important in the paper?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
 
@@ -67,7 +68,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 May}
+\date{2025 June}
 \begin{document}
 \maketitle\thispagestyle{empty}
 
@@ -90,7 +91,7 @@ Every method for making a measurement, deciding among hypotheses, claiming a dis
 This paper is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
 My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}.
-This principle---agreed upon by both Bayesians and frequentists---is that all information in any data set $Y$ about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
+This principle---which applies in both Bayesian and frequentist statistical practice---is that all information in any data set $Y$ about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
 The likelihood function is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
 The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
@@ -122,7 +123,10 @@ Instead it uses a machine-learning regression to substantiate its results; the i
 I opened by noting that data analyses involve subjective choices.
 There is another kind of subjectivity in play:
 What method you use depends on what \emph{you want to do} with your data analysis.
-The primary use case I am going to focus on is the case in which you have a data set and you have a parameter of interest, and you want to know \emph{what that particular data set has to say} about the parameter of interest.
+The primary use case I am going to focus on is the case in which
+\textsl{(a)}~you have a data set, and
+\textsl{(b)}~you have a parameter of interest,
+and \textsl{(c)}~you want to know \emph{what that particular data set has to say} about the parameter of interest.
 There are other use cases.
 Sometimes you are making the measurement because you want to make a \emph{prediction} for a future experiment.
 That is, you want to know what some future data set will say about your parameter of interest.
@@ -143,15 +147,26 @@ Thus the question \emph{Do these data $Y$ deliver a measurement of parameter $\t
 When the likelihood function cannot be written down, life is harder; we will address that case in \secref{sec:lfi}.
 
 \section{The likelihood function}\label{sec:lf}
-The problem setup will be that there is a list or block of data $Y$, a parameter (or list of parameters) of interest $\theta$, a list of nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
+The problem setup will be that there is an ordered list of $n$ data elements $Y$ (``the data''), an ordered list of $m$ parameters of interest $\theta$, an ordered list of $s$ nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
 In contexts like this, there are many meanings of the word ``model,'' but for me this will be something that can be used to compute probabilities in the space of the data.
-That is... HOGG
-HOGG: Importantly: Nuisance parameters also!
-HOGG: Importantly: Specific assumptions.
+Under some set $I$ of detailed assumptions, it is possible to construct a probability density function (or sometimes just ``pdf'' or ``probability'' in what follows) for the data $Y$
+\begin{align}
+    p(Y\given\theta,\alpha,I) ~;
+\end{align}
+this pdf\footnote{I apologize for this notation because... HOGG.} is called \emph{the likelihood function} (or sometimes just ``likelihood'') and it will depend (strongly, we very much hope) on the values of the parameters $(\theta, \alpha)$.
+We hope that the likelihood depends strongly on the parameters because if it doesn't, the data won't give us a measurement.
+One key idea here is that everything is always conditioned on the set $I$ of assumptions: There is no objective truth.
+Another key idea here is that the combination of parameters $(\theta,\alpha)$ is comprehensive: Once you specify those, you have fully specified the relevant pdf.
 
 You can often (but not always) think of the likelihood function as a prediction for the expectation of the data plus a noise model.
-For example, if you believe that the expectation for the data depends linearly on the parameters $(\theta, \alpha)$, and then in addition there is additive, Gaussian noise, the likelihood function becomes... HOGG
-The likelihood function both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted, given the parameters.
+For example, if you believe that it is the expectation for the data that depends on the parameters $(\theta, \alpha)$, and (in addition) there is additive, zero-mean Gaussian noise, the likelihood function becomes
+\begin{align}
+    p(Y\given\theta,\alpha,I) &= \frac{1}{\norm{2\pi\,C}^{1/2}}\,\exp\left(-\frac{1}{2}\,[Y - \mu]^\top\,C^{-1}\,[Y - \mu]\right) ~,
+\end{align}
+where $\mu$ is the expectation for the data $Y$,
+$C$ is the $n\times n$ variance tensor (covariance matrix) for the Gaussian noise,
+and $\mu$ and $C$ both depend (or can depend) on the parameters $(\theta,\alpha)$.
+This kind of form emphasizes that the likelihood function both tells you how you expect the data to change as you change the parameters, \emph{and} how precisely the data can be predicted, given the parameters.
 
 I alluded to the likelihood principle in \secref{sec:intro}.
 The principle is that everything about the data $Y$ that can possibly matter to the parameters $(\theta,\alpha)$ is contained in the likelihood function.
@@ -166,23 +181,34 @@ This procedure \eqref{eq:bayes} is called ``Bayes rule'' and is the basis of Bay
 This is the \emph{only way} that the data are permitted to be used to update your beliefs, in Bayesian reasoning.
 That's the likelihood principle.
 
-But the likelihood principle has a role in frequentist statistics too.
-The principle in frequentism is that everything about the data $Y$ that is relevant to the parameters $(\theta,\alpha)$ is encoded in the likelihood function.
-That is, the likelihood function is a sufficient statistic for the data, when your goals relate (only) to the parameters $(\theta,\alpha)$.
-Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
-The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
-The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameter $\theta$ (and all the nuisance parameters $\alpha$).
-\begin{align}
-    \hat{\theta},\hat{\alpha} = \argmax_{\theta,\alpha} p(Y\given\theta,\alpha,I) ~.
-\end{align}
-Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
-
 In many contexts, both conceptually and for reasons of numerical precision, it is better to work with the logarithm $\mathscr{L}$ of the likelihood function;
 \begin{align}
     \mathscr{L}(\theta,\alpha) &= \ln p(Y\given\theta,\alpha,I) ~.
 \end{align}
 When we take the log---and we always use natural logarithms here---we usually explicitly write the log likelihood in terms of the parameters only.
 The data are fixed, after all.
+
+Something like the likelihood principle has a role in frequentist statistics too.
+The principle in frequentism is that everything about the data $Y$ that is relevant to the parameters $(\theta,\alpha)$ is encoded in the likelihood function.
+That is, the likelihood function is a sufficient statistic for the data, when your goals relate (only) to the estimation of the parameters $(\theta,\alpha)$.
+Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertainty $\sigma_\theta$ on that parameter can all be derived from the likelihood function alone, for particular definitions of the word ``best.''\footnote{%
+The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
+The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameters $\theta$ (and all the nuisance parameters $\alpha$).
+\begin{align}
+    \hat{\theta},\hat{\alpha} &= \argmax_{\theta,\alpha} \mathscr{L}(\theta,\alpha) ~.
+\end{align}
+Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
+
+There is a very special case that arises when the model is linear,
+such that the expectation for the data $Y$ can be written as $X\,\theta$ for some $n\times m$ rectangular design matrix $X$,
+and when the noise is Gaussian with zero mean and known, fixed covariance tensor $C$.
+In this case, because the logarithm of a Gaussian is quadratic, there is a closed form for the maximum-likelihood parameters $\hat\theta$
+\begin{align}
+    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~.
+\end{align}
+This form will reappear in examples below.
+HOGG SHOULD WE define a variable $a$ that contains both $\theta,\alpha$ in one list? And SUCK IT UP?
+For more information about this kind of problem, see the first sections of \cite{fittingaline}.
 
 There are two very important properties of the likelihood function, when it comes to measurement.
 The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
@@ -195,18 +221,16 @@ That is---and critical to everything that follows in this \documentname---any cl
 The peak in the log likelihood must be taller than its surroundings by log-likelihood differences much larger than unity.\footnote{Here, and everywhere in this document, the words ``log'' or ``logarithm'' or ``logarithmic'' always refer to natural logarithms in base $\e$.}
 In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be substantially larger than unity.
 
-The second important property of the likelihood function is that it is parameterization-invariant.
+The second important property of the likelihood function is that it is par\-am\-e\-ter\-i\-za\-tion-invariant.
 If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformations between $(\theta,\alpha)$ and $\beta$ are invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
 This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
 The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes}.
 
 \section{Nuisance parameters}\label{sec:nuisance}
-
-Much of what follows is (effectively) about the nuisance parameters $\alpha$.
-Nuisance parameters substantially complicate questions of measurement.
+The nuisance parameters $\alpha$ substantially complicate questions of measurement when one is only interested in the .
 Many of the mistakes in the literature are mistakes in the handling of nuisance parameters.
 This is in part because it is hard to get rid of the nuisance parameters without accidentally introducing information about the parameter of interest $\theta$.
-Any information brought in that doesn't come directly from the data $Y$ is information that can deceive an investigator into mistakenly claiming a measurement or over-estimating the information in the data about the parameter of interest $\theta$.
+Any information brought in that doesn't come directly from the data $Y$---for example any information in a prior pdf over the nuisances---is information that can deceive an investigator into mistakenly claiming a measurement or over-estimating the information in the data about the parameter of interest $\theta$.
 
 How do we account for the nuisances $\alpha$ when we are claiming a measurement of the parameter of interest $\theta$?
 For the committed Bayesians, there is only one answer, and that is to marginalize.
@@ -271,12 +295,11 @@ That is, you start by computing the information tensor $C^{-1}_{(\theta,\alpha)}
 \begin{align}
     C^{-1}_{(\theta,\alpha)} &= - \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.\label{eq:fisher}
 \end{align}
-This second-derivative tensor is $d\times d$, where $d$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
-HOGG DO WE HAVE DEFINITIONS for the dimensionality of $\theta$ and $\alpha$?
+This second-derivative tensor is $d\times d$, where $d=p+s$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
 Then you invert this matrix to get $C_{(\theta,\alpha)}$.
-Then you take the (square) submatrix of $C_{(\theta,\alpha)}$ corresponding to $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
+Then you take the (square) $m\times m$ submatrix of $C_{(\theta,\alpha)}$ corresponding to the $m$ parameters in $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
 If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
-If $\theta$ has more than one component, this submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
+If $m>1$---that is, if $\theta$ has more than one component---this $m\times m$ submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
 HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
@@ -406,7 +429,7 @@ The second thing that is wrong about this idea is that when the number of parame
 To demonstrate this, we generate a very simple toy-likelihood and toy-posterior situation, in which all priors are flat, and in which it very very much looks like there is a peak in the likelihood function when there absolutely is not.
 
 In our toy problem we have data $Y$ that makes up a $n\times 1$ column vector, or an ordered list of $n$ elements.
-We have parameters $\theta$, which make up a $p\times 1$ column vector, or an ordered list of $p$ elements.
+We have parameters $\theta$, which make up a $m\times 1$ column vector, or an ordered list of $m$ elements.
 If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq p$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
 The simplest possible toy model is that the LF depends only on certain linear combinations of the parameters $\theta$.
 That is, there is a rectangular $q\times p$ matrix $A$, with $q<p<n$, such that, to some very good approximation,
@@ -418,7 +441,7 @@ This model might be called ``low rank'' or ``degenerate'':
 There are parameter degeneracies such that the likelihood depends on less than all the parameters.
 And, by the way, this toy example is extreme; we don't need these parameter degeneracies to be exact to get the effect we are about to see.
 
-HOGG FIX THIS to be more like a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
+HOGG FIX THIS to represent the new situation, which is a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
 
 (HOGG DESCRIBE PRIOR by adjusting the following:)
 When we do Bayesian inference, we will want a prior, and, because we want to be maximally uninformative, we will choose a prior that is precisely flat in all parameters $\theta_i$.
@@ -493,10 +516,49 @@ The regression does not return measurements of $\theta$.
 It returns predictions, under the assumption that the training set is representative.
 
 \section{What is my data?}\label{sec:data}
-HOGG: As raw as possible.
+Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
+That is, it is better to work on the data that came directly from your instrument, and not data that have been highly processed, especially since that processing can significantly bias or affect your results.
 
-HOGG: If not raw, then the derived data should be related to the raw data only through a LF. Why? Proofs.
+Of course, most data are highly processed: Raw instrument read-outs are generally corrected for instrumental biases and spurious signals, and calibrated to interpretable units.
+These corrections are probably necessary for making good measurements!
+That said, there is no reason that these corrections need to be applied to the raw data before you work with it.
+Any calibration or correction procedure that divides the raw data by $a$, say, and then subtracts $b$ could, instead, be obviated:
+Instead, the investigator could add $b$ to the model---the prediction for the data---and then multiply the model by $a$, thus making the calibration something that is applied to the model, not the data.
+That is, any calibration parameters that are used to correct the raw data to corrected data could instead be thought of as model parameters, that correct the idealized data prediction to a prediction for the raw data.
+Whenever this is possible, I recommend it, because it unifies and makes explicit everything that goes into the data analysis.
+Many times, however, for practical reasons, this is not possible, and the data $Y$ is instead derived by some process from some raw data $Z$.
 
+There are three-ish scenarios in which the derived data $Y$ might have been made from the raw data $Z$:
+\begin{enumerate}
+\item In the first scenario, some aribitrary algorithm, not justified by any statistical theory, might have been applied to the raw data, such that $Y=g(Z)$ for some function $g()$.
+The uncertainties on $Y$ in this scenario might be derived from the raw uncertainties on $Z$  by multiplying the raw uncertainties by (the absolute value of) the derivative $\dd g/\dd Z$, or perhaps something more sophisticated than that.
+This is typically the scenario in astronomy when the raw image from a camera has an estimate of the dark (or bias) subtracted, and then some kind of flat-field divided out, then a gain estimate applied, and then something that calibrates the image to intensity units (say).
+\item In the second scenario, the derived data might be, somehow, the maximum-likelihood value of $Y$ for some probabilistic model $\ln p(Z\given Y,I)$, under assumptions $I$.
+The uncertainties on $Y$ in this scenario might be made from the second derivative of the log likelihood, according to information theory (the Fisher information, that is HOGG REFER TO SOMETHING ABOVE).
+This is the scenario for the ESA \textsl{Gaia} Mission, which delivers maximum-likelihood parallaxes and proper motions for all stars, along with (an approximation to) the (inverse of the) Fisher information tensor from the log likelihood function that was used to measure those parallaxes (CITE).
+\item In the third scenario, the derived data might be the mean or maximum of a posterior pdf for $Y$, generated using a log likelihood $\ln p(Z\given Y,I)$ and a log prior pdf $\ln p(Y\given I)$.
+The uncertainties on $Y$ in this scenario are usually made by estimating the second moment (the variance) of the posterior pdf.
+In astronomy, this is the scenario for exoplanet transit spectroscopy, where, in each wavelength bin, differences in spectral flux as a function of time are generally modeled with a Bayesian analysis using a probabilistic model for the transit.
+\end{enumerate}
+While all three of these scenarios can be workable for doing good data analysis, there are arbitrarily bad things that can happen in the first and third.
+In the first, if the function $g(Z)$ is sufficiently nonlinear, the uncertainty estimates can become arbitrarily wrong, or arbitrarily difficult to make right.
+It is far better to apply $g^{-1}()$ to your prediction for the derived data $Y$ and thus make a prediction for $Z$ directly, than it is to just predict $Y$.
+
+In the third scenario, the Bayesian inference produces biased estimators, such that the data $Y$ can become prior-distorted or even effectively prior-dominated.
+In this case, the data $Y$ don’t tell you just about your raw data; they contain also information about your priors, which distorts the data, and also makes multiple data points correlated (since they will share aspects of this prior).
+In general, the third scenario is to be avoided, because it is very hard to tell in the abstract how much the prior matters; indeed it will matter differently to different models and to different settings of your parameters $(\theta,\alpha)$.
+
+The reason that the second scenario is to be preferred is because likelihood functions can be daisy-chained, in the following sense:
+\begin{align}
+    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y~,
+\end{align}
+where the integral is (implicitly) over the full possible domain of $Y$.
+That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ (or enough information to reconstruct it).
+Because of the likelihood principle (\secref{sec:lf}), if we want to make measurements with the data, we want the data to be useful for making likelihood estimates or comparisons.
+If the data $Y$ are related to the raw data $Z$ by a likelihood, then it is usually possible to perform a data analysis on data $Y$ but have it return exactly what \emph{would have been returned} if the analysis had been performed on the raw data $Z$.
+
+All of this is very nicely demonstrated in terms of linear models with Gaussian noise.
+In this case, the model is… HOGG HAVE WE DONE THIS ALREADY ABOVE? IF NOT, THIS NEEDS TO GO IN ABOVE.
 HOGG: Explicit re linear chi-squared fitting: It is associative in the relevant sense!
 
 HOGG: Using posteriors does not work; call out the exoplanet atmosphere crew.
@@ -524,11 +586,11 @@ This is sometimes called ``population inference,'' and it is generally hierarchi
 Here the approach is to build a likelihood for the global $\beta$ out of a product of all the individual likelihoods.
 This looks like
 \begin{align}
-    \mathscr{\beta} &= \ln p(\setof{Y}_{i=1}^n\given\beta,I) \\
-    p(\setof{Y}_{i=1}^n\given\beta,I) &= \prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
+    \mathscr{L}(\beta) &= \ln p(\setof{Y}_{i=1}^n\given\beta,I)
+    = \ln\prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
 \end{align}
 That combined, marginalized likelihood can be optimized to deliver a good estimator for $\beta$ or else it can be combined with priors for a hierarchical Bayesian inference, discussed in more detail elsewhere (CITE).
-In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integral \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}.\footnote{HOGG: More here?}
+In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integrals in \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}, and combined with a sum.\footnote{HOGG: More here?}
 
 Sometimes what is wanted is a really simple statistic of the $\theta_i$, like the mean value of $\theta_i$.
 For reasons related to what's discussed in \secref{sec:data}, if, from each data set $i$ one obtains a maximum-likelihoood estimate $\hat\theta_i$ for each parameter $\theta_i$, then these can in turn be averaged to get an estimate of the mean $\langle\theta\rangle$.
@@ -553,12 +615,21 @@ However, they are independent in the relevant sense here as long as they contain
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
 What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
 
-HOGG: FOR EXAMPLE..
+For example, as we mentioned in \secref{sec:intro}, the \textsl{Gaia} Mission \cite{gaia} is delivering more than a billion stellar parallaxes and proper motions in a set of data releases (for example \cite{gaiadr3}).
+Astronomers are using these parallaxes to estimate the distances to groups of stars in the Galaxy, and the luminosities of stars of different types.
+Each of these kinds of estimates involves combining the parallaxes of multiple stars.
+That is, the users of the \textsl{Gaia} Catalog want to use the catalog entries like data.
+They want to make measurements using these catalog entries as data.
+This situation is common in physics and astronomy:
+A large catalog of measurements is used, later, as \emph{data} in a subsequent analysis.
 
-For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is critical that the quantities given in your catalog can be used to reconstruct the likelihood functions, or approximations thereto.
-HOGG BLAH BLAH. Also refer back to \secref{sec:intro} where the Gaia Catalog was discussed.
+For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is critical that the quantities given in the catalog can be used to reconstruct the likelihood functions, or approximations thereto.
+That is, it is important that....
+HOGG BLAH BLAH.
 
 HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
+
+HOGG: Refer back to the DFM alternative view. HOGG ASKS: Have I stated this clearly above?
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
@@ -598,6 +669,10 @@ For another example, if there is obviously non-Gaussian noise, but the measureme
 HOGG: What do I write in the abstract of my paper? What uncertainty do I report? Answer this for all statistical philosophies.
 
 HOGG: How many ``sigma'' is my measurement? This is a requirement in many fields of physics.
+
+HOGG: How many ``sigma'' is my measurement away from some expectation?
+
+HOGG: What is the $k$-sigma upper limit? HOGG: $k$ here or another variable?
 
 HOGG: Note that if you have a posterior peak but you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. Maybe more data were involved. Be explicit about that and you will be okay.
 
