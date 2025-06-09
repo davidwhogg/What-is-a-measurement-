@@ -204,9 +204,15 @@ such that the expectation for the data $Y$ can be written as $X\,\theta$ for som
 and when the noise is Gaussian with zero mean and known, fixed covariance tensor $C$.
 In this case, because the logarithm of a Gaussian is quadratic, there is a closed form for the maximum-likelihood parameters $\hat\theta$
 \begin{align}
-    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~.
+    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~.\label{eq:wls}
 \end{align}
 This form will reappear in examples below.
+The formal uncertainty on $\hat\theta$ is given by the covariance matrix $C_\theta$ (HOGG: IS THIS OUR USUAL NOTATION?), the inverse of which is simply a projection of the inverse covariance matrix $C^{1}$ for the data $Y$
+\begin{align}
+    C_\theta^{-1} &= X^\top\,C^{-1}\,X ~; \label{eq:Ctheta}
+\end{align}
+this makes sense for units and shape reasons (HOGG EXPLAIN).
+This expression \eqref{eq:Ctheta} is the linear algebra (or multivariate) form of what is called in undergraduate physics laboratory classes, ``error propagation.''
 HOGG SHOULD WE define a variable $a$ that contains both $\theta,\alpha$ in one list? And SUCK IT UP?
 For more information about this kind of problem, see the first sections of \cite{fittingaline}.
 
@@ -487,7 +493,7 @@ This isn't true, and besides, once the data get large enough, coverage of that k
 
 It turns out that, even when the situation is ideal---%
 even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are biased.
-Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, CITE).
+Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, \cite{goodorbad, ting}).
 It relates to the point made above in \secref{sec:bayes}:
 Good predictions (like those produced by Bayesian inferences) are biased, and machine learning regressions are optimized to make good predictions.
 The connections between machine learning regressions and Bayesian inferences are strong:
@@ -553,15 +559,48 @@ The reason that the second scenario is to be preferred is because likelihood fun
     p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y~,
 \end{align}
 where the integral is (implicitly) over the full possible domain of $Y$.
-That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ (or enough information to reconstruct it).
+That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ that relates the raw data $Z$ to the derived data $Y$ (or if the investigator is given enough information to reconstruct that function).
 Because of the likelihood principle (\secref{sec:lf}), if we want to make measurements with the data, we want the data to be useful for making likelihood estimates or comparisons.
 If the data $Y$ are related to the raw data $Z$ by a likelihood, then it is usually possible to perform a data analysis on data $Y$ but have it return exactly what \emph{would have been returned} if the analysis had been performed on the raw data $Z$.
 
 All of this is very nicely demonstrated in terms of linear models with Gaussian noise.
-In this case, the model is… HOGG HAVE WE DONE THIS ALREADY ABOVE? IF NOT, THIS NEEDS TO GO IN ABOVE.
-HOGG: Explicit re linear chi-squared fitting: It is associative in the relevant sense!
+Recall from \eqref{eq:wls} above that, in this case (linear, Gaussian), my maximum-likelihood estimate $\hat\theta$ is given by
+\begin{align}
+    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~,\label{eq:wls2}
+\end{align}
+for some $n\times m$ design matrix $X$.
+Imagine that the data $Y$ are developed from some truly raw data $Z$ by some linear process---for example, if the data $Y$ are the data $Z$ but binned down into coarser bins, say---and this binning is done using the uncertainties correctly; that is:
+\begin{align}
+    Y &= [B^\top\,C_Z^{-1}\,B]^{-1}\,B^\top\,C_Z^{-1}\,Z \label{eq:wls3} \\
+    C^{-1} &= B^\top\,C_Z^{-1}\,B ~,
+\end{align}
+where $C_Z$ is the uncertainty variance tensor on the raw data $Z$.
+Now if you combine \eqref{eq:wls2} and \eqref{eq:wls3} and use the relationship of $C^{-1}$ to $C_Z^{-1}$, you get
+\begin{align}
+    \hat\theta &= [(B\,X)^\top\,C_Z^{-1}\,(B\,X)]^{-1}\,(B\,X)^\top\,C_Z^{-1}\,Z ~.\label{eq:wls4}
+\end{align}
+That is, doing principled weighted least squares on the data $Y$ with design matrix $X$ is numerically identical to doing principled weighted least squares on the truly raw data $Z$ but with design matrix $(B\,X)$.
 
-HOGG: Using posteriors does not work; call out the exoplanet atmosphere crew.
+This is a strong argument for making sure that reduced data $Y$ relate to raw data $Z$ by simple linear expressions like $\eqref{eq:wls3}$.
+Many data-reduction steps \emph{do} have this form or \emph{can} have this form.
+I mentioned binning of the data: Provided that each bin of reduced data is the inverse-variance-weighted average of the raw data going into that bin, the binning is consistent with $\eqref{eq:wls3}$.
+I mentioned flat-fielding and bias subtraction and so on in imaging projects:
+Provided that these operations are linear and use inverse-variance weights on the raw data, these will also meet these conditions.
+What I'm saying is: It isn't hard to work in ways that are consistent with these principles.
+And it is essential in precise or rigorous contexts.
+
+That said, \emph{any other transformation} between raw data $Z$ and reduced data $Y$ will \emph{bias all results} made with the data $Y$.
+For example, if the data $Y$ are found from any statistic (mean, median or mode) of a Bayesian posterior pdf, all scientific results made with the data $Y$ will be biased.
+The biases created by using posterior pdf instead of likelihood for going from $Z$ to $Y$ are not easy to know \foreign{a priori}, and they are generally impossible for downstream users to correct after the fact.
+It might seem absurd that anyone would do this, but in fact this is very common in the astronomy literature (HOGG CITE THINGS).
+If you are reducing, calibrating, or binning data, use likelihood formulations or weighted least squares.
+Don't use posterior inferences.
+
+One final comment is that, even obeying the very simple rule given in \eqref{eq:wls3} does not protect a project from harm.
+Any binning or data reduction step in going from $Z$ to $Y$ can remove information.
+For example, if the signals of interest in design matrix $X$ are high-frequency and the binning matrix $B$ has big bins, the binning will destroy that information.
+That is, it is still better to work directly with the raw data $Z$ if you can.
+And if the data reduction step looks as simple as \eqref{eq:wls3}, then you might as well just work with the raw data directly if you can get the raw data.
 
 HOGG: If you are working with derived data, be careful about repeating the data or using it twice.
 
