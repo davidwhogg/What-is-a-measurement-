@@ -519,7 +519,7 @@ To be concrete: Imagine that data $Y$ are very informative about some quantity o
 And imagine that, in the training set, objects with high $\theta$ also tend to have high $\gamma$, and \foreign{vice versa}.
 Then a regression trained on the training set will deliver good predictions of labels $\theta$, \emph{whether or not} the data $Y$ contains information about $\theta$ directly.
 The regression does not return measurements of $\theta$.
-It returns predictions, under the assumption that the training set is representative.
+It returns \emph{predictions}, under the assumption that the training set is representative.
 
 \section{What is my data?}\label{sec:data}
 Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
@@ -601,11 +601,11 @@ Any binning or data reduction step in going from $Z$ to $Y$ can remove informati
 For example, if the signals of interest in design matrix $X$ are high-frequency and the binning matrix $B$ has big bins, the binning will destroy that information.
 That is, it is still better to work directly with the raw data $Z$ if you can.
 And if the data reduction step looks as simple as \eqref{eq:wls3}, then you might as well just work with the raw data directly if you can get the raw data.
-This is a realization that is adjacent to the phrase ``binning is sinning.''\footnote{This is a favorite phrase of my friend and mentor Hans-Walter Rix, and the title of a paper by Kipping \cite{binningissinning}.}
+This is a realization that is adjacent to the phrase ``binning is sinning.''\footnote{This is a favorite phrase of my friend and mentor Hans-Walter Rix, and the title of a paper by Kipping \cite{binningissinning}. The Kipping paper is making precisely this point that binning destroys high-frequency information.}
 
 When the model relating reduced data $Y$ to raw data $Z$ is nonlinear, it isn't possible to be absolutely principled in all this without explicitly doing the integral \eqref{eq:ZtoY}.
 But when the problem is well-behaved or can be linearized near the optimum, using as the data $Y$ the maximum of the intermediate log-likelihood $\ln p(Y\given Z,I)$, and making the noise inverse-variance $C^{-1}$ the (negative of the) second derivative of that intermediate log-likelihood usually delivers a very good approximation to what you want.
-This is precisely what the \textsl{Gaia} Mission has done in delivering parallaxes and proper motions (the reduced data $Y$) and their uncertainty variances $C$, which are all based on onboard timing of stellar transits (the raw data $Z$) and a timing noise model (parameterized by a $C_Z$).
+This is precisely what the \textsl{Gaia} Mission \cite{gaia} has done in delivering parallaxes and proper motions in their data release \cite{gaiadr3} (the reduced data $Y$) and their uncertainty variances $C$, which are all based on onboard timing of stellar transits (the raw data $Z$) and a timing noise model (parameterized by a $C_Z$).
 
 When one works with derived data $Y$, derived from some data $Z$, one extremely technical final point is that it is essential that the data $Y$ be using the data $Z$ \emph{only once} in some sense.
 That is, you can't make the data $Y$ be all the sums and differences of the data $Z$ without re-using data points from $Z$.
@@ -663,7 +663,7 @@ However, they are independent in the relevant sense here as long as they contain
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
 What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
 
-For example, as we mentioned in \secref{sec:intro}, the \textsl{Gaia} Mission \cite{gaia} is delivering more than a billion stellar parallaxes and proper motions in a set of data releases (for example \cite{gaiadr3}).
+For example, as we mentioned in \secref{sec:intro} and \secref{sec:data}, the \textsl{Gaia} Mission \cite{gaia} is delivering more than a billion stellar parallaxes and proper motions in a set of data releases (for example \cite{gaiadr3}).
 Astronomers are using these parallaxes to estimate the distances to groups of stars in the Galaxy, and the luminosities of stars of different types.
 Each of these kinds of estimates involves combining the parallaxes of multiple stars.
 That is, the users of the \textsl{Gaia} Catalog want to use the catalog entries like data.
@@ -675,7 +675,16 @@ For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is
 That is, it is important that....
 HOGG BLAH BLAH.
 
-HOGG: Refer back to the DFM alternative view. HOGG ASKS: Have I stated this clearly above?
+There is a Bayesian alternative to this view, which is the view of the most principled Bayesians I know.\footnote{In my own sphere, I attribute this view to Dan Foreman-Mackey (DeepMind); it is embodied in many of his papers and projects.}
+This Bayesian view is that the goal of every paper and data release is really to deliver posterior pdfs for everything, and \emph{not} likelihoods.
+However, and importantly, \emph{in addition} to these posterior pdfs, the project or paper should deliver executable code that creates those posterior pdfs.
+Then the downstream user is expected not to use the posterior pdfs directly; after all:
+Why would the downstream user agree with the upstream investigator's priors?
+The downstream user is expected to take the executable code and modify it to their particular needs.
+That is, the likelihood functions are released not as primary outputs but instead as components of executable code.
+I don't necessarily disagree with this vision!
+However, in practice, in my fields of study, only a tiny fraction of downstream users have completely re-run upstream code in their data analyses; a larger fraction have done things that are technically wrong (using summaries of posterior pdfs as data, say).
+So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
