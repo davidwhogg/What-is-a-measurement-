@@ -556,7 +556,7 @@ In general, the third scenario is to be avoided, because it is very hard to tell
 
 The reason that the second scenario is to be preferred is because likelihood functions can be daisy-chained, in the following sense:
 \begin{align}
-    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y~,
+    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y ~,\label{eq:ZtoY}
 \end{align}
 where the integral is (implicitly) over the full possible domain of $Y$.
 That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ that relates the raw data $Z$ to the derived data $Y$ (or if the investigator is given enough information to reconstruct that function).
@@ -596,13 +596,22 @@ It might seem absurd that anyone would do this, but in fact this is very common 
 If you are reducing, calibrating, or binning data, use likelihood formulations or weighted least squares.
 Don't use posterior inferences.
 
-One final comment is that, even obeying the very simple rule given in \eqref{eq:wls3} does not protect a project from harm.
+One final comment on this linear-fitting point is that, even obeying the very simple rule given in \eqref{eq:wls3} does not protect a project from harm.
 Any binning or data reduction step in going from $Z$ to $Y$ can remove information.
 For example, if the signals of interest in design matrix $X$ are high-frequency and the binning matrix $B$ has big bins, the binning will destroy that information.
 That is, it is still better to work directly with the raw data $Z$ if you can.
 And if the data reduction step looks as simple as \eqref{eq:wls3}, then you might as well just work with the raw data directly if you can get the raw data.
+This is a realization that is adjacent to the phrase ``binning is sinning.''\footnote{This is a favorite phrase of my friend and mentor Hans-Walter Rix, and the title of a paper by Kipping \cite{binningissinning}.}
 
-HOGG: If you are working with derived data, be careful about repeating the data or using it twice.
+When the model relating reduced data $Y$ to raw data $Z$ is nonlinear, it isn't possible to be absolutely principled in all this without explicitly doing the integral \eqref{eq:ZtoY}.
+But when the problem is well-behaved or can be linearized near the optimum, using as the data $Y$ the maximum of the intermediate log-likelihood $\ln p(Y\given Z,I)$, and making the noise inverse-variance $C^{-1}$ the (negative of the) second derivative of that intermediate log-likelihood usually delivers a very good approximation to what you want.
+This is precisely what the \textsl{Gaia} Mission has done in delivering parallaxes and proper motions (the reduced data $Y$) and their uncertainty variances $C$, which are all based on onboard timing of stellar transits (the raw data $Z$) and a timing noise model (parameterized by a $C_Z$).
+
+When one works with derived data $Y$, derived from some data $Z$, one extremely technical final point is that it is essential that the data $Y$ be using the data $Z$ \emph{only once} in some sense.
+That is, you can't make the data $Y$ be all the sums and differences of the data $Z$ without re-using data points from $Z$.
+Well you \emph{can}, but then you have to explicitly track all of these covariances in $C$.
+And really those covariances have to be tracked in $C^{-1}$ not $C$ because $C$ will contain infinite eigenvalues.
+This is one of many reasons that we should be transmitting not variances but inverse variances in our datasets and data analyses.\footnote{The inverse variance is sometimes called the information tensor. Variances (and their eigenvalues) can go to infinity, but inverse variances are always finite in all respects, because one never has infinite amounts of information about anything.}
 
 \section{Combining data samples}\label{sec:combining}
 There are (at least) two cases for combining measurements.
@@ -666,12 +675,11 @@ For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is
 That is, it is important that....
 HOGG BLAH BLAH.
 
-HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
-
 HOGG: Refer back to the DFM alternative view. HOGG ASKS: Have I stated this clearly above?
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
+The answer is \emph{no}.
 Obviously, looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
 However, there are many circumstances in the contemporary sciences in which we can get some kind of estimate of our posterior pdf, but we cannot compute the likelihood function.
 
@@ -680,8 +688,8 @@ There are only a few important physical cosmological parameters, but there are (
 Thus it is close to impossible, computationally, to compute the probability of the data given the parameters.
 There are just far too many parameters.
 At the same time, there are methods (known as likelihood-free inference, or simulation-based inference; \cite{abc, sbi}) for obtaining a posterior pdf for the important few parameters, without ever explicitly instantiating a likelihood function.
-Is it impossible to securely claim a measurement in this case?
-It is not.
+Is it possible to securely claim a measurement in this case?
+Yes, but it requires care.
 
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
@@ -692,7 +700,7 @@ It should be obvious at this point that it is a likelihood function, with a peak
 (if it is not possible to access any kind of likelihood function, see \secref{sec:lfi}).
 But even more important than the requirement of a peak in a likelihood function is the requirement that the paper be absolutely clear and unambiguous about everything that was assumed and done.
 
-The art of writing a good paper about a measurement is, as always, the art of writing clearly and with the audience in mind.
+The art of writing a good paper about a measurement is, as in all kinds of writing, the art of having an audience in mind and being clear to that audience.
 This means explaining every non-trivial decision and assumption that you have made---where ``non-trivial'' depends on the context, which in turn is set by the expectations of the audience---and showing that the likelihood function (or your method of measurement) flows directly from those decisions and assumptions.
 I have taken the view recently that the decisions and assumptions should make up a stand-alone section in the papers I write (see, for example, \cite{frizzle}).
 In addition, it is good practice to release all the code and data, such that the measurement can be reproduced, the assumptions can be explored, and the likelihood can be combined with others that follow (see \secref{sec:combining}).
@@ -736,7 +744,7 @@ for existential discussions about these matters over the years, and
 for valuable discussions of the content of this particular \documentname.
 The Flatiron Institute is a division of the Simons Foundation.
 
-\raggedright
+\raggedright\footnotesize
 \bibliographystyle{plain}
 \bibliography{measurement}
 
