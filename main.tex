@@ -17,6 +17,7 @@
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
 % - community norms loom large in the abstract. But are they important in the paper?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
+% - This paper opens with the issue of community norms / agreements, but then never does anything with that? Should it get specific?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
 
 % style notes
@@ -195,7 +196,7 @@ Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertain
 The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
 The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameters $\theta$ (and all the nuisance parameters $\alpha$).
 \begin{align}
-    \hat{\theta},\hat{\alpha} &= \argmax_{\theta,\alpha} \mathscr{L}(\theta,\alpha) ~.
+    \hat{\theta},\hat{\alpha} &= \argmax_{\theta,\alpha} \mathscr{L}(\theta,\alpha) ~.\label{eq:ML}
 \end{align}
 Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
@@ -596,6 +597,10 @@ It might seem absurd that anyone would do this, but in fact this is very common 
 If you are reducing, calibrating, or binning data, use likelihood formulations or weighted least squares.
 Don't use posterior inferences.
 
+Similarly, if the data $Y$ is related to the raw data $Z$ by a regression.
+That is, if the data $Y$ are labels found by training a regression on a training set and then running it on the raw data $Z$, all scientific results made with the data $Y$ will be biased.
+We discussed this in \secref{sec:ml} and it is discussed elsewhere \cite{goodorbad, ting}.
+
 One final comment on this linear-fitting point is that, even obeying the very simple rule given in \eqref{eq:wls3} does not protect a project from harm.
 Any binning or data reduction step in going from $Z$ to $Y$ can remove information.
 For example, if the signals of interest in design matrix $X$ are high-frequency and the binning matrix $B$ has big bins, the binning will destroy that information.
@@ -703,7 +708,7 @@ Yes, but it requires care.
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 
-\section{Writing up the measurement in a paper}\label{sec:claim}
+\section{Reporting the measurement in a paper}\label{sec:claim}
 What does it take to write a paper that claims that a set of data $Y$ constrains or measures a parameter (or set of parameters) $\theta$?
 It should be obvious at this point that it is a likelihood function, with a peak, and with a narrow enough uncertainty, or large enough Fisher Information, that the parameter is usefully measured
 (if it is not possible to access any kind of likelihood function, see \secref{sec:lfi}).
@@ -718,19 +723,46 @@ A measurement will be more acceptable to the community the more consistent with 
 For example, imagine that in the data $Y$, the parameter of interest $\theta$ is strongly covariant with some nuisance parameter $\alpha_k$,
 such that one cannot measure $\theta$ without having strong constraints on $\alpha_k$.
 In this case it is possible for an investigator to deliver a measurement of $\theta$ if the investigator is willing to postulate a particular value or narrow range for $\alpha_k$.
-That measurement of $\theta$ will only be accepted by the investigator's community if the community agrees that $\alpha_k$ does indeed live in or near that postulated range.
+That measurement of $\theta$ will only be accepted by the investigator's community if that community agrees that $\alpha_k$ does indeed live in or near that postulated range.
 If that's controversial, then the investigator has not delivered what anyone would accept as a measurement.
 For another example, if there is obviously non-Gaussian noise, but the measurement is only successful under an assumption of Gaussian noise, then there perhaps isn't a measurement in any real sense, even if there is a good peak in the assumed-Gaussian likelihood function.
 
-HOGG: What do I write in the abstract of my paper? What uncertainty do I report? Answer this for all statistical philosophies.
+A measurement, for the purposes of a scientific paper, is (in some sense) a number (the result of the measurement) and an uncertainty that can be reported in a paper abstract.
+What should these two numbers be?
+In an ideal world, the reported number should be the maximum $\hat\theta$ of the likelihood \eqref{eq:ML}, and the uncertainty should be related to level sets of the log-likelihood function.
+The formal uncertainty on the parameter $\theta$ is the square root of the inverse of the negative of the second derivative tensor, evaluated at that maximum.
+Somewhat more conservative uncertainties come by looking at likelihood ratios, or differences in log-likelihood, as discussed in \secref{sec:lf}.
+Even more conservative uncertainties sometimes come from bootstrap \cite{bootstrap} or jackknife \cite{jackknife} analyses, but a full discussion of uncertainty estimation is out of scope here.
 
-HOGG: How many ``sigma'' is my measurement? This is a requirement in many fields of physics.
+Bayesians might want to replace these with the mean (or median) of a posterior pdf and a root-variance of that.
+That's fine, except for two things:
+The first is that if the anything strange was used for prior pdfs, especially prior pdfs on nuisance parameters, then that weird context must additionally be reported in the abstract.
+The second is that you have to live with the fact that the mean or median of posterior can, in fact, be a bad value.
+If you think about non-trivial posterior pdfs (multi-modal, say), you can easily have a mean or median of posterior that is actually disfavored or ruled out by the data.
+This leads many to consider ``maximum of posterior'' (MAP) estimates, which are good models by construction.
+MAP values are usually not a good idea, and definitely not well estimated by MCMC samplers \cite{mcmc}, which are not in any sense optimizers; they deliver no guarantees about finding ``best'' parameter values.
+Recall that Bayesians integrate; frequentists differentiate.
+Posterior means and medians are found by integration.
 
-HOGG: How many ``sigma'' is my measurement away from some expectation?
+But, to belabor the belabored, if the posterior pdf has a peak, but the likelihood function doesn't, there is no measurement.
+Or maybe there \emph{is} a measurement, but it is based not just on the data $Y$ but also on some prior data or prior knowledge that is additionally relevant.
+The abstract of the paper should be clear about this.
 
-HOGG: What is the $k$-sigma upper limit? HOGG: $k$ here or another variable?
+Some projects (like, for instance, the \textsl{Large Hadron Collider}) have rules or conventions about a measurement being ``5-sigma'' or equivalent.
+Strict thresholds like this are often a bad idea; after all, it is hard to know confidently that a measurement meets this criterion.
+In particular, the number of sigma estimated by taking the second derivative of the log-likelihood and the number of sigma estimated by comparing the log-likelihood at the maximum to the log-likelihood at zero, will in general be different.
+Which is to be preferred?
+Usually the log-likelihood difference is more conservative.
 
-HOGG: Note that if you have a posterior peak but you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. Maybe more data were involved. Be explicit about that and you will be okay.
+Often, when a measurement is made, a report on ``how many sigma'' it is away from a standard value, or a previous measurement.
+Provided that the data are independent of all previous data, this can be estimated with the difference in values divided by the sum-in-quadrature of the uncertainties of the two measurements.
+If the comparison value has tiny uncertainty, or is a noise-free theoretical expectation, then likelihood ratio questions can be asked.
+If the comparison value has significant uncertainty, there is no simple way to ask this without performing a joint analysis of both data sets.
+
+When one makes a measurement, but it is consistent with zero, often ``upper limits'' are reported instead.
+I strongly object to this: It is still usually possible to report a measurement and an uncertainty.
+The fact that it is not significantly different from zero doesn't make it any less of a measurement.
+But once again, upper limits can be constructed with log-likelihood differences, again as described in \secref{sec:lf}.
 
 \section{Discussion}\label{sec:discussion}
 This might have sounded frequentist, but it is not!
@@ -747,9 +779,11 @@ It is a pleasure to thank
   Dan Foreman-Mackey (DeepMind) and
   Hans-Walter Rix (MPIA)
 for existential discussions about these matters over the years, and
+  Gaby Contardo (Nova Gorica),
   Chirag Modi (NYU),
-  Alexander Novara (NYU), and
-  Hans-Walter Rix (MPIA)
+  Alexander Novara (NYU),
+  Hans-Walter Rix (MPIA), and
+  Roberto Trotta (SISSA)
 for valuable discussions of the content of this particular \documentname.
 The Flatiron Institute is a division of the Simons Foundation.
 
