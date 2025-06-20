@@ -2,20 +2,15 @@
 
 % to-do items
 % -----------
-% - write all sections.
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS, Trotta ?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
-% - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
-% - Should the abstract be about derivatives of the log likelihood instead of regions and complementary regions?
 % - Check Fisher citation; also good for maximum-likelihood??
-% - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
-% - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 % - Are we clear about what we are suggesting, positively, in each section?
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
-% - community norms loom large in the abstract. But are they important in the paper?
+% - community norms loom large in the abstract. But are they important enough in the paper?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
 % - This paper opens with the issue of community norms / agreements, but then never does anything with that? Should it get specific?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
@@ -89,12 +84,12 @@ For another, Bayesians (rightly) note that the calculus of probability is provab
 It is increasingly recognized (despite monikers such as ``objective Bayes'' \cite{objective}) that no method for statistical inference is \emph{objectively correct}:
 Every method for making a measurement, deciding among hypotheses, claiming a discovery from data, or predicting the outcome of a new experiment, involves myriad investigator choices.
 
-This paper is partly about claims of measurement:
+This (purely pedagogical) \documentname{} is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
 My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}.
 This principle---which applies in both Bayesian and frequentist statistical practice---is that all information in any data set $Y$ about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
 The likelihood function is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
-The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
+The main point of this \documentname{} is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
 If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not (completely) substantiated by the data.
 For example, the ESA \textsl{Planck} Mission \cite{Planck} delivered a measurement of the matter density of the Universe \cite{planck18};
@@ -229,7 +224,7 @@ The peak in the log likelihood must be taller than its surroundings by log-likel
 In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be (substantially) larger than unity.
 
 The second important property of the likelihood function is that it is par\-am\-e\-ter\-i\-za\-tion-invariant.
-If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformations between $(\theta,\alpha)$ and $\beta$ are invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
+If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformation between $(\theta,\alpha)$ and $\beta$ is invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
 This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
 The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes} and \secref{sec:flat}.
 
@@ -285,7 +280,7 @@ a maximum of posterior.
 
 Sometimes Bayesians like to think that, since they have a framework of prior pdf and posterior pdf, they don't need to ever choose an estimator.
 There is an element of truth to this!
-However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$ (I say more about this in \ref{sec:claim}).
+However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$ (I say more about this in \ref{sec:reporting}).
 Thus even Bayesians have estimators at some level.
 The qualities of estimators---in terms of bias and variance---are limited by a beautiful set of mathematics in the area of \emph{information theory}.
 The most important, relevant result is the Cram\'er--Rao bound \cite{cramer, rao}, which limits the variance estimators.
@@ -711,7 +706,7 @@ Yes, but it requires care.
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 
-\section{Reporting the measurement in a paper}\label{sec:claim}
+\section{Reporting the measurement}\label{sec:reporting}
 What does it take to write a paper that claims that a set of data $Y$ constrains or measures a parameter (or set of parameters) $\theta$?
 It should be obvious at this point that it is a likelihood function, with a peak, and with a narrow enough uncertainty, or large enough Fisher Information, that the parameter is usefully measured
 (if it is not possible to access any kind of likelihood function, see \secref{sec:lfi}).
@@ -768,7 +763,7 @@ The fact that it is not significantly different from zero doesn't make it any le
 But once again, upper limits can be constructed with log-likelihood differences, again as described in \secref{sec:lf}.
 
 \section{Epilogue}\label{sec:discussion}
-This all might have sounded extremely frequentist, because it is so focused on the likelihood, and not on priors and posteriors.
+This pedagogical \documentname{} might have sounded extremely frequentist, because it is so focused on the likelihood, and not on priors and posteriors.
 It is not!
 The position presented here is a fully Bayesian position.
 The likelihood principle is a Bayesian principle, and (additionally) the likelihood is sufficient within frequentism.
