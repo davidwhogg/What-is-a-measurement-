@@ -2,6 +2,7 @@
 
 % to-do items
 % -----------
+% - explicitly address the difference between a measurement and an estimator, or the output of an estimator. What is an estimate?
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS, Trotta ?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
@@ -73,7 +74,7 @@ A measurement of a parameter $\theta$ is a quantitative constraint flowing from 
 In both Bayesian and frequentist practice, all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
 Thus if parameter $\theta$ is measured with data $Y$, there must be a neighborhood in $\theta$ in which the LF has a (sufficiently) tall peak.
 Posterior pdfs, machine-learning regressions, and marginalized likelihoods (marginalized over nuisances), can all deliver things that look like measurements; these are not measurements, unless (in addition) the LF shows a peak.
-Construction of the LF involves making subjective decisions and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
+Construction of the LF involves making subjective choices and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
 I discuss how to demonstrate that the data $Y$ do (or can) provide a measurement of parameter $\theta$ even in the presence of substantial and covariant nuisances; it involves either profiling (optimizing over nuisances) or else taking the inverse of the Fisher information tensor.
 I discuss investigator options when there is no LF, or when the LF is not tractable or not computable.
 
