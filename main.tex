@@ -52,6 +52,7 @@
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
+\newcommand{\footnoteref}[1]{note~\ref{#1}}
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math macros
@@ -153,7 +154,13 @@ Under some set $I$ of detailed assumptions, it is possible to construct a probab
 \begin{align}
     p(Y\given\theta,\alpha,I) ~;
 \end{align}
-this pdf\footnote{I apologize for this notation because... HOGG.} is called \emph{the likelihood function} (or sometimes just ``likelihood'') and it will depend (strongly, we very much hope) on the values of the parameters $(\theta, \alpha)$.
+this pdf\footnote{%
+I apologize for this notation; it over-uses the letter ``$p$''.
+This notation uses the arguments of $p()$ that are on the left side of the vertical bar to tell you the variables over which $p()$ delivers a probability density function.
+A better notation is the statistics notation, which would be something like $p_y(Y\given\theta,\alpha,I)$, which makes clear that $p()$ is a pdf for $y$, evaluated at $Y$.
+However, it is conventional in the physical sciences to use this over-loaded $p()$ notation.
+I will adopt it, with reservations, everywhere.}
+is called \emph{the likelihood function} (or sometimes just ``likelihood'') and it will depend (strongly, we very much hope) on the values of the parameters $(\theta, \alpha)$.
 We hope that the likelihood depends strongly on the parameters because if it doesn't, the data won't give us a measurement.
 One key idea here is that everything is always conditioned on the set $I$ of assumptions: There is no objective truth; there are only reasonable assumptions.
 Another key idea here is that the combination of parameters $(\theta,\alpha)$ is comprehensive: Once you specify those, you have fully specified the relevant pdf.
@@ -202,7 +209,7 @@ Whatever estimate of $\theta$ you want to make, and independently of whether you
 There is a very special case that arises when the model is linear,
 such that the expectation for the data $Y$ can be written as $X\,a$ for some $n\times (m+s)$ rectangular design matrix $X$,
 and when the noise is Gaussian with zero mean and known, fixed covariance tensor $C$.
-Here $a = [\theta,\alpha]^\top$ is the $(m+s)$-dimensional concatenation of the $m$ parameters of interest and the $n$ nuisances.
+Here $a = [\theta,\alpha]^\top$ is the $(m+s)$-dimensional concatenation of the $m$ parameters of interest and the $s$ nuisances.
 In this case, because the logarithm of a Gaussian is quadratic, there is a closed form for the maximum-likelihood parameters $\hat\theta$
 \begin{align}
     \hat a &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y \label{eq:wls} \\
@@ -225,9 +232,11 @@ For more information about this kind of problem, see the first sections of \cite
 
 There are two very important properties of the likelihood function, when it comes to measurement.
 The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
-A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma'' (HOGG CHECK).
+A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma.''\footnote{%
+This kind of relationship---between log-likelihood differences and numbers of standard deviations equivalent---depends on the property that the models being compared are ``nested.''
+For more information, see any classic statistics textbook, for example \cite{casellaberger}.}
 This (it turns out) means that the second derivative of the log likelihood function with respect to parameters is related to measurement uncertainty.
-This is formalized in the Cram\'er--Rao bound \cite{cramer, rao} on the variance (and bias) of estimators; more on this in \secref{sec:inference}
+This is formalized in the Cram\'er--Rao bound \cite{cramer, rao} on the variance (and bias) of estimators; more on this in \secref{sec:inference}.
 It also means that any claim of a measurement requires a large difference in log likelihood between a model with a best-fit value of some parameter $\theta$ and a null model in which that parameter vanishes.
 
 That is---and critical to everything that follows in this \documentname---any claim of a measurement of any parameter $\theta$ in data $Y$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
@@ -277,7 +286,7 @@ In this case, the jet angles can be seen as a kind of noise.
 There are many places in physics and astronomy in which there are exact, compact symmetries, like rotational symmetries, that permit exact marginalizations of nuisances by both frequentists and Bayesians.};
 they have to optimize rather than marginalize over alpha.
 Frequentists therefore must construct a profile likelihood if they want to get rid of $\alpha$.\footnote{%
-I like to joke that Bayesians integrate, and frequentists take derivatives. It isn't entirely a joke.}
+I like to joke that Bayesians integrate, and frequentists differentiate. It isn't entirely a joke.\label{foot:integrate}}
 
 Sometimes Bayesians do a really big integral, which is the likelihood marginalized over \emph{all} parameters,
 and call it the \emph{evidence} or the \emph{fully marginalized likelihood}.
@@ -300,7 +309,7 @@ For a frequentist, this involves an \emph{estimator}, which could be maximum-lik
 For a Bayesian, this means making a likelihood function, and (perhaps) multiplying it by a prior and renormalizing to a posterior pdf (or sampling with MCMC \cite{mcmc}).
 In what follows, for specificity, we will assume that the frequentists use maximum-likelihood estimators.
 Bayesians don't necessarily have estimators, but sometimes a Bayesian will report a posterior mean or median or (wrongly\footnote{%
-Recall my comment in HOGG FOOTNOTE REFERENCE that Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum can be far from the bulk, oddly.})
+Again, Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum of the posterior can be far from the bulk of the posterior density, oddly.})
 a maximum of posterior.
 
 Sometimes Bayesians like to think that, since they have a framework of prior pdf and posterior pdf, they don't need to ever choose an estimator.
@@ -322,11 +331,12 @@ That is, you start by computing the information tensor $C^{-1}_{(\theta,\alpha)}
 \begin{align}
     C^{-1}_{(\theta,\alpha)} &= - \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.\label{eq:fisher}
 \end{align}
-This second-derivative tensor is $d\times d$, where $d=p+s$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
+This second-derivative tensor is $(m+s)\times (m+s)$, where $(m+s)$ is the total number of elements in the full set of parameters $a = [\theta,\alpha]^\top$.
 Then you invert this matrix to get $C_{(\theta,\alpha)}$.
 Then you take the (square) $m\times m$ submatrix of $C_{(\theta,\alpha)}$ corresponding to the $m$ parameters in $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
 If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
 If $m>1$---that is, if $\theta$ has more than one component---this $m\times m$ submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
+Notice that this is all a generalization of the discussion of linear fitting above in \secref{sec:lf} around and after \eqref{eq:Ca}.
 HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
@@ -361,7 +371,7 @@ There are many treatises on the philosophy of science.
 I feel like we need a philosophical theory of the \emph{scientific paper} or of the \emph{individual scientific contribution}.}
 
 When scientist A reads a paper written by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
-I believe that scientist A wants to know if scientist A's beliefs need to be updated.
+I believe that scientist A wants to know if their own (scientist A's own) beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
 What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{sec:catalogs}).
@@ -369,14 +379,14 @@ What scientist A needs to get from the paper is scientist B's likelihood functio
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
 then scientist A can simply update their beliefs by multiplying (approximately or as exactly as possible, depending on the nature of the work)
-scientist A's prior pdf with scientist B's likelihood function.
+their own (scientist A's own) prior pdf with scientist B's likelihood function.
 And it is worthy of note that scientist A is much more prone to agree with the assumptions going into scientist B's likelihood function if scientist B's assumptions are aligned with community norms in the field.
 
 When I say that scientist A will multiply their prior pdf by scientist B's likelihood function,
 I don't necessarily mean that they will do so by writing a piece of code that imports or reimplements prior pdfs, imports the likelihood function, and literally does the multiply and representation of the output.
 I mean something more approximate and vague.
 But sometimes it \emph{literally is the case} that this code and import and multiply \emph{is} what scientist A does.
-In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing.
+In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing \cite{gaialf}.
 And NASA created the \textsl{LAMBDA} archive in part to preserve executable likelihood functions in cosmology for exactly this purpose \cite{lambda}.
 
 Of course this is a dream.
@@ -453,9 +463,9 @@ To demonstrate this, we generate a very simple toy-likelihood and toy-posterior 
 
 In our toy problem we have data $Y$ that makes up a $n\times 1$ column vector, or an ordered list of $n$ elements.
 We have parameters $\theta$, which make up a $m\times 1$ column vector, or an ordered list of $m$ elements.
-If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq p$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
+If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq m$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
 The simplest possible toy model is that the LF depends only on certain linear combinations of the parameters $\theta$.
-That is, there is a rectangular $q\times p$ matrix $A$, with $q<p<n$, such that, to some very good approximation,
+That is, there is a rectangular $q\times m$ matrix $A$, with $q<m<n$, such that, to some very good approximation,
 \begin{align}
     \mathscr{L}(\theta) \equiv \ln p(Y\given\theta,I) &= K - \frac{1}{2}\,\norm{A\cdot\theta - a}^2 ~,\label{eq:toyLF}
 \end{align}
@@ -476,10 +486,10 @@ That is
     (b-a)^{-1} & \mbox{for $a<x<b$,} \\
     0 & \mbox{for $b<x$,}\end{array}\right.
 \end{align}
-where the $a_i, b_i$ ($1\leq i\leq p$) are prior limit parameters with $a_i<b_i$ for all $i$.
+where the $a_i, b_i$ ($1\leq i\leq m$) are prior limit parameters with $a_i<b_i$ for all $i$.
 In fact, these flat priors \emph{aren't} uninformative (CITE THINGS), but perhaps, in some circumstances, they are least informative?
 It turns out that they will be quite informative in what follows.
-This prior requires us to make $2\,p$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
+This prior requires us to make $2\,m$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
 
 HOGG SHOW RESULTS.
 
@@ -586,7 +596,7 @@ Recall from \eqref{eq:wls} above that, in this case (linear, Gaussian), my maxim
 \begin{align}
     \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~,\label{eq:wls2}
 \end{align}
-for some $n\times m$ design matrix $X$.
+for some $n\times m$ design matrix $X$ (dropping the nuisance parameters just for convenience here).
 Imagine that the data $Y$ are developed from some truly raw data $Z$ by some linear process---for example, if the data $Y$ are the data $Z$ but binned down into coarser bins, say---and this binning is done using the uncertainties correctly; that is:
 \begin{align}
     Y &= [B^\top\,C_Z^{-1}\,B]^{-1}\,B^\top\,C_Z^{-1}\,Z \label{eq:wls3} \\
