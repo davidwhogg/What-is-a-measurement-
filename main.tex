@@ -22,8 +22,8 @@
 % style notes
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
-% - Is first person "I" or "we"?
-% - We should use \emph{} every time we introduce a new term of jargon that is important to know.
+% - Is first person "I" or "we"? I think "I" but use "we" when talking about shared goals with the reader.
+% - Use \emph{} every time I introduce a new term of jargon that is important to know.
 % - Be careful with "set" vs "list" vs "vector" vs "matrix".
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
@@ -68,7 +68,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 June}
+\date{2025 August}
 \begin{document}
 \maketitle\thispagestyle{empty}
 
@@ -200,20 +200,27 @@ The most important of these estimates is the maximum-likelihood estimate, found 
 Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
 There is a very special case that arises when the model is linear,
-such that the expectation for the data $Y$ can be written as $X\,\theta$ for some $n\times m$ rectangular design matrix $X$,
+such that the expectation for the data $Y$ can be written as $X\,a$ for some $n\times (m+s)$ rectangular design matrix $X$,
 and when the noise is Gaussian with zero mean and known, fixed covariance tensor $C$.
+Here $a = [\theta,\alpha]^\top$ is the $(m+s)$-dimensional concatenation of the $m$ parameters of interest and the $n$ nuisances.
 In this case, because the logarithm of a Gaussian is quadratic, there is a closed form for the maximum-likelihood parameters $\hat\theta$
 \begin{align}
-    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~.\label{eq:wls}
+    \hat a &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y \label{eq:wls} \\
+    \begin{bmatrix}\hat\theta \\ \hat\alpha\end{bmatrix} &= \hat a ~.
 \end{align}
 This form will reappear in examples below.
-The formal uncertainty on $\hat\theta$ is given by the covariance matrix $C_\theta$ (HOGG: IS THIS OUR USUAL NOTATION?), the inverse of which is simply a projection of the inverse covariance matrix $C^{1}$ for the data $Y$
+The formal uncertainty on $\hat\theta$ is given by an $m\times m$ submatrix $C_\theta$ of the full $(m+s)\times (m+s)$ covariance matrix $C_a$, the inverse of which is simply a projection of the inverse covariance matrix $C^{-1}$ for the data $Y$
 \begin{align}
-    C_\theta^{-1} &= X^\top\,C^{-1}\,X ~; \label{eq:Ctheta}
+    C_a^{-1} &= X^\top\,C^{-1}\,X \label{eq:Ca} \\
+    \begin{bmatrix}C_\theta & C_{\theta\alpha} \\ C_{\theta\alpha}^\top & C_\alpha\end{bmatrix} &= C_a ~.
 \end{align}
-this makes sense for units and shape reasons (HOGG EXPLAIN).
-This expression \eqref{eq:Ctheta} is the linear algebra (or multivariate) form of what is called in undergraduate physics laboratory classes, ``error propagation.''
-HOGG SHOULD WE define a variable $a$ that contains both $\theta,\alpha$ in one list? And SUCK IT UP?
+Very importantly for taking care of covariant nuisance parameters:
+If you want the correctly profiled uncertainties (or correctly marginalized uncertainties) $C_\theta$ on the parameters of interest $\theta$, profiling (or marginalizing) out the nuisance parameters $\alpha$, you must invert $C_a^{-1}$ to get $C_a$ prior to breaking out the $m\times m$ submatrix $C_\theta$.
+If $C_a^{-1}$ is not invertible, you don't have a measurement (see \secref{sec:flat}).
+
+This expression \eqref{eq:Ca} is the linear algebra (or multivariate) form of what is called in undergraduate physics laboratory classes, ``error propagation.''
+It is interesting to think about the error propagation $\eqref{eq:Ca}$ in terms of matrix shapes and units.
+The design matrix $X$ can be seen as a translator from parameter space to data space, and since $C^{-1}$ has units of inverse data squared, the whole thing works.
 For more information about this kind of problem, see the first sections of \cite{fittingaline}.
 
 There are two very important properties of the likelihood function, when it comes to measurement.
@@ -261,17 +268,31 @@ This answers the questions of the form:
 Is there \emph{any} setting of $\alpha$ that makes the data probable for this value of $\theta$?
 That is, is it likely to make the data at this value of $\theta$ (when I have no opinions about $\alpha$)?
 Bayesians can make a marginalized likelihood if they want to get rid of $\alpha$ (provided that they have a prior pdf on $\alpha$).
-Frequentists don't usually\footnote{%
-HOGG exception!}
-have a pdf to apply on any parameters, so they can't marginalize; they have to optimize rather than marginalize over alpha.
-Frequentists made a profile likelihood if they want to get rid of $\alpha$.\footnote{%
+Frequentists don't usually have a pdf to apply on any parameters, so they can't marginalize\footnote{%
+There are exceptions to this; sometimes frequentists \emph{can} marginalize.
+One example in particle physics is that, in collisions, certain aspects of phase-space distributions, like jet angles, have known distributions.
+The fact that the jet angles will be drawn from a particular distribuition is \emph{part of the model}, not an external prior.
+Thus even a frequentist can marginalize over these angles without bringing in any additional information.
+In this case, the jet angles can be seen as a kind of noise.
+There are many places in physics and astronomy in which there are exact, compact symmetries, like rotational symmetries, that permit exact marginalizations of nuisances by both frequentists and Bayesians.};
+they have to optimize rather than marginalize over alpha.
+Frequentists therefore must construct a profile likelihood if they want to get rid of $\alpha$.\footnote{%
 I like to joke that Bayesians integrate, and frequentists take derivatives. It isn't entirely a joke.}
 
 Sometimes Bayesians do a really big integral, which is the likelihood marginalized over \emph{all} parameters,
 and call it the \emph{evidence} or the \emph{fully marginalized likelihood}.
 This is not relevant to our goals here, so I will leave my criticisms for a different rant.
 
-HOGG: Something about true subjective Bayes if the community really does have shared beliefs about the nuisances. Then does the marginalized likelihood deliver a measurement? I think maybe it does?
+There are rare cases in which you really do have quantitatively accurate beliefs about nuisance parameters, and thus can do the marginalization integral \eqref{eq:marginallf} safely.
+One case is that in which your beliefs about the nuisance parameters themselves come from a prior experimental project constraining the nuisance parameters (a project executed with relatively uninformative priors).
+This situation arises, for example, when the nuisance parameters have been constrained by a calibration program, and the distribution $p(\alpha)$ is really the posterior pdf from that calibration program.
+Then this marginalization \eqref{eq:marginallf} is justifiable, although, instead, you could have just added the calibration-program data into your data set $Y$ and done everything simultaneously, and avoided marginalizations.
+For many reasons, however, marginalization with a prior on $\alpha$ is often the only viable approach.
+
+Another related case in which you can marginalize is when your scientific community really does have a widely agreed-upon prior pdf for your nuisances $\alpha$.
+This case has come up recently in cosmology, where the posteriors (or likelihood functions) from the final analyses of the ESA \textsl{Planck} Mission \cite{planck18} are considered reasonable priors for the cosmological parameters in subsequent analyses.
+This example demonstrates the social-construction aspect of measurement:
+A prior taken from \textsl{Planck} is acceptable not because it is \emph{correct} but because \emph{the community accepts it}; it is consistent with the \emph{beliefs} of the community (and Bayesian inferences are about quantitatively updating beliefs).
 
 \section{Statistical inference}\label{sec:inference}
 Fundamentally, \emph{inference} is the estimation or measurement or prediction of $\theta$ given data $Y$.
@@ -343,7 +364,7 @@ When scientist A reads a paper written by scientist B, what does scientist A hop
 I believe that scientist A wants to know if scientist A's beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
-What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{...} HOGG DO WE?).
+What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{sec:catalogs}).
 
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
