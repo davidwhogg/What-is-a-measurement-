@@ -2,28 +2,28 @@
 
 % to-do items
 % -----------
-% - write all sections.
+% - explicitly address the difference between a measurement and an estimator, or the output of an estimator. What is an estimate?
+% - make sure it is abundantly clear that the use of anyone's data involves adopting myriad assumptions. Should there be an assumptions and subjectivity section?
+% - add in the "worked example" in "basic_example.ipynb" perhaps?
 % - Make it clear who the audience is: People who know how to do data analysis, who know basic statistics and have used it. Then audit for that level.
+% - Will Farr argument: Posterior samplings are such an elegant way of delivering results. I don't disagree with that point.
 % - give to friendlies for feedback -- especially Rix, Margossian, Marshall, Chandra, Brewer, Jaffe, Modi, Heinrich, DFM, Peebles, Beane, Audenaert, Lindegren, Malz, APW, DNS, Trotta ?
 % - make a plan for how we cite arXiv papers and make it consistent over the whole bibliography.
 % - Fix the et al formatting in the bibliography. Heck. Fix all the formatting in the bibliography.
-% - is it absolutely clear that this paper contains nothing new? It is purely pedagogical.
-% - Should the abstract be about derivatives of the log likelihood instead of regions and complementary regions?
 % - Check Fisher citation; also good for maximum-likelihood??
-% - Is it clear that a peak in theta at fixed alpha, or theta marginalizing out alpha is not enough? It has to survive profiling? This should be in the abstract, right?
-% - Fix "et al" formatting in the bibliography.
 % - This paper is very relevant and ought to be cited: https://arxiv.org/pdf/2408.07700
 % - Are we clear about what we are suggesting, positively, in each section?
 % - Are we clear about what constitutes "data" and what we mean by "parameters"? Example of nucleosynthetic parameters vs element abundance parameters?
-% - community norms loom large in the abstract. But are they important in the paper?
+% - community norms loom large in the abstract. But are they important enough in the paper?
 % - Example of LIGO populations analyses?! Should be in the Bayes part, maybe?
+% - This paper opens with the issue of community norms / agreements, but then never does anything with that? Should it get specific?
 % - Is it clear: This paper is for someone who wants to think very rigorously about the measurement they are making.
 
 % style notes
 % -----------
 % - Audit for second-person language; maybe make it more third-person where possible?
-% - Is first person "I" or "we"?
-% - We should use \emph{} every time we introduce a new term of jargon that is important to know.
+% - Is first person "I" or "we"? I think "I" but use "we" when talking about shared goals with the reader.
+% - Use \emph{} every time I introduce a new term of jargon that is important to know.
 % - Be careful with "set" vs "list" vs "vector" vs "matrix".
 % - Use LF in abstract, maybe, but not the main text, which should read clean.
 % - Footnotes before or after commas and periods?
@@ -52,6 +52,7 @@
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
+\newcommand{\footnoteref}[1]{note~\ref{#1}}
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math macros
@@ -68,7 +69,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 June}
+\date{2025 August}
 \begin{document}
 \maketitle\thispagestyle{empty}
 
@@ -77,23 +78,23 @@ A measurement of a parameter $\theta$ is a quantitative constraint flowing from 
 In both Bayesian and frequentist practice, all the evidence or information in a data sample about the parameters of a model is contained in the likelihood function (LF); the LF is sufficient.
 Thus if parameter $\theta$ is measured with data $Y$, there must be a neighborhood in $\theta$ in which the LF has a (sufficiently) tall peak.
 Posterior pdfs, machine-learning regressions, and marginalized likelihoods (marginalized over nuisances), can all deliver things that look like measurements; these are not measurements, unless (in addition) the LF shows a peak.
-Construction of the LF involves making subjective decisions and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
+Construction of the LF involves making subjective choices and assumptions; in order for a measurement to be accepted by the community, these choices must be made in accordance with community norms.
 I discuss how to demonstrate that the data $Y$ do (or can) provide a measurement of parameter $\theta$ even in the presence of substantial and covariant nuisances; it involves either profiling (optimizing over nuisances) or else taking the inverse of the Fisher information tensor.
 I discuss investigator options when there is no LF, or when the LF is not tractable or not computable.
 
 \section{Introduction}\label{sec:intro}
 In the arguments about Bayesian and frequentist statistics, there are claims about subjectivity.
-For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs (CITE).
+For example, frequentists (rightly) note that the introduction of a prior into an inference generally involves informative, subjective inputs.
 For another, Bayesians (rightly) note that the calculus of probability is provably optimal for making certain kinds of probabilistic predictions or bets \cite{jaynes}; anything else involves subjective choices, at the expense of optimality.
 It is increasingly recognized (despite monikers such as ``objective Bayes'' \cite{objective}) that no method for statistical inference is \emph{objectively correct}:
 Every method for making a measurement, deciding among hypotheses, claiming a discovery from data, or predicting the outcome of a new experiment, involves myriad investigator choices.
 
-This paper is partly about claims of measurement:
+This (purely pedagogical) \documentname{} is partly about claims of measurement:
 When is it true that a data set $Y$ has delivered a measurement of parameter $\theta$?
 My answer relates to the \emph{likelihood principle}, which I discuss in \secref{sec:lf}.
 This principle---which applies in both Bayesian and frequentist statistical practice---is that all information in any data set $Y$ about any parameter $\theta$ is summarized completely by the likelihood function $p(Y\given\theta, I)$.
 The likelihood function is a probability density for the data $Y$ given the parameter $\theta$ and possibly other relevant information or assumptions $I$.
-The main point of this paper is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
+The main point of this \documentname{} is that a claim of a measurement must be made---or be possible to make---using the likelihood function alone.
 And, additionally, that the likelihood function must be based on assumptions or choices that represent consensus choices for the relevant scientific community.
 If the claimed measurement can't be seen as a peak in a reasonably constructed likelihood function, then the claim is not (completely) substantiated by the data.
 For example, the ESA \textsl{Planck} Mission \cite{Planck} delivered a measurement of the matter density of the Universe \cite{planck18};
@@ -104,9 +105,9 @@ The \textsl{Gaia} Mission acts very much like it understands the likelihood prin
 That said, there is no documentary evidence that I can find that the project made the decisions it made specifically because of the likelihood principle.
 Its design decisions may have been intuitively made, as far as I can tell, even though they were made absolutely correctly.}
 \cite{gaia},
-which is measuring (among many other things, the parallaxes to more than a billion stars in the Milky Way.
+which is measuring (among many other things) the parallaxes to more than a billion stars in the Milky Way.
 The parallax is a geometric measure of the inverse of the distance to the star.
-This Mission is trying to deliver valuable information to the astronomical community, members of which can update their beliefs about individual stars, about stellar clusters, and about the populations of stars using the data releases.
+This Mission is trying to deliver valuable information to the astronomical community, members of which can make measurements of, or update their beliefs about, individual stars, about stellar clusters, and about the populations of stars, all using the \textsl{Gaia} data releases.
 The quantities in the \textsl{Gaia} Data Archive \cite{gaiadata} that represent its parallax measurements are maximum-likelihood parallax measurements, and uncertainty estimates based on a Fisher-matrix-like analysis of uncertainty.
 These quantities can be cleanly combined into a good approximation of likelihood function \cite{gaialf}.
 That is, the \textsl{Gaia} Catalog parallax and parallax uncertainty for any star are parameters of a form for the probability of the Gaia data given that star's parallax.
@@ -135,11 +136,11 @@ We will discuss these alternative objectives a tiny bit in \secref{sec:bayes}, b
 One of the questions I get asked most about data is whether the word ``data'' is singular or plural. I don't have a strong position. However, in this document I will attempt to treat the word ``data'' as a mass noun, like ``grass'' or ``hair.''}
 say about my parameter of interest?''
 
-My field is astrophysics, and many of the examples I give will be astrophysical.
+My field is astrophysics; most of the examples I give will be astrophysical.
 Furthermore, the astrophysics community (now) is very Bayesian.
 For this reason, the document that follows will seem to many of my astrophysics colleagues as oddly frequentist.
 It isn't!
-The likelihood principle is shared between Bayesians and frequentists:
+The likelihood principle is a Bayesian principle:
 The likelihood function is sufficient to deliver all information about the parameters coming from the data.
 This is the key idea of Bayes's rule:
 The prior is updated to the posterior with---and only with---the likelihood function.
@@ -153,9 +154,15 @@ Under some set $I$ of detailed assumptions, it is possible to construct a probab
 \begin{align}
     p(Y\given\theta,\alpha,I) ~;
 \end{align}
-this pdf\footnote{I apologize for this notation because... HOGG.} is called \emph{the likelihood function} (or sometimes just ``likelihood'') and it will depend (strongly, we very much hope) on the values of the parameters $(\theta, \alpha)$.
+this pdf\footnote{%
+I apologize for this notation; it over-uses the letter ``$p$''.
+This notation uses the arguments of $p()$ that are on the left side of the vertical bar to tell you the variables over which $p()$ delivers a probability density function.
+A better notation is the statistics notation, which would be something like $p_y(Y\given\theta,\alpha,I)$, which makes clear that $p()$ is a pdf for $y$, evaluated at $Y$.
+However, it is conventional in the physical sciences to use this over-loaded $p()$ notation.
+I will adopt it, with reservations, everywhere.}
+is called \emph{the likelihood function} (or sometimes just ``likelihood'') and it will depend (strongly, we very much hope) on the values of the parameters $(\theta, \alpha)$.
 We hope that the likelihood depends strongly on the parameters because if it doesn't, the data won't give us a measurement.
-One key idea here is that everything is always conditioned on the set $I$ of assumptions: There is no objective truth.
+One key idea here is that everything is always conditioned on the set $I$ of assumptions: There is no objective truth; there are only reasonable assumptions.
 Another key idea here is that the combination of parameters $(\theta,\alpha)$ is comprehensive: Once you specify those, you have fully specified the relevant pdf.
 
 You can often (but not always) think of the likelihood function as a prediction for the expectation of the data plus a noise model.
@@ -170,7 +177,7 @@ This kind of form emphasizes that the likelihood function both tells you how you
 
 I alluded to the likelihood principle in \secref{sec:intro}.
 The principle is that everything about the data $Y$ that can possibly matter to the parameters $(\theta,\alpha)$ is contained in the likelihood function.
-That is, if you have beliefs represented (accurately) a prior pdf $p(\theta,\alpha\given I)$ for the parameters $(\theta,\alpha)$,
+That is, if you have beliefs represented (accurately) by a prior pdf $p(\theta,\alpha\given I)$ for the parameters $(\theta,\alpha)$,
 and then you get data $Y$,
 and then you want to update your beliefs to a posterior pdf $p(\theta,\alpha\given Y,I)$, the only legitimate procedure for updating your beliefs is to multiply by the likelihood function $p(Y\given\theta,\alpha,I)$:
 \begin{align}
@@ -195,42 +202,57 @@ Your best estimate $\hat{\theta}$ for the parameter $\theta$, and your uncertain
 The definition of ``best'' estimator is out of scope for this document, but it relates to having minimum variance while also being asymptotically unbiased.}
 The most important of these estimates is the maximum-likelihood estimate, found by maximizing the likelihood with respect to the parameters $\theta$ (and all the nuisance parameters $\alpha$).
 \begin{align}
-    \hat{\theta},\hat{\alpha} &= \argmax_{\theta,\alpha} \mathscr{L}(\theta,\alpha) ~.
+    \hat{\theta},\hat{\alpha} &= \argmax_{\theta,\alpha} \mathscr{L}(\theta,\alpha) ~.\label{eq:ML}
 \end{align}
 Whatever estimate of $\theta$ you want to make, and independently of whether you (or your audience) is frequentist or Bayesian, you haven't measured your parameter $\theta$ with your data $Y$ if there isn't a peak in your likelihood function at some well-defined value of $\theta$.
 
 There is a very special case that arises when the model is linear,
-such that the expectation for the data $Y$ can be written as $X\,\theta$ for some $n\times m$ rectangular design matrix $X$,
+such that the expectation for the data $Y$ can be written as $X\,a$ for some $n\times (m+s)$ rectangular design matrix $X$,
 and when the noise is Gaussian with zero mean and known, fixed covariance tensor $C$.
+Here $a = [\theta,\alpha]^\top$ is the $(m+s)$-dimensional concatenation of the $m$ parameters of interest and the $s$ nuisances.
 In this case, because the logarithm of a Gaussian is quadratic, there is a closed form for the maximum-likelihood parameters $\hat\theta$
 \begin{align}
-    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~.
+    \hat a &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y \label{eq:wls} \\
+    \begin{bmatrix}\hat\theta \\ \hat\alpha\end{bmatrix} &= \hat a ~.
 \end{align}
 This form will reappear in examples below.
-HOGG SHOULD WE define a variable $a$ that contains both $\theta,\alpha$ in one list? And SUCK IT UP?
+The formal uncertainty on $\hat\theta$ is given by an $m\times m$ submatrix $C_\theta$ of the full $(m+s)\times (m+s)$ covariance matrix $C_a$, the inverse of which is simply a projection of the inverse covariance matrix $C^{-1}$ for the data $Y$
+\begin{align}
+    C_a^{-1} &= X^\top\,C^{-1}\,X \label{eq:Ca} \\
+    \begin{bmatrix}C_\theta & C_{\theta\alpha} \\ C_{\theta\alpha}^\top & C_\alpha\end{bmatrix} &= C_a ~.
+\end{align}
+Very importantly for taking care of covariant nuisance parameters:
+If you want the correctly profiled uncertainties (or correctly marginalized uncertainties) $C_\theta$ on the parameters of interest $\theta$, profiling (or marginalizing) out the nuisance parameters $\alpha$, you must invert $C_a^{-1}$ to get $C_a$ prior to breaking out the $m\times m$ submatrix $C_\theta$.
+If $C_a^{-1}$ is not invertible, you don't have a measurement (see \secref{sec:flat}).
+
+This expression \eqref{eq:Ca} is the linear algebra (or multivariate) form of what is called in undergraduate physics laboratory classes, ``error propagation.''
+It is interesting to think about the error propagation $\eqref{eq:Ca}$ in terms of matrix shapes and units.
+The design matrix $X$ can be seen as a translator from parameter space to data space, and since $C^{-1}$ has units of inverse data squared, the whole thing works.
 For more information about this kind of problem, see the first sections of \cite{fittingaline}.
 
 There are two very important properties of the likelihood function, when it comes to measurement.
 The first is that differences in the natural logarithm of the likelihood have an absolute meaning:
-A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma'' (HOGG CHECK).
+A difference of 0.5 in natural log (a likelihood ratio of $\sqrt{\e}$) between two models is something akin to ``one sigma'' and a difference of 12.5 is something akin to ``five sigma.''\footnote{%
+This kind of relationship---between log-likelihood differences and numbers of standard deviations equivalent---depends on the property that the models being compared are ``nested.''
+For more information, see any classic statistics textbook, for example \cite{casellaberger}.}
 This (it turns out) means that the second derivative of the log likelihood function with respect to parameters is related to measurement uncertainty.
-This is formalized in the Cram\'er--Rao bound \cite{cramer, rao} on the variance (and bias) of estimators; more on this in \secref{sec:inference}
+This is formalized in the Cram\'er--Rao bound \cite{cramer, rao} on the variance (and bias) of estimators; more on this in \secref{sec:inference}.
 It also means that any claim of a measurement requires a large difference in log likelihood between a model with a best-fit value of some parameter $\theta$ and a null model in which that parameter vanishes.
 
 That is---and critical to everything that follows in this \documentname---any claim of a measurement of any parameter $\theta$ in data $Y$ requires not just a peak in the likelihood at some value of the parameter $\theta$, but a tall peak.
 The peak in the log likelihood must be taller than its surroundings by log-likelihood differences much larger than unity.\footnote{Here, and everywhere in this document, the words ``log'' or ``logarithm'' or ``logarithmic'' always refer to natural logarithms in base $\e$.}
-In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be substantially larger than unity.
+In particular, the log likelihood difference between the measured value of $\theta$ and the values that the investigator or project claims to ``rule out'' with their data must be (substantially) larger than unity.
 
 The second important property of the likelihood function is that it is par\-am\-e\-ter\-i\-za\-tion-invariant.
-If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformations between $(\theta,\alpha)$ and $\beta$ are invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
+If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformation between $(\theta,\alpha)$ and $\beta$ is invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
 This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
-The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes}.
+The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes} and \secref{sec:flat}.
 
 \section{Nuisance parameters}\label{sec:nuisance}
-The nuisance parameters $\alpha$ substantially complicate questions of measurement when one is only interested in the .
+The nuisance parameters $\alpha$ substantially complicate questions of measurement when one is only interested in the parameters of interest $\theta$.
 Many of the mistakes in the literature are mistakes in the handling of nuisance parameters.
-This is in part because it is hard to get rid of the nuisance parameters without accidentally introducing information about the parameter of interest $\theta$.
-Any information brought in that doesn't come directly from the data $Y$---for example any information in a prior pdf over the nuisances---is information that can deceive an investigator into mistakenly claiming a measurement or over-estimating the information in the data about the parameter of interest $\theta$.
+This is in part because it is hard to get rid of the nuisance parameters without accidentally introducing information about the parameter of interest.
+Any information brought in that doesn't come directly from the data $Y$---for example any information in a prior pdf over the nuisances---is information that can deceive an investigator into mistakenly claiming a measurement or over-estimating the information in the data $Y$ about the parameter of interest $\theta$.
 
 How do we account for the nuisances $\alpha$ when we are claiming a measurement of the parameter of interest $\theta$?
 For the committed Bayesians, there is only one answer, and that is to marginalize.
@@ -242,7 +264,7 @@ where the integral over $\alpha$ is, implicitly the integral over all of the nui
 You might be tempted to conclude that we have a measurement of $\theta$ if there is a peak in this marginal likelihood.
 That will turn out to be wrong, as we will show in \secref{sec:flat}, and related to ideas that come up in \secref{sec:ml}:
 If the data contain lots of information about the nuisances $\alpha$ and the highest-likelihood values of the nuisances depend on the parameter of interest $\theta$, then these kinds of marginalizations will in general produce peaks in the marginal likelihood even when there is no information about $\theta$ in the data $Y$.
-That's true even when those priors on the nuisances are flat, as we mention in \secref{sec:bayes} (HOGG DO WE?) and explicitly show in \secref{sec:flat}.
+That's true even when those priors on the nuisances are flat, as we explicitly show in \secref{sec:flat}.
 
 On the subject of nuisance parameters,
 there is an extremely important idea in frequentist statistics, which is that of the \emph{profile likelihood}.
@@ -255,17 +277,31 @@ This answers the questions of the form:
 Is there \emph{any} setting of $\alpha$ that makes the data probable for this value of $\theta$?
 That is, is it likely to make the data at this value of $\theta$ (when I have no opinions about $\alpha$)?
 Bayesians can make a marginalized likelihood if they want to get rid of $\alpha$ (provided that they have a prior pdf on $\alpha$).
-Frequentists don't usually\footnote{%
-HOGG exception!}
-have a pdf to apply on any parameters, so they can't marginalize; they have to optimize rather than marginalize over alpha.
-Frequentists made a profile likelihood if they want to get rid of $\alpha$.\footnote{%
-I like to joke that Bayesians integrate, and frequentists take derivatives. It isn't entirely a joke.}
+Frequentists don't usually have a pdf to apply on any parameters, so they can't marginalize\footnote{%
+There are exceptions to this; sometimes frequentists \emph{can} marginalize.
+One example in particle physics is that, in collisions, certain aspects of phase-space distributions, like jet angles, have known distributions.
+The fact that the jet angles will be drawn from a particular distribuition is \emph{part of the model}, not an external prior.
+Thus even a frequentist can marginalize over these angles without bringing in any additional information.
+In this case, the jet angles can be seen as a kind of noise.
+There are many places in physics and astronomy in which there are exact, compact symmetries, like rotational symmetries, that permit exact marginalizations of nuisances by both frequentists and Bayesians.};
+they have to optimize rather than marginalize over alpha.
+Frequentists therefore must construct a profile likelihood if they want to get rid of $\alpha$.\footnote{%
+I like to joke that Bayesians integrate, and frequentists differentiate. It isn't entirely a joke.\label{foot:integrate}}
 
 Sometimes Bayesians do a really big integral, which is the likelihood marginalized over \emph{all} parameters,
 and call it the \emph{evidence} or the \emph{fully marginalized likelihood}.
 This is not relevant to our goals here, so I will leave my criticisms for a different rant.
 
-HOGG: Something about true subjective Bayes if the community really does have shared beliefs about the nuisances. Then does the marginalized likelihood deliver a measurement? I think maybe it does?
+There are rare cases in which you really do have quantitatively accurate beliefs about nuisance parameters, and thus can do the marginalization integral \eqref{eq:marginallf} safely.
+One case is that in which your beliefs about the nuisance parameters themselves come from a prior experimental project constraining the nuisance parameters (a project executed with relatively uninformative priors).
+This situation arises, for example, when the nuisance parameters have been constrained by a calibration program, and the distribution $p(\alpha)$ is really the posterior pdf from that calibration program.
+Then this marginalization \eqref{eq:marginallf} is justifiable, although, instead, you could have just added the calibration-program data into your data set $Y$ and done everything simultaneously, and avoided marginalizations.
+For many reasons, however, marginalization with a prior on $\alpha$ is often the only viable approach.
+
+Another related case in which you can marginalize is when your scientific community really does have a widely agreed-upon prior pdf for your nuisances $\alpha$.
+This case has come up recently in cosmology, where the posteriors (or likelihood functions) from the final analyses of the ESA \textsl{Planck} Mission \cite{planck18} are considered reasonable priors for the cosmological parameters in subsequent analyses.
+This example demonstrates the social-construction aspect of measurement:
+A prior taken from \textsl{Planck} is acceptable not because it is \emph{correct} but because \emph{the community accepts it}; it is consistent with the \emph{beliefs} of the community (and Bayesian inferences are about quantitatively updating beliefs).
 
 \section{Statistical inference}\label{sec:inference}
 Fundamentally, \emph{inference} is the estimation or measurement or prediction of $\theta$ given data $Y$.
@@ -273,12 +309,12 @@ For a frequentist, this involves an \emph{estimator}, which could be maximum-lik
 For a Bayesian, this means making a likelihood function, and (perhaps) multiplying it by a prior and renormalizing to a posterior pdf (or sampling with MCMC \cite{mcmc}).
 In what follows, for specificity, we will assume that the frequentists use maximum-likelihood estimators.
 Bayesians don't necessarily have estimators, but sometimes a Bayesian will report a posterior mean or median or (wrongly\footnote{%
-Recall my comment in HOGG FOOTNOTE REFERENCE that Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum can be far from the bulk, oddly.})
+Again, Bayesians integrate and frequentists differentiate. Bayesian beliefs are much better summarized with means or medians of posteriors than optima of posteriors: The optimum of the posterior can be far from the bulk of the posterior density, oddly.})
 a maximum of posterior.
 
 Sometimes Bayesians like to think that, since they have a framework of prior pdf and posterior pdf, they don't need to ever choose an estimator.
 There is an element of truth to this!
-However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$.
+However even the Bayesians have to decide what number (or numbers or intervals) they \emph{report in the abstract of their paper} or in their summary slides about their parameter of interest $\theta$ (I say more about this in \ref{sec:reporting}).
 Thus even Bayesians have estimators at some level.
 The qualities of estimators---in terms of bias and variance---are limited by a beautiful set of mathematics in the area of \emph{information theory}.
 The most important, relevant result is the Cram\'er--Rao bound \cite{cramer, rao}, which limits the variance estimators.
@@ -295,11 +331,12 @@ That is, you start by computing the information tensor $C^{-1}_{(\theta,\alpha)}
 \begin{align}
     C^{-1}_{(\theta,\alpha)} &= - \frac{\dd^2\mathscr{L}}{\dd(\theta,\alpha)^2} ~.\label{eq:fisher}
 \end{align}
-This second-derivative tensor is $d\times d$, where $d=p+s$ is the total number of elements in the full set of parameters $(\theta,\alpha)$.
+This second-derivative tensor is $(m+s)\times (m+s)$, where $(m+s)$ is the total number of elements in the full set of parameters $a = [\theta,\alpha]^\top$.
 Then you invert this matrix to get $C_{(\theta,\alpha)}$.
 Then you take the (square) $m\times m$ submatrix of $C_{(\theta,\alpha)}$ corresponding to the $m$ parameters in $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
 If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
 If $m>1$---that is, if $\theta$ has more than one component---this $m\times m$ submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
+Notice that this is all a generalization of the discussion of linear fitting above in \secref{sec:lf} around and after \eqref{eq:Ca}.
 HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
@@ -334,22 +371,22 @@ There are many treatises on the philosophy of science.
 I feel like we need a philosophical theory of the \emph{scientific paper} or of the \emph{individual scientific contribution}.}
 
 When scientist A reads a paper written by scientist B, what does scientist A hope to get from that paper, and what did scientist B hope to provide in that paper?
-I believe that scientist A wants to know if scientist A's beliefs need to be updated.
+I believe that scientist A wants to know if their own (scientist A's own) beliefs need to be updated.
 I believe that scientist B wants to influence the beliefs of scientist A.
 In either case, what scientist A needs to get from the paper is not scientist B's posterior pdf.
-What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{...} HOGG DO WE?).
+What scientist A needs to get from the paper is scientist B's likelihood function (or, alternatively, scientist B's data; we will return to that idea below in \secref{sec:catalogs}).
 
 If scientist A can understand clearly the assumptions going into scientist B's likelihood function,
 and if scientist A broadly agrees with them,
 then scientist A can simply update their beliefs by multiplying (approximately or as exactly as possible, depending on the nature of the work)
-scientist A's prior pdf with scientist B's likelihood function.
+their own (scientist A's own) prior pdf with scientist B's likelihood function.
 And it is worthy of note that scientist A is much more prone to agree with the assumptions going into scientist B's likelihood function if scientist B's assumptions are aligned with community norms in the field.
 
 When I say that scientist A will multiply their prior pdf by scientist B's likelihood function,
 I don't necessarily mean that they will do so by writing a piece of code that imports or reimplements prior pdfs, imports the likelihood function, and literally does the multiply and representation of the output.
 I mean something more approximate and vague.
 But sometimes it \emph{literally is the case} that this code and import and multiply \emph{is} what scientist A does.
-In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing.
+In the case from \secref{sec:intro} with the ESA \textsl{Gaia} Catalog, that is exactly what we have been doing \cite{gaialf}.
 And NASA created the \textsl{LAMBDA} archive in part to preserve executable likelihood functions in cosmology for exactly this purpose \cite{lambda}.
 
 Of course this is a dream.
@@ -402,11 +439,7 @@ Hence measurements are properties of your likelihood function, not properties of
 That's almost the main point of this \documentname.
 
 Finally, I remark that people often say to me: ``But Bayesian inference with flat priors is identical to maximum likelihood, so it doesn't matter.''
-This is absolutely \emph{not true}.
-For one, Bayesian inference produces probability distributions over outcomes, not single outcomes.
-For another, Bayesian inferences depend on the parameterization; while maximum likelihood estimates don't depend on reparameterizations, the most posterior-probable parameter combinations will always depend on parameterization.
-For yet another, even flat priors can introduce very weird artifacts and biases into your measurements.
-I give one very simple and natural example below in \secref{sec:flat}.
+This is absolutely \emph{not true}, as I discuss in \secref{sec:flat}.
 If you don't want priors to bias your measurement, \emph{don't use priors}.
 
 \section{Can't I just use flat priors?}\label{sec:flat}
@@ -430,9 +463,9 @@ To demonstrate this, we generate a very simple toy-likelihood and toy-posterior 
 
 In our toy problem we have data $Y$ that makes up a $n\times 1$ column vector, or an ordered list of $n$ elements.
 We have parameters $\theta$, which make up a $m\times 1$ column vector, or an ordered list of $m$ elements.
-If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq p$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
+If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq m$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
 The simplest possible toy model is that the LF depends only on certain linear combinations of the parameters $\theta$.
-That is, there is a rectangular $q\times p$ matrix $A$, with $q<p<n$, such that, to some very good approximation,
+That is, there is a rectangular $q\times m$ matrix $A$, with $q<m<n$, such that, to some very good approximation,
 \begin{align}
     \mathscr{L}(\theta) \equiv \ln p(Y\given\theta,I) &= K - \frac{1}{2}\,\norm{A\cdot\theta - a}^2 ~,\label{eq:toyLF}
 \end{align}
@@ -453,10 +486,10 @@ That is
     (b-a)^{-1} & \mbox{for $a<x<b$,} \\
     0 & \mbox{for $b<x$,}\end{array}\right.
 \end{align}
-where the $a_i, b_i$ ($1\leq i\leq p$) are prior limit parameters with $a_i<b_i$ for all $i$.
+where the $a_i, b_i$ ($1\leq i\leq m$) are prior limit parameters with $a_i<b_i$ for all $i$.
 In fact, these flat priors \emph{aren't} uninformative (CITE THINGS), but perhaps, in some circumstances, they are least informative?
 It turns out that they will be quite informative in what follows.
-This prior requires us to make $2\,p$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
+This prior requires us to make $2\,m$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
 
 HOGG SHOW RESULTS.
 
@@ -470,6 +503,7 @@ There are many ways in which machine learning might enter into a project to meas
 Here we will only consider one, which is \emph{supervised regression}:
 The setup for supervised regression is that there is a \emph{training set} $\setof{Y_i, \theta_i}_{i=1}^n$ of $n$ data instances $Y_i$ and corresponding labels $\theta_i$.
 We are going to \emph{learn} a flexible function $f(Y;W)$, parameterized by a large block of weights $W$, that does a good job of predicting labels $\theta_i$ for training-set examples $Y_i$.
+Here $f(Y;W)$ is the multi-layer perceptron or transformer or whatever highly flexible machine-learning model and $W$ represents all the biases and weights inside that model.
 We will estimate our parameter of interest $\theta$ by executing the learned function on our data $Y$.
 In equations, this looks something like
 \begin{align}
@@ -483,11 +517,11 @@ If they are noisy, pure regressions aren't a good idea; it makes more sense to g
 Ideally the data $Y_i$ in your training set are somehow ``drawn'' from the same distribution as the data $Y$ you have.
 If they are not drawn from the same distribution, strong biases will occur.
 Often it is believed that so long as the training data ``cover'' the test data (for example the test data live inside the convex hull of the training data), then things are fine.
-This isn't true, and besides, once the data get large enough, coverage of that kind is impossible to satisfy.
+This isn't true, and besides, once the data get large enough, coverage of that kind isn't possible to satisfy.
 
 It turns out that, even when the situation is ideal---%
 even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are biased.
-Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, CITE).
+Full analysis of this is out of scope; it is discussed extensively elsewhere (for example, \cite{goodorbad, ting}).
 It relates to the point made above in \secref{sec:bayes}:
 Good predictions (like those produced by Bayesian inferences) are biased, and machine learning regressions are optimized to make good predictions.
 The connections between machine learning regressions and Bayesian inferences are strong:
@@ -513,7 +547,7 @@ To be concrete: Imagine that data $Y$ are very informative about some quantity o
 And imagine that, in the training set, objects with high $\theta$ also tend to have high $\gamma$, and \foreign{vice versa}.
 Then a regression trained on the training set will deliver good predictions of labels $\theta$, \emph{whether or not} the data $Y$ contains information about $\theta$ directly.
 The regression does not return measurements of $\theta$.
-It returns predictions, under the assumption that the training set is representative.
+It returns \emph{predictions}, under the assumption that the training set is representative.
 
 \section{What is my data?}\label{sec:data}
 Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
@@ -550,20 +584,72 @@ In general, the third scenario is to be avoided, because it is very hard to tell
 
 The reason that the second scenario is to be preferred is because likelihood functions can be daisy-chained, in the following sense:
 \begin{align}
-    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y~,
+    p(Z\given\theta,\alpha,I) &= \int p(Z\given Y,I)\,p(Y\given\theta,\alpha,I)\,\dd Y ~,\label{eq:ZtoY}
 \end{align}
 where the integral is (implicitly) over the full possible domain of $Y$.
-That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ (or enough information to reconstruct it).
+That is, the raw-data likelihood can be very simply related to the derived-data likelihood, provided that the investigator has access to the intermediate likelihood function $p(Z\given Y,I)$ that relates the raw data $Z$ to the derived data $Y$ (or if the investigator is given enough information to reconstruct that function).
 Because of the likelihood principle (\secref{sec:lf}), if we want to make measurements with the data, we want the data to be useful for making likelihood estimates or comparisons.
 If the data $Y$ are related to the raw data $Z$ by a likelihood, then it is usually possible to perform a data analysis on data $Y$ but have it return exactly what \emph{would have been returned} if the analysis had been performed on the raw data $Z$.
 
 All of this is very nicely demonstrated in terms of linear models with Gaussian noise.
-In this case, the model is… HOGG HAVE WE DONE THIS ALREADY ABOVE? IF NOT, THIS NEEDS TO GO IN ABOVE.
-HOGG: Explicit re linear chi-squared fitting: It is associative in the relevant sense!
+Recall from \eqref{eq:wls} above that, in this case (linear, Gaussian), my maximum-likelihood estimate $\hat\theta$ is given by
+\begin{align}
+    \hat\theta &= [X^\top\,C^{-1}\,X]^{-1}\,X^\top\,C^{-1}\,Y ~,\label{eq:wls2}
+\end{align}
+for some $n\times m$ design matrix $X$ (dropping the nuisance parameters just for convenience here).
+Imagine that the data $Y$ are developed from some truly raw data $Z$ by some linear process---for example, if the data $Y$ are the data $Z$ but binned down into coarser bins, say---and this binning is done using the uncertainties correctly; that is:
+\begin{align}
+    Y &= [B^\top\,C_Z^{-1}\,B]^{-1}\,B^\top\,C_Z^{-1}\,Z \label{eq:wls3} \\
+    C^{-1} &= B^\top\,C_Z^{-1}\,B ~,
+\end{align}
+where $C_Z$ is the uncertainty variance tensor on the raw data $Z$.
+Now if you combine \eqref{eq:wls2} and \eqref{eq:wls3} and use the relationship of $C^{-1}$ to $C_Z^{-1}$, you get
+\begin{align}
+    \hat\theta &= [(B\,X)^\top\,C_Z^{-1}\,(B\,X)]^{-1}\,(B\,X)^\top\,C_Z^{-1}\,Z ~.\label{eq:wls4}
+\end{align}
+That is, doing principled weighted least squares on the data $Y$ with design matrix $X$ is numerically identical to doing principled weighted least squares on the truly raw data $Z$ but with design matrix $(B\,X)$.
 
-HOGG: Using posteriors does not work; call out the exoplanet atmosphere crew.
+This is a strong argument for making sure that reduced data $Y$ relate to raw data $Z$ by simple linear expressions like $\eqref{eq:wls3}$.
+Many data-reduction steps \emph{do} have this form or \emph{can} have this form.
+I mentioned binning of the data: Provided that each bin of reduced data is the inverse-variance-weighted average of the raw data going into that bin, the binning is consistent with $\eqref{eq:wls3}$.
+I mentioned flat-fielding and bias subtraction and so on in imaging projects:
+Provided that these operations are linear and use inverse-variance weights on the raw data, these will also meet these conditions.
+What I'm saying is: It isn't hard to work in ways that are consistent with these principles.
+And it is essential in precise or rigorous contexts.
 
-HOGG: If you are working with derived data, be careful about repeating the data or using it twice.
+That said, any other transformation between raw data $Z$ and reduced data $Y$---that is, any transformation that uses anything other than a pure likelihood---will \emph{bias all results} made with the data $Y$.
+For example, if the data $Y$ are found from any statistic (mean, median or mode) of a Bayesian posterior pdf, all scientific results made with the data $Y$ will be biased by the priors that went in.
+The biases created by using posterior pdf instead of likelihood for going from $Z$ to $Y$ are not easy to know \foreign{a priori}, and they are generally impossible for downstream users to correct after the fact.
+It might seem absurd that anyone would do this, but in fact this is very common in the astronomy literature.\footnote{HOGG CITE THINGS with tiny explanations.}
+If you are reducing, calibrating, or binning data, use likelihood formulations or weighted least squares.
+Don't use posterior inferences.
+
+Similarly, if the data $Y$ is related to the raw data $Z$ by a regression.
+That is, if the data $Y$ is a set of labels found by training a regression on a training set and then running it on the raw data $Z$, all scientific results made with the data $Y$ will be biased.
+We described this in \secref{sec:ml} and it is discussed elsewhere \cite{goodorbad, ting}.
+
+One final comment on this linear-fitting point is that, even obeying the very simple rule given in \eqref{eq:wls3} does not protect a project from harm.
+Any binning or data reduction step in going from $Z$ to $Y$ can remove information.
+For example, if the signals of interest in design matrix $X$ are high-frequency and the binning matrix $B$ has big bins, the binning will destroy that information.
+That is, it is still better to work directly with the raw data $Z$ if you can.
+And if the data reduction step looks as simple as \eqref{eq:wls3}, then you might as well just work with the raw data directly if you can get the raw data.
+This is a realization that is adjacent to the phrase ``binning is sinning.''\footnote{This is a favorite phrase of my friend and mentor Hans-Walter Rix, and the title of a paper by Kipping \cite{binningissinning}. The Kipping paper is making precisely this point that binning destroys high-frequency information.}
+
+When the model relating reduced data $Y$ to raw data $Z$ is nonlinear, it isn't possible to be absolutely principled in all this without explicitly doing the integral \eqref{eq:ZtoY}.
+But when the problem is well-behaved or can be linearized near the optimum, using as the data $Y$ the maximum of the intermediate log-likelihood $\ln p(Y\given Z,I)$, and making the noise inverse-variance $C^{-1}$ the (negative of the) second derivative of that intermediate log-likelihood usually delivers a very good approximation to what you want.
+In equations, this is
+\begin{align}
+    Y &= \argmax_{Y'} \ln p(Y'\given Z, I) \\
+    C^{-1} &= - \left.\frac{\dd^2}{\dd {Y'}^2} \ln p(Y'\given Z, I)\right|_Y ~,
+\end{align}
+where I used a dummy variable $Y'$ to make the notation consistent.\footnote{Technically the second derivative should be an \emph{expectation over $Y$} and not just evaluated at $Y$; this matters when the second derivative is a very strong function of $Y'$.}
+This is precisely what the \textsl{Gaia} Mission \cite{gaia} has done in delivering parallaxes and proper motions in their data release \cite{gaiadr3} (the reduced data $Y$) and their uncertainty variances $C$, which are all based on onboard timing of stellar transits (the raw data $Z$) and a timing noise model (parameterized by a $C_Z$).
+
+When one works with derived data $Y$, derived from some data $Z$, one extremely technical final point is that it is essential that the data $Y$ be using the data $Z$ \emph{only once} in some sense.
+That is, you can't make the data $Y$ be all the sums and differences of the data $Z$ without re-using data points from $Z$.
+Well you \emph{can}, but then you have to explicitly track all of these covariances in $C$.
+And really those covariances have to be tracked in $C^{-1}$ not $C$ because $C$ will contain infinite eigenvalues.
+This is one of many reasons that we should be transmitting not variances but inverse variances in our datasets and data analyses.\footnote{The inverse variance is sometimes called the information tensor. Variances (and their eigenvalues) can go to infinity, but inverse variances are always finite in all respects, because one never has infinite amounts of information about anything.}
 
 \section{Combining data samples}\label{sec:combining}
 There are (at least) two cases for combining measurements.
@@ -615,7 +701,7 @@ However, they are independent in the relevant sense here as long as they contain
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
 What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
 
-For example, as we mentioned in \secref{sec:intro}, the \textsl{Gaia} Mission \cite{gaia} is delivering more than a billion stellar parallaxes and proper motions in a set of data releases (for example \cite{gaiadr3}).
+For example, as we mentioned in \secref{sec:intro} and \secref{sec:data}, the \textsl{Gaia} Mission \cite{gaia} is delivering more than a billion stellar parallaxes and proper motions in a set of data releases (for example \cite{gaiadr3}).
 Astronomers are using these parallaxes to estimate the distances to groups of stars in the Galaxy, and the luminosities of stars of different types.
 Each of these kinds of estimates involves combining the parallaxes of multiple stars.
 That is, the users of the \textsl{Gaia} Catalog want to use the catalog entries like data.
@@ -627,12 +713,20 @@ For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is
 That is, it is important that....
 HOGG BLAH BLAH.
 
-HOGG: Show that least-square fitting is transitive in the right way (and everything else is not). Email with Novara 2025-05-09.
-
-HOGG: Refer back to the DFM alternative view. HOGG ASKS: Have I stated this clearly above?
+There is a Bayesian alternative to this view, which is the view of the most principled Bayesians I know.\footnote{In my own sphere, I attribute this view to Dan Foreman-Mackey (DeepMind); it is embodied in many of his papers and projects.}
+This Bayesian view is that the goal of every paper and data release is really to deliver posterior pdfs for everything, and \emph{not} likelihoods.
+However, and importantly, \emph{in addition} to these posterior pdfs, the project or paper should deliver executable code that creates those posterior pdfs.
+Then the downstream user is expected not to use the posterior pdfs directly; after all:
+Why would the downstream user agree with the upstream investigator's priors?
+The downstream user is expected to take the executable code and modify it to their particular needs.
+That is, the likelihood functions are released not as primary outputs but instead as components of executable code.
+I don't necessarily disagree with this vision!
+However, in practice, in my fields of study, only a tiny fraction of downstream users have completely re-run upstream code in their data analyses; a larger fraction have done things that are technically wrong (using summaries of posterior pdfs as data, say).
+So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
+The answer is \emph{no}.
 Obviously, looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
 However, there are many circumstances in the contemporary sciences in which we can get some kind of estimate of our posterior pdf, but we cannot compute the likelihood function.
 
@@ -641,19 +735,19 @@ There are only a few important physical cosmological parameters, but there are (
 Thus it is close to impossible, computationally, to compute the probability of the data given the parameters.
 There are just far too many parameters.
 At the same time, there are methods (known as likelihood-free inference, or simulation-based inference; \cite{abc, sbi}) for obtaining a posterior pdf for the important few parameters, without ever explicitly instantiating a likelihood function.
-Is it impossible to securely claim a measurement in this case?
-It is not.
+Is it possible to securely claim a measurement in this case?
+Yes, but it requires care.
 
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 
-\section{Writing up the measurement in a paper}\label{sec:claim}
+\section{Reporting the measurement}\label{sec:reporting}
 What does it take to write a paper that claims that a set of data $Y$ constrains or measures a parameter (or set of parameters) $\theta$?
 It should be obvious at this point that it is a likelihood function, with a peak, and with a narrow enough uncertainty, or large enough Fisher Information, that the parameter is usefully measured
 (if it is not possible to access any kind of likelihood function, see \secref{sec:lfi}).
 But even more important than the requirement of a peak in a likelihood function is the requirement that the paper be absolutely clear and unambiguous about everything that was assumed and done.
 
-The art of writing a good paper about a measurement is, as always, the art of writing clearly and with the audience in mind.
+The art of writing a good paper about a measurement is, as in all kinds of writing, the art of having an audience in mind and being clear to that audience.
 This means explaining every non-trivial decision and assumption that you have made---where ``non-trivial'' depends on the context, which in turn is set by the expectations of the audience---and showing that the likelihood function (or your method of measurement) flows directly from those decisions and assumptions.
 I have taken the view recently that the decisions and assumptions should make up a stand-alone section in the papers I write (see, for example, \cite{frizzle}).
 In addition, it is good practice to release all the code and data, such that the measurement can be reproduced, the assumptions can be explored, and the likelihood can be combined with others that follow (see \secref{sec:combining}).
@@ -662,42 +756,80 @@ A measurement will be more acceptable to the community the more consistent with 
 For example, imagine that in the data $Y$, the parameter of interest $\theta$ is strongly covariant with some nuisance parameter $\alpha_k$,
 such that one cannot measure $\theta$ without having strong constraints on $\alpha_k$.
 In this case it is possible for an investigator to deliver a measurement of $\theta$ if the investigator is willing to postulate a particular value or narrow range for $\alpha_k$.
-That measurement of $\theta$ will only be accepted by the investigator's community if the community agrees that $\alpha_k$ does indeed live in or near that postulated range.
+That measurement of $\theta$ will only be accepted by the investigator's community if that community agrees that $\alpha_k$ does indeed live in or near that postulated range.
 If that's controversial, then the investigator has not delivered what anyone would accept as a measurement.
 For another example, if there is obviously non-Gaussian noise, but the measurement is only successful under an assumption of Gaussian noise, then there perhaps isn't a measurement in any real sense, even if there is a good peak in the assumed-Gaussian likelihood function.
 
-HOGG: What do I write in the abstract of my paper? What uncertainty do I report? Answer this for all statistical philosophies.
+A measurement, for the purposes of a scientific paper, is (in some sense) a number (the result of the measurement) and an uncertainty that can be reported in a paper abstract.
+What should these two numbers be?
+In an ideal world, the reported number should be the maximum $\hat\theta$ of the likelihood \eqref{eq:ML}, and the uncertainty should be related to level sets of the log-likelihood function.
+The formal uncertainty on the parameter $\theta$ is the square root of the inverse of the negative of the second derivative tensor, evaluated at that maximum.
+Somewhat more conservative uncertainties come by looking at likelihood ratios, or differences in log-likelihood, as discussed in \secref{sec:lf}.
+Even more conservative uncertainties sometimes come from bootstrap \cite{bootstrap} or jackknife \cite{jackknife} analyses, but a full discussion of uncertainty estimation is out of scope here.
 
-HOGG: How many ``sigma'' is my measurement? This is a requirement in many fields of physics.
+Bayesians might want to replace these with the mean (or median) of a posterior pdf and a root-variance of that.
+That's fine, except for two things:
+The first is that if the anything strange was used for prior pdfs, especially prior pdfs on nuisance parameters, then that weird context must additionally be reported in the abstract.
+The second is that you have to live with the fact that the mean or median of posterior can, in fact, be a bad value.
+If you think about non-trivial posterior pdfs (multi-modal, say), you can easily have a mean or median of posterior that is actually disfavored or ruled out by the data.
+This leads many to consider ``maximum of posterior'' (MAP) estimates, which are good models by construction.
+MAP values are usually not a good idea, and definitely not well estimated by MCMC samplers \cite{mcmc}, which are not in any sense optimizers; they deliver no guarantees about finding ``best'' parameter values.
+Recall that Bayesians integrate; frequentists differentiate.
+Posterior means and medians are found by integration.
 
-HOGG: How many ``sigma'' is my measurement away from some expectation?
+But, to belabor the belabored, if the posterior pdf has a peak, but the likelihood function doesn't, there is no measurement.
+Or maybe there \emph{is} a measurement, but it is based not just on the data $Y$ but also on some prior data or prior knowledge that is additionally relevant.
+The abstract of the paper should be clear about this.
 
-HOGG: What is the $k$-sigma upper limit? HOGG: $k$ here or another variable?
+Some projects (like, for instance, the \textsl{Large Hadron Collider} Higgs particle measurement \cite{lhc}) have rules or conventions about a measurement being ``5-sigma'' or equivalent.
+Strict thresholds like this are often a bad idea; after all, it is hard to know confidently that a measurement meets this criterion.
+In particular, the number of sigma estimated by taking the second derivative of the log-likelihood and the number of sigma estimated by comparing the log-likelihood at the maximum to the log-likelihood at zero, will in general be different.
+Which is to be preferred?
+Usually the log-likelihood difference is more conservative.
 
-HOGG: Note that if you have a posterior peak but you can't see a peak in the likelihood function, it doesn't mean that you don't have a measurement! It just means that the scope of your likelihood function is too narrow. Maybe more data were involved. Be explicit about that and you will be okay.
+Often, when a measurement is made, a report on ``how many sigma'' it is away from a standard value, or a previous measurement.
+Provided that the data are independent of all previous data, this can be estimated with the difference in values divided by the sum-in-quadrature of the uncertainties of the two measurements.
+If the comparison value has tiny uncertainty, or is a noise-free theoretical expectation, then likelihood ratio questions can be asked.
+If the comparison value has significant uncertainty, there is no simple way to ask this without performing a joint analysis of both data sets.
 
-\section{Discussion}\label{sec:discussion}
-This might have sounded frequentist, but it is not!
-This is a fully Bayesian position.
-Actually, it is a position that doesn't make a commitment between frequentism and Bayesianism.
+When one makes a measurement, but it is consistent with zero, often ``upper limits'' are reported instead.
+I strongly object to this: It is still usually possible to report a measurement and an uncertainty.
+The fact that it is not significantly different from zero doesn't make it any less of a measurement.
+But once again, upper limits can be constructed with log-likelihood differences, again as described in \secref{sec:lf}.
 
-Many Bayesians feel that the only point of science is to update a posterior. Maybe?! But that would be the point of the literature taken as a whole. Not the point of every single paper you write.
-If you want to support your Bayesian readers, give them a likelihood function!
+\section{Epilogue}\label{sec:discussion}
+This pedagogical \documentname{} might have sounded extremely frequentist, because it is so focused on the likelihood, and not on priors and posteriors.
+It is not!
+The position presented here is a fully Bayesian position.
+The likelihood principle is a Bayesian principle, and (additionally) the likelihood is sufficient within frequentism.
+In this way, the position on measurement presented here is a position that doesn't make a commitment between frequentism and Bayesianism.
+No statistical philosophy was harmed in this \documentname.
 
-If you put tons of work into making a likelihood function, why obscure it by multiplying it by a pointless and obscuring prior?
+The one thing that might be controversial here, it seems to me, is my original definition in \secref{sec:intro}:
+In my view, any measurement claim (about parameter $\theta$) is always contextualized in terms of one particular data set $Y$.
+Is it always true that when someone says ``I have measured parameter $\theta$'' they are making a claim about a particular data set (or set of data sets)?
+I believe this is true, but it is certainly possible to debate the point.
+
+As I note above in \secref{sec:bayes}, many Bayesians feel that the only point of science is to update a posterior pdf.
+This might be true, although it is not \emph{obviously} true.
+Even if this point of view is true and correct, it would be the point of the literature \emph{taken as a whole}. 
+It can't be the point of every single paper we write.
+Any paper or project that is trying to supply data or intermediate results or, indeed, \emph{measurements} to the community must do so through likelihood functions, or approximations thereto.
 
 \paragraph{Acknowledgments}
 It is a pleasure to thank
   Dan Foreman-Mackey (DeepMind) and
   Hans-Walter Rix (MPIA)
 for existential discussions about these matters over the years, and
+  Gaby Contardo (Nova Gorica),
   Chirag Modi (NYU),
-  Alexander Novara (NYU), and
-  Hans-Walter Rix (MPIA)
+  Alexander Novara (NYU),
+  Hans-Walter Rix (MPIA), and
+  Roberto Trotta (SISSA)
 for valuable discussions of the content of this particular \documentname.
 The Flatiron Institute is a division of the Simons Foundation.
 
-\raggedright
+\raggedright\footnotesize
 \bibliographystyle{plain}
 \bibliography{measurement}
 
