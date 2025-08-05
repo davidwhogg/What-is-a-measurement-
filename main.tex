@@ -283,7 +283,8 @@ One example in particle physics is that, in collisions, certain aspects of phase
 The fact that the jet angles will be drawn from a particular distribuition is \emph{part of the model}, not an external prior.
 Thus even a frequentist can marginalize over these angles without bringing in any additional information.
 In this case, the jet angles can be seen as a kind of noise.
-There are many places in physics and astronomy in which there are exact, compact symmetries, like rotational symmetries, that permit exact marginalizations of nuisances by both frequentists and Bayesians.};
+There are many places in physics and astronomy in which there are exact, compact symmetries, like rotational symmetries, that permit exact marginalizations of nuisances by both frequentists and Bayesians.
+These ideas are related to the core ideas of (poorly named) \emph{objective Bayesian analysis} \cite{objective}.};
 they have to optimize rather than marginalize over alpha.
 Frequentists therefore must construct a profile likelihood if they want to get rid of $\alpha$.\footnote{%
 I like to joke that Bayesians integrate, and frequentists differentiate. It isn't entirely a joke.\label{foot:integrate}}
@@ -411,10 +412,10 @@ And the point / result that if the number of sources gets large, current methods
 
 This \sectionname{} opened with the point that Bayesian reasoning is optimal.
 In what very specific sense is it optimal?
-It turns out that it is best for \emph{placing bets};
+It is best for \emph{placing bets};
 One statement of the theorems is that if two bettors have access to the same information, and one reasons via Bayes, and one reasons in any other way, the Bayesian bettor will win bets (in the long run) against the other.
 Thus Bayes is optimal for making predictions, and in particular putting betting odds on predictions.
-This explains why Bayesian reasoning was developed mainly by the insurance industry \cite{bayesactuary}.
+This explains why Bayesian reasoning was developed by the insurance industry \cite{bayesactuary}.
 Science involves prediction, crucially.
 However, measurements are not the same as predictions.
 They can be similar though: A measurement can (in principle) be seen as a prediction for what a subsequent experiment might measure.
@@ -447,7 +448,7 @@ We need a peak in the likelihood function to claim a measurement.
 But if we want to be Bayesian, and we want to use \emph{flat priors},\footnote{%
 If you want to be Bayesian, there is almost no context in which you would want to use flat priors on any parameter you care about.
 The Cox theorems that deliver Bayesian reasoning only apply when the Bayesian procedure is being used to update \emph{your beliefs}.
-It is essentially impossible that your belief about anything you care about is well represented by a flat pdf.}
+It is essentially impossible that your belief about anything is well represented by a flat pdf.}
 isn't it the case that any peak in the likelihood will lead to an identically shaped peak in the posterior pdf?
 
 This sounds so naively and obviously true, what could possibly go wrong?
@@ -496,7 +497,10 @@ HOGG SHOW RESULTS.
 There is nothing really new about this demonstration, by the way.
 They are all simple consequences of prior-volume effects or prior-edge effects discussed in many places (CITE THINGS).
 This demonstration also links to the idea that flat priors aren't in fact uninformative, as has been argued elsewhere in many places (CITE THINGS).
-HOGG: ALSO this situation is very easy to diagnose (prior-dependence of results, moving the nuisance priors).
+HOGG: ALSO this situation is very easy to diagnose (significant prior-dependence of results, even when adjusting only the nuisance priors).
+
+\section{What if my likelihood has multiple peaks?}\label{sec:multiple}
+HOGG: What?
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
@@ -725,9 +729,9 @@ However, in practice, in my fields of study, only a tiny fraction of downstream 
 So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines.
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
-Does the requirement that there be a peak in a sensible likelihood function imply that we can only determine whether or not we have a measurement by directly looking at the likelihood function?
+Does the requirement that there be a peak in a sensible likelihood function imply that we can \emph{only} determine whether or not we have a measurement by directly looking at the likelihood function?
 The answer is \emph{no}.
-Obviously, looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
+Looking at the likelihood function is the best way to determine whether we have a peak in the likelihood function.
 However, there are many circumstances in the contemporary sciences in which we can get some kind of estimate of our posterior pdf, but we cannot compute the likelihood function.
 
 One example is in present-day cosmology, where one of the goals is to measure cosmological parameters using data on the large-scale structure (as traced by the positions of many millions of galaxies and quasars).
@@ -740,6 +744,7 @@ Yes, but it requires care.
 
 HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
 This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
+Also, note that these empirical methods tend to over-estimate the information, because they tend to make the LF wiggly.
 
 \section{Reporting the measurement}\label{sec:reporting}
 What does it take to write a paper that claims that a set of data $Y$ constrains or measures a parameter (or set of parameters) $\theta$?
@@ -822,6 +827,7 @@ It is a pleasure to thank
   Hans-Walter Rix (MPIA)
 for existential discussions about these matters over the years, and
   Gaby Contardo (Nova Gorica),
+  Will Farr (Stony Brook),
   Chirag Modi (NYU),
   Alexander Novara (NYU),
   Hans-Walter Rix (MPIA), and
