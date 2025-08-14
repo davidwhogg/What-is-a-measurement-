@@ -553,6 +553,10 @@ Then a regression trained on the training set will deliver good predictions of l
 The regression does not return measurements of $\theta$.
 It returns \emph{predictions}, under the assumption that the training set is representative.
 
+\section{Is good causal structure required?}\label{sec:causal}
+HOGG: Rix notes that if there isn't a arrow (or chain of arrows) in a causal graph that links parameters of interest $\theta$ to data $y$, then, \emph{even if you can write down a likelihood function}, you might not have a valid measurement.
+Think about this and write something here about this question.
+
 \section{What is my data?}\label{sec:data}
 Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
 That is, it is better to work on the data that came directly from your instrument, and not data that have been highly processed, especially since that processing can significantly bias or affect your results.
