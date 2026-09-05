@@ -2,6 +2,7 @@
 
 % to-do items
 % -----------
+% - figure out whether figures will be marginal, and either way, put in some figures and captions.
 % - explicitly address the difference between a measurement and an estimator, or the output of an estimator. What is an estimate?
 % - make sure it is abundantly clear that the use of anyone's data involves adopting myriad assumptions. Should there be an assumptions and subjectivity section?
 % - add in the "worked example" in "basic_example.ipynb" perhaps?
@@ -32,22 +33,19 @@
 
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[letterpaper]{geometry}
-\usepackage{setspace}
-\usepackage{amsmath, amsfonts, mathrsfs}
 
-% typesetting issues
+% typesetting and page layout issues
+\usepackage[letterpaper, text={5.00in,9.00in}]{geometry}
+\usepackage{setspace}
+\addtolength{\topmargin}{0.25in}
 \setstretch{1.08}
-\addtolength{\topmargin}{-0.30in}
-\addtolength{\textheight}{1.60in}
-\setlength{\textwidth}{5.0in}
-\setlength{\oddsidemargin}{0.5\paperwidth}\addtolength{\oddsidemargin}{-1.0in}\addtolength{\oddsidemargin}{-0.5\textwidth}
 \pagestyle{myheadings}
 \markboth{foo}{\sffamily Hogg / What is a measurement?}
 \renewcommand{\newblock}{} % this adjusts the bibliography style.
 \frenchspacing\sloppy\sloppypar\raggedbottom
 
 % text macros
+\usepackage[hidelinks]{hyperref}
 \renewcommand{\paragraph}[1]{\bigskip\par\noindent\textbf{#1}~---}
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
@@ -56,6 +54,7 @@
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math macros
+\usepackage{amsmath, amsfonts, mathrsfs}
 \newcommand{\e}{\mathrm{e}} % why do I have to define this?
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\given}{\,|\,}
@@ -69,7 +68,7 @@ What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2025 August}
+\date{2026 August}
 \begin{document}
 \maketitle\thispagestyle{empty}
 
@@ -107,7 +106,7 @@ Its design decisions may have been intuitively made, as far as I can tell, even 
 \cite{gaia},
 which is measuring (among many other things) the parallaxes to more than a billion stars in the Milky Way.
 The parallax is a geometric measure of the inverse of the distance to the star.
-This Mission is trying to deliver valuable information to the astronomical community, members of which can make measurements of, or update their beliefs about, individual stars, about stellar clusters, and about the populations of stars, all using the \textsl{Gaia} data releases.
+This Mission is trying to deliver valuable information to the astronomical community, members of which can make measurements of, or update their beliefs about, individual stars, stellar clusters, and populations of stars, all using the \textsl{Gaia} data releases.
 The quantities in the \textsl{Gaia} Data Archive \cite{gaiadata} that represent its parallax measurements are maximum-likelihood parallax measurements, and uncertainty estimates based on a Fisher-matrix-like analysis of uncertainty.
 These quantities can be cleanly combined into a good approximation of likelihood function \cite{gaialf}.
 That is, the \textsl{Gaia} Catalog parallax and parallax uncertainty for any star are parameters of a form for the probability of the Gaia data given that star's parallax.
@@ -149,7 +148,7 @@ When the likelihood function cannot be written down, life is harder; we will add
 
 \section{The likelihood function}\label{sec:lf}
 The problem setup will be that there is an ordered list of $n$ data elements $Y$ (``the data''), an ordered list of $m$ parameters of interest $\theta$, an ordered list of $s$ nuisance parameters $\alpha$, and a large set of choices, assumptions, and background information $I$.
-In contexts like this, there are many meanings of the word ``model,'' but for me this will be something that can be used to compute probabilities in the space of the data.
+In contexts like this, there are many meanings of the word ``model,'' but for me the model will be something that can be used to compute probabilities in the space of the data.
 Under some set $I$ of detailed assumptions, it is possible to construct a probability density function (or sometimes just ``pdf'' or ``probability'' in what follows) for the data $Y$
 \begin{align}
     p(Y\given\theta,\alpha,I) ~;
@@ -246,7 +245,7 @@ In particular, the log likelihood difference between the measured value of $\the
 The second important property of the likelihood function is that it is par\-am\-e\-ter\-i\-za\-tion-invariant.
 If the problem is reparameterized from parameters $(\theta,\alpha)$ to new parameters $\beta$ such that the transformation between $(\theta,\alpha)$ and $\beta$ is invertible (and the inverse is also invertible), then the value of the likelihood at $(\theta,\alpha)$ will be precisely equal to the likelihood at the corresponding value of $\beta$.
 This invariance is extremely important to frequentist statistics, and does not hold for Bayesian posteriors.
-The fact that Bayesian priors and posteriors do not have reparameterization invariance will come back up in \secref{sec:bayes} and \secref{sec:flat}.
+How Bayesian priors and posteriors act under reparameterizations will come back up in \secref{sec:bayes} and \secref{sec:flat}.
 
 \section{Nuisance parameters}\label{sec:nuisance}
 The nuisance parameters $\alpha$ substantially complicate questions of measurement when one is only interested in the parameters of interest $\theta$.
@@ -337,7 +336,7 @@ Then you invert this matrix to get $C_{(\theta,\alpha)}$.
 Then you take the (square) $m\times m$ submatrix of $C_{(\theta,\alpha)}$ corresponding to the $m$ parameters in $\theta$ only.\footnote{It is critical here that you invert before you take the submatrix. If you submatrix before you invert, you will get disastrously wrong uncertainty estimates. In that (wrong) case you have computed the best possible uncertainty under the (wrong) assumption that God told you the correct values of the nuisance parameters.}
 If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
 If $m>1$---that is, if $\theta$ has more than one component---this $m\times m$ submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
-Notice that this is all a generalization of the discussion of linear fitting above in \secref{sec:lf} around and after \eqref{eq:Ca}.
+Notice that this is all a generalization of the discussion of linear fitting above in \secref{sec:lf} around and after equation~\eqref{eq:Ca}.
 HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
@@ -345,7 +344,7 @@ If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you nee
 Second derivatives like in \eqref{eq:fisher} sound hard!
 But they aren't, for two reasons.
 The first is that, when your model is linear, and your noise is Gaussian, this second derivative becomes an outer product of first derivatives (see, for example, \cite{fittingaline}).
-The second is that we live in the future, in which programming languages like jax \cite{jax} give you analytic derivatives to second order for free.
+The second is that we live in the future, in which programming languages like jax \cite{jax} and julia \cite{julia} give you analytic derivatives to second order for free.
 
 Frequentists and Bayesians are all bound by Cram\'er--Rao.
 However, Bayesians can do more than frequentists.
@@ -500,6 +499,14 @@ This demonstration also links to the idea that flat priors aren't in fact uninfo
 HOGG: ALSO this situation is very easy to diagnose (significant prior-dependence of results, even when adjusting only the nuisance priors).
 
 \section{What if my likelihood has multiple peaks?}\label{sec:multiple}
+In many cases, the likelihood function will have not one peak, but two or many.
+One common example is in time-series analysis:
+If you are looking for a frequency in a time series, you will generally have many tiny peaks in the likelihood function at a set of different frequencies.
+If one peak is much taller than all the other peaks---for example if the difference in (natural) log likelihood between the tallest peak and the second-tallest peak is much greater than unity---then you have a good measurement, and you can do everything you would usually do:
+You can choose the maximum-likelihood peak as your measurement, and the formal uncertainty region can be established with log-likelihood differences (or second derivatives of the log-likelihood function).
+
+When there are multiple peaks, and the peaks differ in height (in the log-likelihood sense) by of order unity (like say delta-log-likelihood of 0.75 or 1.3), the situation is more challenging.
+
 HOGG: What?
 
 \section{Machine learning or regression}\label{sec:ml}
@@ -521,7 +528,7 @@ If they are noisy, pure regressions aren't a good idea; it makes more sense to g
 Ideally the data $Y_i$ in your training set are somehow ``drawn'' from the same distribution as the data $Y$ you have.
 If they are not drawn from the same distribution, strong biases will occur.
 Often it is believed that so long as the training data ``cover'' the test data (for example the test data live inside the convex hull of the training data), then things are fine.
-This isn't true, and besides, once the data get large enough, coverage of that kind isn't possible to satisfy.
+This isn't true, and besides, once the feature space gets large enough (the data lives in a high-dimensional space), coverage of that kind isn't possible to satisfy.
 
 It turns out that, even when the situation is ideal---%
 even when the training labels are perfect, the data are drawn from the same distribution as the training data, and the function $f()$ has been given sufficient flexibility---the results of machine learning regressions are biased.
@@ -552,6 +559,10 @@ And imagine that, in the training set, objects with high $\theta$ also tend to h
 Then a regression trained on the training set will deliver good predictions of labels $\theta$, \emph{whether or not} the data $Y$ contains information about $\theta$ directly.
 The regression does not return measurements of $\theta$.
 It returns \emph{predictions}, under the assumption that the training set is representative.
+
+\section{Causal structure and community norms}\label{sec:causal}
+HOGG: Rix notes that if there isn't a arrow (or chain of arrows) in a causal graph that links parameters of interest $\theta$ to data $y$, then, \emph{even if you can write down a likelihood function}, you might not have a valid measurement.
+Think about this and write something here about this question.
 
 \section{What is my data?}\label{sec:data}
 Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
@@ -653,7 +664,7 @@ When one works with derived data $Y$, derived from some data $Z$, one extremely 
 That is, you can't make the data $Y$ be all the sums and differences of the data $Z$ without re-using data points from $Z$.
 Well you \emph{can}, but then you have to explicitly track all of these covariances in $C$.
 And really those covariances have to be tracked in $C^{-1}$ not $C$ because $C$ will contain infinite eigenvalues.
-This is one of many reasons that we should be transmitting not variances but inverse variances in our datasets and data analyses.\footnote{The inverse variance is sometimes called the information tensor. Variances (and their eigenvalues) can go to infinity, but inverse variances are always finite in all respects, because one never has infinite amounts of information about anything.}
+This is one of many reasons that we should be transmitting not standard errors, and not uncertainty variances but instead inverse variances in our datasets and data analyses.\footnote{The inverse variance is sometimes called the information tensor. Variances (and their eigenvalues) can go to infinity, but inverse variances are always finite in all respects, because one never has infinite amounts of information about anything.}
 
 \section{Combining data samples}\label{sec:combining}
 There are (at least) two cases for combining measurements.
@@ -671,7 +682,7 @@ That is, combining data sets is extremely straightforward, \emph{so long as you 
 
 In the second case for combining measurements, there are $n$ data sets $Y_i$ each measuring a different parameter of interest $\theta_i$.
 In this case, the goal might be to measure some new parameter $\beta$ that sets the values (or distribution of values) of the $\theta_i$.
-An example from astrophysics might be that each data set $Y_i$ is the data on an exoplanet $i$, measuring the parameters $\theta_i$ of that planet; the parameters $\beta$ describe the distribution or population planet $i$.
+An example from astrophysics might be that each data set $Y_i$ is the data on an exoplanet $i$, measuring the parameters $\theta_i$ of that planet; the parameters $\beta$ describe the distribution or population of planets.
 This is sometimes called ``population inference,'' and it is generally hierarchical in form.
 Here the approach is to build a likelihood for the global $\beta$ out of a product of all the individual likelihoods.
 This looks like
@@ -701,7 +712,7 @@ The word ``independent'' can be confusing here.
 Because the two data sets in \eqref{eq:combineLFs} both depend on $\theta$, the two data sets are, in a frequentist sense, covariant.
 However, they are independent in the relevant sense here as long as they contain no data in common.
 
-\section{Delivering data useful to others}\label{sec:catalogs}
+\section{Delivering measurements useful to others}\label{sec:catalogs}
 Imagine that you are making a \emph{lot} of measurements; so many that you are going to do some kind of ``data release'' of your measurements, so that other people in your scientific domain can use those measurements in their own scientific projects.
 What kind of measurements or estimators do you want to use to build that set or list or catalog of measurements?
 
@@ -726,7 +737,7 @@ The downstream user is expected to take the executable code and modify it to the
 That is, the likelihood functions are released not as primary outputs but instead as components of executable code.
 I don't necessarily disagree with this vision!
 However, in practice, in my fields of study, only a tiny fraction of downstream users have completely re-run upstream code in their data analyses; a larger fraction have done things that are technically wrong (using summaries of posterior pdfs as data, say).
-So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines.
+So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines at the moment.\footnote{HOGG: Something about making the community better here.}
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can \emph{only} determine whether or not we have a measurement by directly looking at the likelihood function?
@@ -765,16 +776,16 @@ That measurement of $\theta$ will only be accepted by the investigator's communi
 If that's controversial, then the investigator has not delivered what anyone would accept as a measurement.
 For another example, if there is obviously non-Gaussian noise, but the measurement is only successful under an assumption of Gaussian noise, then there perhaps isn't a measurement in any real sense, even if there is a good peak in the assumed-Gaussian likelihood function.
 
-A measurement, for the purposes of a scientific paper, is (in some sense) a number (the result of the measurement) and an uncertainty that can be reported in a paper abstract.
-What should these two numbers be?
-In an ideal world, the reported number should be the maximum $\hat\theta$ of the likelihood \eqref{eq:ML}, and the uncertainty should be related to level sets of the log-likelihood function.
-The formal uncertainty on the parameter $\theta$ is the square root of the inverse of the negative of the second derivative tensor, evaluated at that maximum.
+A measurement, for the purposes of a scientific paper, is (in some sense) a value (the result of the measurement), and an uncertainty, that can be reported in a paper abstract.
+What should these two reported numbers (value and uncertainty) be?
+In an ideal world, the reported value should be the maximum $\hat\theta$ of the likelihood \eqref{eq:ML}, and the uncertainty should be related to the Fisher information or else level sets of the log-likelihood function.
+As we described in \secref{sec:inference}, the formal uncertainty on the parameter $\theta$ is the square root of the inverse of the negative of the second derivative tensor, evaluated at that maximum.
 Somewhat more conservative uncertainties come by looking at likelihood ratios, or differences in log-likelihood, as discussed in \secref{sec:lf}.
 Even more conservative uncertainties sometimes come from bootstrap \cite{bootstrap} or jackknife \cite{jackknife} analyses, but a full discussion of uncertainty estimation is out of scope here.
 
 Bayesians might want to replace these with the mean (or median) of a posterior pdf and a root-variance of that.
 That's fine, except for two things:
-The first is that if the anything strange was used for prior pdfs, especially prior pdfs on nuisance parameters, then that weird context must additionally be reported in the abstract.
+The first is that if anything strange was used for prior pdfs, especially prior pdfs on nuisance parameters, then that weird context must additionally be reported in the abstract.
 The second is that you have to live with the fact that the mean or median of posterior can, in fact, be a bad value.
 If you think about non-trivial posterior pdfs (multi-modal, say), you can easily have a mean or median of posterior that is actually disfavored or ruled out by the data.
 This leads many to consider ``maximum of posterior'' (MAP) estimates, which are good models by construction.
@@ -792,7 +803,7 @@ In particular, the number of sigma estimated by taking the second derivative of 
 Which is to be preferred?
 Usually the log-likelihood difference is more conservative.
 
-Often, when a measurement is made, a report on ``how many sigma'' it is away from a standard value, or a previous measurement.
+Often, when a measurement is made, we want to know ``how many sigma'' it is away from a standard value, or a previous measurement.
 Provided that the data are independent of all previous data, this can be estimated with the difference in values divided by the sum-in-quadrature of the uncertainties of the two measurements.
 If the comparison value has tiny uncertainty, or is a noise-free theoretical expectation, then likelihood ratio questions can be asked.
 If the comparison value has significant uncertainty, there is no simple way to ask this without performing a joint analysis of both data sets.
@@ -800,7 +811,8 @@ If the comparison value has significant uncertainty, there is no simple way to a
 When one makes a measurement, but it is consistent with zero, often ``upper limits'' are reported instead.
 I strongly object to this: It is still usually possible to report a measurement and an uncertainty.
 The fact that it is not significantly different from zero doesn't make it any less of a measurement.
-But once again, upper limits can be constructed with log-likelihood differences, again as described in \secref{sec:lf}.
+(This is another reason that it might be a bad idea to adopt a ``number of sigma'' threshold to claim a measurement.)
+But once again, if you want them, upper limits can be constructed with log-likelihood differences, as described in \secref{sec:lf}.
 
 \section{Epilogue}\label{sec:discussion}
 This pedagogical \documentname{} might have sounded extremely frequentist, because it is so focused on the likelihood, and not on priors and posteriors.
