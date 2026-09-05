@@ -1,4 +1,4 @@
-% Copyright 2025 David W. Hogg. All rights reserved.
+% Copyright 2025, 2026 David W. Hogg. All rights reserved.
 
 % to-do items
 % -----------
@@ -63,12 +63,16 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
 
+% draft and communication macros -- TO BE DELETED
+\usepackage{xcolor}
+\newcommand{\hogg}[1]{{\color{blue}[Hogg says: {#1}]}}
+
 \title{\bfseries
 What is a measurement?}
 \author{David W. Hogg\footnote{%
 DWH (david.hogg@nyu.edu) is in the Center for Cosmology and Particle Physics, Department of Physics, New York University.
 He also has appointments at the Center for Computational Astrophysics, Flatiron Institute, and at the Max-Planck-Institut f\"ur Astronomie.}}
-\date{2026 August}
+\date{2026 September}
 \begin{document}
 \maketitle\thispagestyle{empty}
 
@@ -337,7 +341,7 @@ Then you take the (square) $m\times m$ submatrix of $C_{(\theta,\alpha)}$ corres
 If there is only one, scalar parameter of interest $\theta$, then this gives the uncertainty variance (the square of the uncertainty) on $\theta$.
 If $m>1$---that is, if $\theta$ has more than one component---this $m\times m$ submatrix is the variance tensor of the uncertainty ellipse in the $\theta$ space.
 Notice that this is all a generalization of the discussion of linear fitting above in \secref{sec:lf} around and after equation~\eqref{eq:Ca}.
-HOGG DO WE NEED SOME PICTURES OR DIAGRAMS?
+\hogg{DO WE NEED SOME PICTURES OR DIAGRAMS?}
 Importantly, this bound sets the properties of any possible estimator.
 If this Cram\'er--Rao (or Fisher-matrix) uncertainty is larger than what you need to claim a (say 5-sigma) measurement, then \emph{there is simply no sense in which data $Y$ have measured parameter $\theta$}.
 
@@ -406,8 +410,8 @@ It is that it demonstrates the procedure of constructing a prior pdf, constructi
 That demonstration can be useful to others, especially if the methods are unambiguously explained and the codes are released for re-use.
 But the specific value or shape of the individual investigator's particular posterior pdf is not an object of community scientific interest, unless the author is an \emph{extremely important person}.}
 
-HOGG: HERE is where we would talk about LIGO posterior samplings and LIGO populations inferences.
-And the point / result that if the number of sources gets large, current methods don't work!
+\hogg{HERE is where we would talk about LIGO posterior samplings and LIGO populations inferences.
+And the point / result that if the number of sources gets large, current methods don't work!}
 
 This \sectionname{} opened with the point that Bayesian reasoning is optimal.
 In what very specific sense is it optimal?
@@ -456,14 +460,14 @@ The first thing that is wrong is that (as we emphasized in \secref{sec:lf}) the 
 The posterior pdf is absolutely not reparameterization-invariant.
 So if the prior is flat in some parameter, it is absolutely not flat in any non-trivial function of that parameter.
 Even worse, if it is flat in some parameter, in any square-root or square or logarithm of that parameter, the prior is strongly peaked \emph{at one edge of the allowed range!}
-That's demonstrated in FIGURE HOGG and definitely not what people usually have in mind when they think about using ``uninformative priors.''
+That's demonstrated in \hogg{what FIGURE?} and definitely not what people usually have in mind when they think about using ``uninformative priors.''
 
 The second thing that is wrong about this idea is that when the number of parameters gets large---larger than 2 say---it becomes very easy to believe that there is a peak in the likelihood function when there most definitely isn't.
 To demonstrate this, we generate a very simple toy-likelihood and toy-posterior situation, in which all priors are flat, and in which it very very much looks like there is a peak in the likelihood function when there absolutely is not.
 
 In our toy problem we have data $Y$ that makes up a $n\times 1$ column vector, or an ordered list of $n$ elements.
 We have parameters $\theta$, which make up a $m\times 1$ column vector, or an ordered list of $m$ elements.
-If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq m$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ (HOGG AUDIT NOTATION) that we don't care about.
+If we use the symbol $\theta_i$ to denote the $i$th element ($1\leq i\leq m$) of this vector, we could say that $\theta_1$ is the parameter of interest that we care about and the other $\theta_i$ (for $i>1$) are the nuisance parameters $\alpha$ \hogg{AUDIT NOTATION} that we don't care about.
 The simplest possible toy model is that the LF depends only on certain linear combinations of the parameters $\theta$.
 That is, there is a rectangular $q\times m$ matrix $A$, with $q<m<n$, such that, to some very good approximation,
 \begin{align}
@@ -474,9 +478,9 @@ This model might be called ``low rank'' or ``degenerate'':
 There are parameter degeneracies such that the likelihood depends on less than all the parameters.
 And, by the way, this toy example is extreme; we don't need these parameter degeneracies to be exact to get the effect we are about to see.
 
-HOGG FIX THIS to represent the new situation, which is a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.
+\hogg{FIX THIS to represent the new situation, which is a standard linear LF, but with a design matrix that is LOW RANK; rank $q$ with $q<p<n$.}
 
-(HOGG DESCRIBE PRIOR by adjusting the following:)
+\hogg{DESCRIBE PRIOR by adjusting the following:}
 When we do Bayesian inference, we will want a prior, and, because we want to be maximally uninformative, we will choose a prior that is precisely flat in all parameters $\theta_i$.
 That is
 \begin{align}
@@ -491,12 +495,12 @@ In fact, these flat priors \emph{aren't} uninformative (CITE THINGS), but perhap
 It turns out that they will be quite informative in what follows.
 This prior requires us to make $2\,m$ choices, to wit, the upper and lower limits $a_i, b_i$ for each parameter $\theta_i$.
 
-HOGG SHOW RESULTS.
+\hogg{SHOW RESULTS.}
 
 There is nothing really new about this demonstration, by the way.
 They are all simple consequences of prior-volume effects or prior-edge effects discussed in many places (CITE THINGS).
 This demonstration also links to the idea that flat priors aren't in fact uninformative, as has been argued elsewhere in many places (CITE THINGS).
-HOGG: ALSO this situation is very easy to diagnose (significant prior-dependence of results, even when adjusting only the nuisance priors).
+\hogg{ALSO this situation is very easy to diagnose (significant prior-dependence of results, even when adjusting only the nuisance priors.}
 
 \section{What if my likelihood has multiple peaks?}\label{sec:multiple}
 In many cases, the likelihood function will have not one peak, but two or many.
@@ -506,8 +510,7 @@ If one peak is much taller than all the other peaks---for example if the differe
 You can choose the maximum-likelihood peak as your measurement, and the formal uncertainty region can be established with log-likelihood differences (or second derivatives of the log-likelihood function).
 
 When there are multiple peaks, and the peaks differ in height (in the log-likelihood sense) by of order unity (like say delta-log-likelihood of 0.75 or 1.3), the situation is more challenging.
-
-HOGG: What?
+\hogg{What to say here?}
 
 \section{Machine learning or regression}\label{sec:ml}
 There are many ways in which machine learning might enter into a project to measure a parameter $\theta$ given data $Y$.
@@ -560,9 +563,48 @@ Then a regression trained on the training set will deliver good predictions of l
 The regression does not return measurements of $\theta$.
 It returns \emph{predictions}, under the assumption that the training set is representative.
 
-\section{Causal structure and community norms}\label{sec:causal}
-HOGG: Rix notes that if there isn't a arrow (or chain of arrows) in a causal graph that links parameters of interest $\theta$ to data $y$, then, \emph{even if you can write down a likelihood function}, you might not have a valid measurement.
-Think about this and write something here about this question.
+\section{Assumptions, choices, and community norms}\label{sec:assumptions}
+If your data $Y$ are going to be measuring your parameter of interest $\theta$, then it really must be that there is a \emph{causal connection} between $Y$ and $\theta$.
+Statisticians sometimes get bent out of shape when the ``causal'' word arises here; I am not talking about causal inference, I am talking about causal structure:
+It has to be that the expectation (or some moment) of $Y$ changes as $\theta$ changes, otherwise there will be no possible measurement.
+After all, measurement is related to the likelihood principle, and the likelihood is the probability for the data, conditioned on the parameters.
+If there is no dependence, there is no measurement.
+
+One (perhaps unimportant) comment to make here is that causal relationships are generally counterfactual, in the sense that they are related to the question:
+``If $\theta$ had a different value, how would my expectations about $Y$ change?''
+It is almost always the case that if some parameter is entering your likelihood function, then there are counterfactual questions you can ask and answer.
+
+Another comment to make here is that we almost never know, with high confidence, the causal structure of the world.
+This point is related to causal inference:
+It is hard to know, with certainty, that anything causes anything else.
+Or, more correctly, we aren't usually spending lots of our time in science in areas where the causation is fully settled.\footnote{My colleague Jennifer Hill (NYU) says ``It is hard to think of any question in science that isn't fundamentally causal.''}
+So is it possible for us to \emph{know} that $\theta$ is causally related to $Y$, such that a measurement will even be possible?
+How could we know this, if causation is often uncertain?
+
+The answer is (and foreshadowed in \secref{sec:intro}) that all measurements require \emph{assumptions}.
+Every measurement requires a model for how the world works, and preferably a model that is specific enough that it specifies a likelihood function $p(Y\given\theta,\alpha,I)$.
+How do we make these assumptions?
+If we want our measurement to be useful to scientists and accepted by scientists, we must make these assumptions at least largely in accordance with the norms and expectations of our field.
+And, consequently, every measurement we ever make is \emph{conditional on myriad asumptions}.
+
+The amazing thing is that every measurement humanity has ever made is conditioned on myriad assumptions, and yet we have an incredibly successful model of the world, and our measurements have survived lots of changes to our basic theory.
+When we drop something, we can predict very accurately how it will fall, and when we launch a satellite or space probe, we can predict very accurately what its trajectory will be.
+It is hard to know whether our measurements are correct---and they can only be correct subject to assumptions---but we make very good predictions using our measurements and the theories that underly them.
+Further discussion of that point is out of scope.
+
+How do we describe or track or communicate the assumptions---often primarily causal assumptions---that go into our measurements?
+\hogg{Rix notes that if there isn't a arrow (or chain of arrows) in a causal graph that links parameters of interest $\theta$ to data $y$, then, \emph{even if you can write down a likelihood function}, you might not have a valid measurement.
+Think about this and write something here about this question.}
+
+Finally, I want to make a comment about ``community norms.''
+A lot of progress has been made in science---and in human affairs generally---by people who are willing to do away with community norms and think and act radically.
+I fully support this, and nothing in this \documentname{} should be seen as arguing against that.
+In my own work, I have worked on technosignatures \cite{techno} and tests for inhomogeneous cosmologies \cite{fractal}.
+But these projects aren't projects that deliver \emph{measurements}.
+Measurements can only really be made within the context of an established or sensible model.
+We must obviously always endeavor to critically test and attack the models we use; this is among the most important scientific work that anyone ever does.
+Measurement is just a tiny bit of science, and it only happens when models are quantitative and mature.
+Thus the scope of this whole \documentname{} is very limited.
 
 \section{What is my data?}\label{sec:data}
 Ideally, you want to be operating on data $Y$ that is as raw as possible, or as close to raw as possible.
@@ -583,7 +625,7 @@ There are three-ish scenarios in which the derived data $Y$ might have been made
 The uncertainties on $Y$ in this scenario might be derived from the raw uncertainties on $Z$  by multiplying the raw uncertainties by (the absolute value of) the derivative $\dd g/\dd Z$, or perhaps something more sophisticated than that.
 This is typically the scenario in astronomy when the raw image from a camera has an estimate of the dark (or bias) subtracted, and then some kind of flat-field divided out, then a gain estimate applied, and then something that calibrates the image to intensity units (say).
 \item In the second scenario, the derived data might be, somehow, the maximum-likelihood value of $Y$ for some probabilistic model $\ln p(Z\given Y,I)$, under assumptions $I$.
-The uncertainties on $Y$ in this scenario might be made from the second derivative of the log likelihood, according to information theory (the Fisher information, that is HOGG REFER TO SOMETHING ABOVE).
+The uncertainties on $Y$ in this scenario might be made from the second derivative of the log likelihood, according to information theory (the Fisher information, that is \hogg{REFER TO SOMETHING ABOVE}).
 This is the scenario for the ESA \textsl{Gaia} Mission, which delivers maximum-likelihood parallaxes and proper motions for all stars, along with (an approximation to) the (inverse of the) Fisher information tensor from the log likelihood function that was used to measure those parallaxes (CITE).
 \item In the third scenario, the derived data might be the mean or maximum of a posterior pdf for $Y$, generated using a log likelihood $\ln p(Z\given Y,I)$ and a log prior pdf $\ln p(Y\given I)$.
 The uncertainties on $Y$ in this scenario are usually made by estimating the second moment (the variance) of the posterior pdf.
@@ -635,7 +677,7 @@ And it is essential in precise or rigorous contexts.
 That said, any other transformation between raw data $Z$ and reduced data $Y$---that is, any transformation that uses anything other than a pure likelihood---will \emph{bias all results} made with the data $Y$.
 For example, if the data $Y$ are found from any statistic (mean, median or mode) of a Bayesian posterior pdf, all scientific results made with the data $Y$ will be biased by the priors that went in.
 The biases created by using posterior pdf instead of likelihood for going from $Z$ to $Y$ are not easy to know \foreign{a priori}, and they are generally impossible for downstream users to correct after the fact.
-It might seem absurd that anyone would do this, but in fact this is very common in the astronomy literature.\footnote{HOGG CITE THINGS with tiny explanations.}
+It might seem absurd that anyone would do this, but in fact this is very common in the astronomy literature.\footnote{\hogg{CITE THINGS with tiny explanations.}}
 If you are reducing, calibrating, or binning data, use likelihood formulations or weighted least squares.
 Don't use posterior inferences.
 
@@ -691,7 +733,7 @@ This looks like
     = \ln\prod_{i=1}^n \int p(Y_i\given\theta_i,I)\,p(\theta_i\given\beta,I)\,\dd\beta ~.\label{eq:hierarchical}
 \end{align}
 That combined, marginalized likelihood can be optimized to deliver a good estimator for $\beta$ or else it can be combined with priors for a hierarchical Bayesian inference, discussed in more detail elsewhere (CITE).
-In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integrals in \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}, and combined with a sum.\footnote{HOGG: More here?}
+In detail, when any integral or product of integrals is implemented, it is important (for numerical stability) to keep all pdfs in logarithmic form, so really the integrals in \eqref{eq:hierarchical} ought to be performed with something like a \texttt{logsumexp}, and combined with a sum.\footnote{\hogg{Put more here?}}
 
 Sometimes what is wanted is a really simple statistic of the $\theta_i$, like the mean value of $\theta_i$.
 For reasons related to what's discussed in \secref{sec:data}, if, from each data set $i$ one obtains a maximum-likelihoood estimate $\hat\theta_i$ for each parameter $\theta_i$, then these can in turn be averaged to get an estimate of the mean $\langle\theta\rangle$.
@@ -700,8 +742,8 @@ A very simple example of that is shown in the appendix of \cite{goodorbad}.
 
 Often when you are combining data, the data are coming from a scientist or a project that is upstream of you.
 That is, in cases like \eqref{eq:bayes}, often you are combining measurements of $\theta_i$ coming from a project or study of which you are not a part.
-HOGG: The impossibility of combining posteriors unless they (and their associated priors) are continuous functions.
-HOGG: Also the impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.
+\hogg{The impossibility of combining posteriors unless they (and their associated priors) are continuous functions.}
+\hogg{Also the impossibility of reweighting posterior samples, despite our own work. CITE LIGO RESULTS TOO.}
 
 It is critical to the validity of the sum of logarithms in \eqref{eq:combineLFs} and the product in \eqref{eq:hierarchical}
 that the different data sets be \emph{independent}.
@@ -726,7 +768,7 @@ A large catalog of measurements is used, later, as \emph{data} in a subsequent a
 
 For all the reasons given in \secref{sec:data} and \secref{sec:combining}, it is critical that the quantities given in the catalog can be used to reconstruct the likelihood functions, or approximations thereto.
 That is, it is important that....
-HOGG BLAH BLAH.
+\hogg{BLAH BLAH.}
 
 There is a Bayesian alternative to this view, which is the view of the most principled Bayesians I know.\footnote{In my own sphere, I attribute this view to Dan Foreman-Mackey (DeepMind); it is embodied in many of his papers and projects.}
 This Bayesian view is that the goal of every paper and data release is really to deliver posterior pdfs for everything, and \emph{not} likelihoods.
@@ -737,7 +779,7 @@ The downstream user is expected to take the executable code and modify it to the
 That is, the likelihood functions are released not as primary outputs but instead as components of executable code.
 I don't necessarily disagree with this vision!
 However, in practice, in my fields of study, only a tiny fraction of downstream users have completely re-run upstream code in their data analyses; a larger fraction have done things that are technically wrong (using summaries of posterior pdfs as data, say).
-So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines at the moment.\footnote{HOGG: Something about making the community better here.}
+So while this Bayesian point of view (release posterior pdfs and also fully executable code) is self-consistent and rigorously correct, it isn't compatible with the zeitgeist in many academic disciplines at the moment.\footnote{\hogg{Something about making the community better here.}}
 
 \section{What if I don't have a likelihood?}\label{sec:lfi}
 Does the requirement that there be a peak in a sensible likelihood function imply that we can \emph{only} determine whether or not we have a measurement by directly looking at the likelihood function?
@@ -753,8 +795,8 @@ At the same time, there are methods (known as likelihood-free inference, or simu
 Is it possible to securely claim a measurement in this case?
 Yes, but it requires care.
 
-HOGG: HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.
-This discussion should refer back to things in \secref{sec:flat}, where HOGG HOPES that we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
+\hogg{HOW TO SAFELY ratio the posterior and the prior. MODI POINT about approximating both.}
+This discussion should refer back to things in \secref{sec:flat}, where \hogg{I hope that} we said things about how to safely look at the ratio of the prior to the posterior in high dimensions?
 Also, note that these empirical methods tend to over-estimate the information, because they tend to make the LF wiggly.
 
 \section{Reporting the measurement}\label{sec:reporting}
@@ -832,6 +874,7 @@ This might be true, although it is not \emph{obviously} true.
 Even if this point of view is true and correct, it would be the point of the literature \emph{taken as a whole}. 
 It can't be the point of every single paper we write.
 Any paper or project that is trying to supply data or intermediate results or, indeed, \emph{measurements} to the community must do so through likelihood functions, or approximations thereto.
+\hogg{But above all, I am not restricting statistical practice: Do what you like! Just remember that a confident claim of data $Y$ measuring parameter $\theta$ requires a peak in a properly profiled likelihood function, or some reliable approximation thereto.}
 
 \paragraph{Acknowledgments}
 It is a pleasure to thank
